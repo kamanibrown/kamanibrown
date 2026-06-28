@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UGC Creator Portfolio - Live Sandbox Builder</title>
+    <title>Kamani Brown - UGC Creator & Strategist Portfolio</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Plus Jakarta Sans for clean modern typography -->
@@ -42,14 +42,6 @@
             color: #111215;
             font-family: 'Plus Jakarta Sans', sans-serif;
             overflow-x: hidden;
-        }
-
-        /* Outline focus for the in-browser real-time content editing */
-        [contenteditable="true"]:focus {
-            outline: 2px dashed #C5A27D;
-            padding: 2px;
-            background-color: rgba(197, 162, 125, 0.15);
-            border-radius: 6px;
         }
 
         /* Device Mockup Aspect Ratios & Frames */
@@ -103,15 +95,6 @@
             border-color: #C5A27D;
         }
 
-        .video-placeholder-container {
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .video-placeholder-container:hover {
-            background-color: #F5EFEB;
-        }
-
         /* Custom scrollbar styling */
         ::-webkit-scrollbar {
             width: 8px;
@@ -127,9 +110,31 @@
             background: #A88A65;
         }
 
-        /* ========================================================
-           FULLSCREEN STYLING WITH EXACT ASPECT RATIO PRESERVATION
-           ======================================================== */
+        .watermark-overlay {
+            position: absolute;
+            bottom: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            width: 44px;
+            height: auto;
+            pointer-events: none;
+            opacity: 0.85;
+            transition: opacity 0.3s ease;
+        }
+
+        .watermark-overlay-wide {
+            position: absolute;
+            bottom: 24px;
+            right: 24px;
+            z-index: 20;
+            width: 36px;
+            height: auto;
+            pointer-events: none;
+            opacity: 0.75;
+            transition: opacity 0.3s ease;
+        }
+
         .video-container-parent:fullscreen {
             background-color: #000000 !important;
             display: flex !important;
@@ -141,12 +146,9 @@
             border-radius: 0 !important;
             box-shadow: none !important;
         }
-        .video-container-parent:fullscreen .watermark-logo {
+        .video-container-parent:fullscreen .watermark-overlay {
             bottom: 12% !important;
-            width: 8vw !important;
-            height: 8vw !important;
-            max-width: 60px !important;
-            max-height: 60px !important;
+            width: 60px !important;
         }
         .video-container-parent:fullscreen video {
             height: 100% !important;
@@ -157,7 +159,7 @@
             margin: 0 auto !important;
         }
 
-        /* 16:9 horizontal video fullscreen — fills screen width */
+        /* 16:9 horizontal video fullscreen */
         .video-container-parent.widescreen-player:fullscreen {
             background-color: #000000 !important;
             display: flex !important;
@@ -176,53 +178,6 @@
             aspect-ratio: 16/9 !important;
             object-fit: contain !important;
             margin: 0 !important;
-        }
-        .video-container-parent.widescreen-player:-webkit-full-screen {
-            background-color: #000000 !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            width: 100vw !important;
-            height: 100vh !important;
-            border: none !important;
-            border-radius: 0 !important;
-            box-shadow: none !important;
-        }
-        .video-container-parent.widescreen-player:-webkit-full-screen video {
-            width: 100vw !important;
-            height: 100vh !important;
-            max-width: 100vw !important;
-            aspect-ratio: 16/9 !important;
-            object-fit: contain !important;
-            margin: 0 !important;
-        }
-
-        /* Safari Fullscreen fallback bounds */
-        .video-container-parent:-webkit-full-screen {
-            background-color: #000000 !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            width: 100vw !important;
-            height: 100vh !important;
-            border: none !important;
-            border-radius: 0 !important;
-            box-shadow: none !important;
-        }
-        .video-container-parent:-webkit-full-screen .watermark-logo {
-            bottom: 12% !important;
-            width: 8vw !important;
-            height: 8vw !important;
-            max-width: 60px !important;
-            max-height: 60px !important;
-        }
-        .video-container-parent:-webkit-full-screen video {
-            height: 100% !important;
-            width: auto !important;
-            max-width: 100% !important;
-            aspect-ratio: 9/16 !important;
-            object-fit: contain !important;
-            margin: 0 auto !important;
         }
 
         /* Smart Auto-Hiding Controls Overlay */
@@ -256,8 +211,6 @@
             opacity: 1;
             transform: translateY(0);
         }
-
-        /* ── PREMIUM UPGRADES ── */
 
         /* Staggered children reveal */
         .scroll-reveal-children > * {
@@ -307,36 +260,12 @@
             to { transform: translateX(-50%); }
         }
 
-        /* Gold text gradient */
-        .text-gold-gradient {
-            background: linear-gradient(135deg, #E8C99A 0%, #C5A27D 50%, #A07850 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
         /* Glowing card border pulse */
         @keyframes borderPulse {
             0%, 100% { box-shadow: 0 0 0 0 rgba(197,162,125,0); }
             50% { box-shadow: 0 0 20px 2px rgba(197,162,125,0.15); }
         }
         .glow-pulse { animation: borderPulse 4s ease-in-out infinite; }
-
-        /* Stat card entrance scale */
-        @keyframes statPop {
-            0% { transform: scale(0.88); opacity:0; }
-            100% { transform: scale(1); opacity:1; }
-        }
-        .stat-pop { animation: statPop 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards; }
-
-        /* Hero letter spacing animation */
-        @keyframes heroReveal {
-            from { letter-spacing: -0.08em; opacity: 0; }
-            to { letter-spacing: -0.03em; opacity: 1; }
-        }
-        .hero-title-animate {
-            animation: heroReveal 1.2s cubic-bezier(0.16,1,0.3,1) forwards;
-        }
 
         /* Floating badge pulse */
         @keyframes floatBadge {
@@ -345,7 +274,6 @@
         }
         .float-badge { animation: floatBadge 3s ease-in-out infinite; }
 
-        /* Section label underline slide */
         .section-eyebrow {
             position: relative;
             display: inline-block;
@@ -362,18 +290,6 @@
         }
         .scroll-reveal.active .section-eyebrow::after,
         .active .section-eyebrow::after { width: 100%; }
-
-        /* Stat number editable fix — allow clicks through animation */
-        .count-up-stat, .count-up-stat-decimal {
-            cursor: text;
-            min-width: 60px;
-            display: inline-block;
-        }
-        .count-up-stat:focus, .count-up-stat-decimal:focus {
-            outline: 2px dashed #C5A27D;
-            border-radius: 6px;
-            padding: 2px 6px;
-        }
 
         /* Package card hover lift */
         .pkg-card {
@@ -396,7 +312,6 @@
             transition: width 0.1s linear;
         }
 
-        /* About me bio text reveal */
         .bio-text {
             position: relative;
         }
@@ -411,7 +326,6 @@
             border-radius: 2px;
         }
 
-        /* Testimonial quote mark styling */
         .quote-giant {
             font-size: 120px;
             line-height: 0.6;
@@ -424,7 +338,6 @@
             pointer-events: none;
         }
 
-        /* Rates section add-ons table row hover */
         .addon-row-hover {
             transition: background 0.2s ease, padding-left 0.2s ease;
         }
@@ -456,27 +369,9 @@
     <!-- Scroll progress bar -->
     <div id="scroll-progress"></div>
 
-    <!-- Interactive Workspace Mode Alert Banner (Sticky at Top) -->
-    <div id="sandbox-banner" class="sticky top-0 z-[100] bg-[#0B0C0E] text-white px-4 py-3 text-center text-xs md:text-sm flex flex-col md:flex-row justify-center items-center gap-3 shadow-md border-b border-white/10">
-        <div class="flex items-center gap-2">
-            <span class="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span class="font-light">
-                <strong>Canva Interactive Builder Mode:</strong> Dynamic Watermarking & Bulletproof Text Protection Active.
-            </span>
-        </div>
-        <div class="flex items-center gap-2">
-            <button onclick="exportHTML()" class="bg-brand-accentGold hover:bg-brand-accentGold/80 text-[#0B0C0E] font-bold py-1 px-3 rounded text-xs transition shadow flex items-center gap-1">
-                <i class="fa-solid fa-cloud-arrow-down"></i> Export Site HTML
-            </button>
-            <button onclick="resetTemplate()" class="bg-red-500/20 hover:bg-red-500 hover:text-white text-red-300 py-1 px-2.5 rounded text-xs transition border border-red-500/30">
-                Reset Draft
-            </button>
-        </div>
-    </div>
-
     <!-- Glass Capsule Navigation (Fades in dynamically on scroll) -->
-    <nav id="sticky-nav" class="fixed top-20 left-1/2 -translate-x-1/2 z-[90] w-[90%] max-w-2xl bg-white/70 dark:bg-[#0B0C0E]/70 backdrop-blur-md rounded-full border border-white/20 dark:border-white/10 px-6 py-3 flex items-center justify-between shadow-lg opacity-0 pointer-events-none transition-all duration-500 transform translate-y-[-10px]">
-        <span class="text-xs font-bold tracking-widest text-[#111215] dark:text-white uppercase">K.B</span>
+    <nav id="sticky-nav" class="fixed top-8 left-1/2 -translate-x-1/2 z-[90] w-[90%] max-w-2xl bg-white/70 dark:bg-[#0B0C0E]/70 backdrop-blur-md rounded-full border border-white/20 dark:border-white/10 px-6 py-3 flex items-center justify-between shadow-lg opacity-0 pointer-events-none transition-all duration-500 transform translate-y-[-10px]">
+        <span class="text-xs font-bold tracking-widest text-[#111215] dark:text-white uppercase font-sans">K.B</span>
         <div class="flex items-center gap-6">
             <a href="#hero-about" class="text-xs font-semibold tracking-wider text-gray-600 dark:text-gray-300 hover:text-[#C5A27D] dark:hover:text-[#C5A27D] transition">About</a>
             <a href="#portfolio" class="text-xs font-semibold tracking-wider text-gray-600 dark:text-gray-300 hover:text-[#C5A27D] dark:hover:text-[#C5A27D] transition">Work</a>
@@ -490,7 +385,7 @@
     <main class="w-full">
 
         <!-- ==========================================
-             SECTION 1 — HERO & ABOUT ME
+             SECTION 1 — HERO & ABOUT ME (Verbatim Wording)
              ========================================== -->
         <section id="hero-about" class="relative w-full overflow-hidden bg-[#0B0C0E] text-white grain-overlay">
             
@@ -506,12 +401,12 @@
                     ✨ UGC CREATOR & STRATEGIST
                 </div>
                 <!-- Editorial Scaled Typography -->
-                <h1 class="text-5xl md:text-8xl font-black tracking-tighter text-white hero-title-animate" data-draft-id="hero-name" contenteditable="true" oninput="queueAutoSave()">
+                <h1 class="text-5xl md:text-8xl font-black tracking-tighter text-white font-sans uppercase">
                     KAMANI BROWN
                 </h1>
                 <!-- Subtle Gradient Text Effect on Tagline -->
-                <p class="text-xl md:text-3xl max-w-3xl mx-auto font-light leading-relaxed bg-gradient-to-r from-white via-gray-100 to-[#C5A27D] bg-clip-text text-transparent" data-draft-id="hero-tagline" contenteditable="true" oninput="queueAutoSave()">
-                    Authentic Tech & Product Content for Brands That Convert
+                <p class="text-xl md:text-3xl max-w-3xl mx-auto font-light leading-relaxed text-gray-400">
+                    Authentic Tech & Product Content for <span class="text-white">Brands That Convert</span>
                 </p>
                 <div class="pt-6">
                     <!-- Smooth Color Fill Hover CTA Button -->
@@ -548,52 +443,22 @@
                 </div>
             </div>
 
-            <!-- About Me Block (Lightened Rhythm Background) -->
+            <!-- About Me Block -->
             <div class="bg-[#F9F9FB] text-[#111215] py-24 border-b border-gray-100">
                 <div class="max-w-6xl mx-auto px-6 md:px-8 grid grid-cols-1 md:grid-cols-2 gap-16 items-center scroll-reveal">
                     
-                    <!-- Vertical 9:16 Intro Video Placeholder -->
+                    <!-- Intro Video Mockup Player -->
                     <div class="flex justify-center">
-                        <div class="w-full max-w-[320px] phone-frame relative group video-container-parent" id="container_intro-video-upload">
-                            <input type="file" accept="video/*" class="hidden video-file-input" id="intro-video-upload" onchange="handleVideoUpload(this)">
+                        <div class="w-full max-w-[320px] phone-frame relative group video-container-parent" id="container_intro-video">
+                            <video src="videos/intro.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                             
-                            <div onclick="triggerUpload(this)" class="video-placeholder-container absolute inset-0 flex flex-col items-center justify-center bg-[#F3F4F6] text-center p-6 space-y-4 z-20">
-                                <div class="w-14 h-14 rounded-full bg-white flex items-center justify-center text-brand-dark shadow-md group-hover:scale-105 transition-transform duration-300">
-                                    <i class="fa-solid fa-arrow-up-from-bracket text-lg"></i>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-bold tracking-wide text-brand-dark uppercase">Insert 1-min intro video here</p>
-                                    <p class="text-xs text-gray-500 mt-1">Click to upload video file</p>
-                                </div>
-                            </div>
-
-                            <video class="hidden w-full h-full object-cover" playsinline></video>
-                            
-                            <!-- Watermark Overlay Verbatim Reference -->
-                            <img src="KB logo_NEW_1.png" onerror="this.onerror=null; this.src='https://placehold.co/100x100/191C1A/ffffff?text=KB';" class="watermark-logo absolute pointer-events-none select-none opacity-25 z-10 w-12 h-12 bottom-20 left-1/2 -translate-x-1/2 object-contain hidden" alt="Watermark">
+                            <!-- Premium static logo overlay watermark pointing to images/logo-watermark.png -->
+                            <img src="images/logo-watermark.png" class="watermark-overlay" alt="KB">
                             
                             <!-- Rich Custom Playback Control Bar Overlay -->
-                            <div class="custom-controls absolute inset-0 bg-[#111215]/80 backdrop-blur-[2px] flex flex-col justify-between p-4 transition-all duration-300 hidden z-30">
+                            <div class="custom-controls absolute inset-0 bg-[#111215]/80 backdrop-blur-[2px] flex flex-col justify-between p-4 transition-all duration-300 z-30">
                                 <div class="flex justify-between items-center">
                                     <span class="text-[9px] font-bold tracking-widest text-[#C5A27D] uppercase bg-[#1C1E24] px-2.5 py-1 rounded-full border border-brand-accentGold/20">Intro Clip</span>
-                                    <div class="flex gap-1.5">
-                                        <button onclick="toggleUrlSettings(this)" class="text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-1.5 rounded-full backdrop-blur-sm transition-all" title="Configure Link / Path">
-                                            <i class="fa-solid fa-link text-[10px]"></i>
-                                        </button>
-                                        <button onclick="triggerUpload(this)" class="text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-1.5 rounded-full backdrop-blur-sm transition-all" title="Replace Video File">
-                                            <i class="fa-solid fa-arrows-rotate text-[10px]"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                
-                                <!-- Inline Direct URL Subpanel -->
-                                <div class="url-subpanel bg-[#0B0C0E]/95 p-3 rounded-lg border border-white/10 absolute inset-x-2 top-12 z-40 hidden space-y-2">
-                                    <p class="text-[10px] font-semibold text-white">Direct URL or Relative Video Filename:</p>
-                                    <input type="text" placeholder="e.g. intro.mp4 or https://site.com/video.mp4" class="w-full bg-black/40 text-xs text-white rounded px-2 py-1 border border-white/20 focus:outline-none focus:border-brand-accentGold url-input">
-                                    <div class="flex justify-end gap-1.5">
-                                        <button onclick="saveUrlSource(this)" class="bg-brand-accentGold text-[#0B0C0E] text-[10px] font-bold px-2.5 py-1 rounded hover:opacity-90 transition">Save Link</button>
-                                        <button onclick="toggleUrlSettings(this)" class="bg-white/10 text-white text-[10px] px-2.5 py-1 rounded hover:bg-white/20 transition">Cancel</button>
-                                    </div>
                                 </div>
 
                                 <div class="flex items-center justify-center gap-4">
@@ -636,12 +501,12 @@
                         <div class="space-y-4">
                             <h3 class="text-xs font-bold tracking-[0.25em] text-gray-400 uppercase">My Story</h3>
                             <h2 class="text-4xl font-extrabold tracking-tight">About Me</h2>
-                            <div class="text-gray-600 text-lg space-y-4 font-light leading-relaxed" data-draft-id="bio-text" contenteditable="true" oninput="queueAutoSave()">
+                            <div class="text-gray-600 text-lg space-y-4 font-light leading-relaxed">
                                 <p>
-                                    Hey! I’m Kamani. I specialize in crafting high-impact organic aesthetic video reviews and energetic tech unboxings that feel natively social, build trust, and drive conversions.
+                                    Hey! I'm Kamani. I specialize in crafting high-impact organic aesthetic video reviews and energetic tech unboxings that feel natively social, build trust, and drive conversions.
                                 </p>
                                 <p>
-                                    With years of production strategy experience, I take care of everything—from hook scripting to editing and adding aesthetic overlays—so you get scroll-stopping creative on autopilot.
+                                    With years of production experience, I take care of everything from hook scripting to editing and adding aesthetic overlays, so you get scroll-stopping creative content on autopilot.
                                 </p>
                             </div>
                         </div>
@@ -652,165 +517,103 @@
                                 <span class="w-10 h-10 rounded-full bg-[#F3F4F6] flex items-center justify-center text-gray-600 shadow-sm"><i class="fa-solid fa-location-dot text-sm"></i></span>
                                 <div>
                                     <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Location</p>
-                                    <p class="text-sm font-bold" data-draft-id="location-text" contenteditable="true" oninput="queueAutoSave()">Dieppe, NB (Available Worldwide)</p>
+                                    <p class="text-sm font-bold">NB, Canada (Available Worldwide)</p>
                                 </div>
                             </div>
                             <div class="flex items-center gap-3">
                                 <span class="w-10 h-10 rounded-full bg-[#F3F4F6] flex items-center justify-center text-gray-600 shadow-sm"><i class="fa-solid fa-envelope text-sm"></i></span>
                                 <div>
                                     <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Email</p>
-                                    <p class="text-sm font-bold" data-draft-id="email-text" contenteditable="true" oninput="queueAutoSave()">collabs@kamanibrown.com</p>
+                                    <p class="text-sm font-bold">kamani_brown@icloud.com</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Trusted by Brands Logo Strip -->
+                <!-- Trusted by Brands Logo Grid (Locked Production View - Exact Logos from Screenshot) -->
                 <div class="pt-20 border-t border-gray-100 max-w-6xl mx-auto px-6 md:px-8 space-y-6">
                     <p class="text-center text-xs font-bold uppercase tracking-[0.25em] text-gray-400">Trusted By Brands</p>
-                    <div class="grid grid-cols-4 gap-4 md:gap-6">
+                    <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-6 text-center">
 
-                        <!-- Logo Upload Card 1 -->
-                        <div class="logo-upload-container relative px-4 py-3 border border-gray-200 rounded-xl bg-white flex items-center justify-center cursor-pointer hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300 h-16 group shadow-sm">
-                            <input type="file" accept="image/*" class="hidden logo-file-input" id="brand-logo-1" onchange="handleLogoUpload(this)">
-                            <div onclick="triggerLogoUpload(this)" class="logo-placeholder flex flex-col items-center justify-center text-center">
-                                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider group-hover:text-[#C5A27D] transition">[ LOGO 1 ]</span>
-                                <span class="text-[8px] text-gray-300 group-hover:text-gray-400 mt-0.5">Click to upload</span>
-                            </div>
-                            <img src="" class="logo-image hidden max-w-full max-h-full object-contain" alt="Brand Logo">
-                            <button onclick="removeLogo(this, event)" class="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-[8px] opacity-0 group-hover:opacity-100 transition z-10" title="Remove Logo"><i class="fa-solid fa-xmark"></i></button>
+                        <!-- Logo 1: TORRAS -->
+                        <div class="px-4 py-3 border border-gray-200 rounded-xl bg-white flex flex-col items-center justify-center h-16 shadow-sm hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300">
+                            <img src="images/brand1.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="max-w-full max-h-full object-contain" alt="TORRAS">
+                            <span class="hidden text-xs font-bold uppercase tracking-wider text-orange-500">TORRAS</span>
                         </div>
 
-                        <!-- Logo Upload Card 2 -->
-                        <div class="logo-upload-container relative px-4 py-3 border border-gray-200 rounded-xl bg-white flex items-center justify-center cursor-pointer hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300 h-16 group shadow-sm">
-                            <input type="file" accept="image/*" class="hidden logo-file-input" id="brand-logo-2" onchange="handleLogoUpload(this)">
-                            <div onclick="triggerLogoUpload(this)" class="logo-placeholder flex flex-col items-center justify-center text-center">
-                                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider group-hover:text-[#C5A27D] transition">[ LOGO 2 ]</span>
-                                <span class="text-[8px] text-gray-300 group-hover:text-gray-400 mt-0.5">Click to upload</span>
-                            </div>
-                            <img src="" class="logo-image hidden max-w-full max-h-full object-contain" alt="Brand Logo">
-                            <button onclick="removeLogo(this, event)" class="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-[8px] opacity-0 group-hover:opacity-100 transition z-10" title="Remove Logo"><i class="fa-solid fa-xmark"></i></button>
+                        <!-- Logo 2: OINCO -->
+                        <div class="px-4 py-3 border border-gray-200 rounded-xl bg-white flex flex-col items-center justify-center h-16 shadow-sm hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300">
+                            <img src="images/brand2.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="max-w-full max-h-full object-contain" alt="OINCO">
+                            <span class="hidden text-xs font-black uppercase tracking-wider text-red-600">OINCO®</span>
                         </div>
 
-                        <!-- Logo Upload Card 3 -->
-                        <div class="logo-upload-container relative px-4 py-3 border border-gray-200 rounded-xl bg-white flex items-center justify-center cursor-pointer hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300 h-16 group shadow-sm">
-                            <input type="file" accept="image/*" class="hidden logo-file-input" id="brand-logo-3" onchange="handleLogoUpload(this)">
-                            <div onclick="triggerLogoUpload(this)" class="logo-placeholder flex flex-col items-center justify-center text-center">
-                                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider group-hover:text-[#C5A27D] transition">[ LOGO 3 ]</span>
-                                <span class="text-[8px] text-gray-300 group-hover:text-gray-400 mt-0.5">Click to upload</span>
-                            </div>
-                            <img src="" class="logo-image hidden max-w-full max-h-full object-contain" alt="Brand Logo">
-                            <button onclick="removeLogo(this, event)" class="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-[8px] opacity-0 group-hover:opacity-100 transition z-10" title="Remove Logo"><i class="fa-solid fa-xmark"></i></button>
+                        <!-- Logo 3: IVANKY -->
+                        <div class="px-4 py-3 border border-gray-200 rounded-xl bg-white flex flex-col items-center justify-center h-16 shadow-sm hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300">
+                            <img src="images/brand3.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="max-w-full max-h-full object-contain" alt="IVANKY">
+                            <span class="hidden text-xs font-bold uppercase tracking-wider text-gray-800">IVANKY</span>
                         </div>
 
-                        <!-- Logo Upload Card 4 -->
-                        <div class="logo-upload-container relative px-4 py-3 border border-gray-200 rounded-xl bg-white flex items-center justify-center cursor-pointer hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300 h-16 group shadow-sm">
-                            <input type="file" accept="image/*" class="hidden logo-file-input" id="brand-logo-4" onchange="handleLogoUpload(this)">
-                            <div onclick="triggerLogoUpload(this)" class="logo-placeholder flex flex-col items-center justify-center text-center">
-                                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider group-hover:text-[#C5A27D] transition">[ LOGO 4 ]</span>
-                                <span class="text-[8px] text-gray-300 group-hover:text-gray-400 mt-0.5">Click to upload</span>
-                            </div>
-                            <img src="" class="logo-image hidden max-w-full max-h-full object-contain" alt="Brand Logo">
-                            <button onclick="removeLogo(this, event)" class="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-[8px] opacity-0 group-hover:opacity-100 transition z-10" title="Remove Logo"><i class="fa-solid fa-xmark"></i></button>
+                        <!-- Logo 4: maono -->
+                        <div class="px-4 py-3 border border-gray-200 rounded-xl bg-white flex flex-col items-center justify-center h-16 shadow-sm hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300">
+                            <img src="images/brand4.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="max-w-full max-h-full object-contain" alt="maono">
+                            <span class="hidden text-xs font-semibold tracking-wider text-yellow-600">maono</span>
                         </div>
 
-                        <!-- Logo Upload Card 5 -->
-                        <div class="logo-upload-container relative px-4 py-3 border border-gray-200 rounded-xl bg-white flex items-center justify-center cursor-pointer hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300 h-16 group shadow-sm">
-                            <input type="file" accept="image/*" class="hidden logo-file-input" id="brand-logo-5" onchange="handleLogoUpload(this)">
-                            <div onclick="triggerLogoUpload(this)" class="logo-placeholder flex flex-col items-center justify-center text-center">
-                                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider group-hover:text-[#C5A27D] transition">[ LOGO 5 ]</span>
-                                <span class="text-[8px] text-gray-300 group-hover:text-gray-400 mt-0.5">Click to upload</span>
-                            </div>
-                            <img src="" class="logo-image hidden max-w-full max-h-full object-contain" alt="Brand Logo">
-                            <button onclick="removeLogo(this, event)" class="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-[8px] opacity-0 group-hover:opacity-100 transition z-10" title="Remove Logo"><i class="fa-solid fa-xmark"></i></button>
+                        <!-- Logo 5: Abstract Leaf Design -->
+                        <div class="px-4 py-3 border border-gray-200 rounded-xl bg-white flex flex-col items-center justify-center h-16 shadow-sm hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300">
+                            <img src="images/brand5.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="max-w-full max-h-full object-contain" alt="Green Design">
+                            <span class="hidden text-xs font-bold text-emerald-600">🌿 LOGO 5</span>
                         </div>
 
-                        <!-- Logo Upload Card 6 -->
-                        <div class="logo-upload-container relative px-4 py-3 border border-gray-200 rounded-xl bg-white flex items-center justify-center cursor-pointer hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300 h-16 group shadow-sm">
-                            <input type="file" accept="image/*" class="hidden logo-file-input" id="brand-logo-6" onchange="handleLogoUpload(this)">
-                            <div onclick="triggerLogoUpload(this)" class="logo-placeholder flex flex-col items-center justify-center text-center">
-                                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider group-hover:text-[#C5A27D] transition">[ LOGO 6 ]</span>
-                                <span class="text-[8px] text-gray-300 group-hover:text-gray-400 mt-0.5">Click to upload</span>
-                            </div>
-                            <img src="" class="logo-image hidden max-w-full max-h-full object-contain" alt="Brand Logo">
-                            <button onclick="removeLogo(this, event)" class="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-[8px] opacity-0 group-hover:opacity-100 transition z-10" title="Remove Logo"><i class="fa-solid fa-xmark"></i></button>
+                        <!-- Logo 6: NILLKIN -->
+                        <div class="px-4 py-3 border border-gray-200 rounded-xl bg-white flex flex-col items-center justify-center h-16 shadow-sm hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300">
+                            <img src="images/brand6.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="max-w-full max-h-full object-contain" alt="NILLKIN">
+                            <span class="hidden text-xs font-bold tracking-widest text-gray-800">NILLKIN</span>
                         </div>
 
-                        <!-- Logo Upload Card 7 -->
-                        <div class="logo-upload-container relative px-4 py-3 border border-gray-200 rounded-xl bg-white flex items-center justify-center cursor-pointer hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300 h-16 group shadow-sm">
-                            <input type="file" accept="image/*" class="hidden logo-file-input" id="brand-logo-7" onchange="handleLogoUpload(this)">
-                            <div onclick="triggerLogoUpload(this)" class="logo-placeholder flex flex-col items-center justify-center text-center">
-                                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider group-hover:text-[#C5A27D] transition">[ LOGO 7 ]</span>
-                                <span class="text-[8px] text-gray-300 group-hover:text-gray-400 mt-0.5">Click to upload</span>
-                            </div>
-                            <img src="" class="logo-image hidden max-w-full max-h-full object-contain" alt="Brand Logo">
-                            <button onclick="removeLogo(this, event)" class="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-[8px] opacity-0 group-hover:opacity-100 transition z-10" title="Remove Logo"><i class="fa-solid fa-xmark"></i></button>
+                        <!-- Logo 7: NEEWER -->
+                        <div class="px-4 py-3 border border-gray-200 rounded-xl bg-white flex flex-col items-center justify-center h-16 shadow-sm hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300">
+                            <img src="images/brand7.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="max-w-full max-h-full object-contain" alt="NEEWER">
+                            <span class="hidden text-xs font-bold tracking-widest text-black">NEEWER</span>
                         </div>
 
-                        <!-- Logo Upload Card 8 -->
-                        <div class="logo-upload-container relative px-4 py-3 border border-gray-200 rounded-xl bg-white flex items-center justify-center cursor-pointer hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300 h-16 group shadow-sm">
-                            <input type="file" accept="image/*" class="hidden logo-file-input" id="brand-logo-8" onchange="handleLogoUpload(this)">
-                            <div onclick="triggerLogoUpload(this)" class="logo-placeholder flex flex-col items-center justify-center text-center">
-                                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider group-hover:text-[#C5A27D] transition">[ LOGO 8 ]</span>
-                                <span class="text-[8px] text-gray-300 group-hover:text-gray-400 mt-0.5">Click to upload</span>
-                            </div>
-                            <img src="" class="logo-image hidden max-w-full max-h-full object-contain" alt="Brand Logo">
-                            <button onclick="removeLogo(this, event)" class="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-[8px] opacity-0 group-hover:opacity-100 transition z-10" title="Remove Logo"><i class="fa-solid fa-xmark"></i></button>
+                        <!-- Logo 8: YESOUL -->
+                        <div class="px-4 py-3 border border-gray-200 rounded-xl bg-white flex flex-col items-center justify-center h-16 shadow-sm hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300">
+                            <img src="images/brand8.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="max-w-full max-h-full object-contain" alt="YESOUL">
+                            <span class="hidden text-xs font-bold text-rose-500 tracking-wider">YESOUL</span>
                         </div>
 
-                        <!-- Logo Upload Card 9 -->
-                        <div class="logo-upload-container relative px-4 py-3 border border-gray-200 rounded-xl bg-white flex items-center justify-center cursor-pointer hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300 h-16 group shadow-sm">
-                            <input type="file" accept="image/*" class="hidden logo-file-input" id="brand-logo-9" onchange="handleLogoUpload(this)">
-                            <div onclick="triggerLogoUpload(this)" class="logo-placeholder flex flex-col items-center justify-center text-center">
-                                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider group-hover:text-[#C5A27D] transition">[ LOGO 9 ]</span>
-                                <span class="text-[8px] text-gray-300 group-hover:text-gray-400 mt-0.5">Click to upload</span>
-                            </div>
-                            <img src="" class="logo-image hidden max-w-full max-h-full object-contain" alt="Brand Logo">
-                            <button onclick="removeLogo(this, event)" class="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-[8px] opacity-0 group-hover:opacity-100 transition z-10" title="Remove Logo"><i class="fa-solid fa-xmark"></i></button>
+                        <!-- Logo 9: AP ALLPOWERS -->
+                        <div class="px-4 py-3 border border-gray-200 rounded-xl bg-white flex flex-col items-center justify-center h-16 shadow-sm hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300">
+                            <img src="images/brand9.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="max-w-full max-h-full object-contain" alt="AP ALLPOWERS">
+                            <span class="hidden text-xs font-black text-gray-900 tracking-tighter">AP ALLPOWERS</span>
                         </div>
 
-                        <!-- Logo Upload Card 10 -->
-                        <div class="logo-upload-container relative px-4 py-3 border border-gray-200 rounded-xl bg-white flex items-center justify-center cursor-pointer hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300 h-16 group shadow-sm">
-                            <input type="file" accept="image/*" class="hidden logo-file-input" id="brand-logo-10" onchange="handleLogoUpload(this)">
-                            <div onclick="triggerLogoUpload(this)" class="logo-placeholder flex flex-col items-center justify-center text-center">
-                                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider group-hover:text-[#C5A27D] transition">[ LOGO 10 ]</span>
-                                <span class="text-[8px] text-gray-300 group-hover:text-gray-400 mt-0.5">Click to upload</span>
-                            </div>
-                            <img src="" class="logo-image hidden max-w-full max-h-full object-contain" alt="Brand Logo">
-                            <button onclick="removeLogo(this, event)" class="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-[8px] opacity-0 group-hover:opacity-100 transition z-10" title="Remove Logo"><i class="fa-solid fa-xmark"></i></button>
+                        <!-- Logo 10: INIU (Strictly removed [LOGO 10] text labels underneath) -->
+                        <div class="px-4 py-3 border border-gray-200 rounded-xl bg-white flex flex-col items-center justify-center h-16 shadow-sm hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300">
+                            <img src="images/brand10.png" onerror="this.style.display='none';" class="max-w-full max-h-full object-contain" alt="INIU">
                         </div>
 
-                        <!-- Logo Upload Card 11 -->
-                        <div class="logo-upload-container relative px-4 py-3 border border-gray-200 rounded-xl bg-white flex items-center justify-center cursor-pointer hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300 h-16 group shadow-sm">
-                            <input type="file" accept="image/*" class="hidden logo-file-input" id="brand-logo-11" onchange="handleLogoUpload(this)">
-                            <div onclick="triggerLogoUpload(this)" class="logo-placeholder flex flex-col items-center justify-center text-center">
-                                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider group-hover:text-[#C5A27D] transition">[ LOGO 11 ]</span>
-                                <span class="text-[8px] text-gray-300 group-hover:text-gray-400 mt-0.5">Click to upload</span>
-                            </div>
-                            <img src="" class="logo-image hidden max-w-full max-h-full object-contain" alt="Brand Logo">
-                            <button onclick="removeLogo(this, event)" class="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-[8px] opacity-0 group-hover:opacity-100 transition z-10" title="Remove Logo"><i class="fa-solid fa-xmark"></i></button>
+                        <!-- Logo 11: extremeRate (Strictly removed [LOGO 11] text labels underneath) -->
+                        <div class="px-4 py-3 border border-gray-200 rounded-xl bg-white flex flex-col items-center justify-center h-16 shadow-sm hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300">
+                            <img src="images/brand11.png" onerror="this.style.display='none';" class="max-w-full max-h-full object-contain" alt="extremeRate">
                         </div>
 
-                        <!-- Logo Upload Card 12 -->
-                        <div class="logo-upload-container relative px-4 py-3 border border-gray-200 rounded-xl bg-white flex items-center justify-center cursor-pointer hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300 h-16 group shadow-sm">
-                            <input type="file" accept="image/*" class="hidden logo-file-input" id="brand-logo-12" onchange="handleLogoUpload(this)">
-                            <div onclick="triggerLogoUpload(this)" class="logo-placeholder flex flex-col items-center justify-center text-center">
-                                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider group-hover:text-[#C5A27D] transition">[ LOGO 12 ]</span>
-                                <span class="text-[8px] text-gray-300 group-hover:text-gray-400 mt-0.5">Click to upload</span>
-                            </div>
-                            <img src="" class="logo-image hidden max-w-full max-h-full object-contain" alt="Brand Logo">
-                            <button onclick="removeLogo(this, event)" class="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-[8px] opacity-0 group-hover:opacity-100 transition z-10" title="Remove Logo"><i class="fa-solid fa-xmark"></i></button>
+                        <!-- Logo 12: PUN CUBE -->
+                        <div class="px-4 py-3 border border-gray-200 rounded-xl bg-white flex flex-col items-center justify-center h-16 shadow-sm hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300">
+                            <img src="images/brand12.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="max-w-full max-h-full object-contain" alt="PUN CUBE">
+                            <span class="hidden text-xs font-black tracking-widest text-black">PUN CUBE</span>
                         </div>
 
                     </div>
                 </div>
-                        
+            </div>
+        </section>
 
         <!-- ==========================================
-             SECTION 2 — PORTFOLIO / CONTENT SHOWCASE
+             SECTION 2 — PORTFOLIO / FEATURED WORK (Exact labels & titles)
              ========================================== -->
-        <!-- Portfolio Section (Cool Fog Background rhythm) -->
         <section id="portfolio" class="bg-[#F1F2F5] py-24 border-b border-gray-200">
             <div class="max-w-6xl mx-auto px-6 md:px-8 space-y-16">
                 
@@ -819,40 +622,25 @@
                         <h3 class="text-xs font-bold tracking-[0.25em] text-gray-400 uppercase">Visual Showcase</h3>
                         <h2 class="text-4xl font-black tracking-tight mt-1">Featured Work</h2>
                     </div>
-                    <p class="text-sm text-gray-500 italic mt-2 md:mt-0 font-light" data-draft-id="featured-work-subtitle" contenteditable="true" oninput="queueAutoSave()">
+                    <p class="text-sm text-gray-500 italic mt-2 md:mt-0 font-light">
                         All content filmed, directed & edited in-house.
                     </p>
                 </div>
 
-                <!-- Row 1: Vertical Content (6x iPhone frames split in high-impact 3x3 rows) -->
+                <!-- Row 1: Vertical Content (6x iPhone frames with exact tags) -->
                 <div class="space-y-6 scroll-reveal">
                     <p class="text-xs font-bold uppercase tracking-[0.15em] text-gray-400">Vertical Formats (9:16)</p>
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12">
                         
-                        <!-- iPhone Frame Mockup 1 -->
+                        <!-- iPhone Frame Mockup 1 (Product Review) -->
                         <div class="flex flex-col items-center space-y-4">
                             <div class="w-full max-w-[260px] phone-frame relative group video-container-parent" id="container_v-video-1">
-                                <input type="file" accept="video/*" class="hidden video-file-input" id="v-video-1" onchange="handleVideoUpload(this)">
-                                <div onclick="triggerUpload(this)" class="video-placeholder-container absolute inset-0 flex flex-col items-center justify-center bg-[#F9F9FB] p-4 text-center space-y-3 z-20">
-                                    <i class="fa-solid fa-mobile-screen-button text-4xl text-gray-400"></i>
-                                    <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Reel 1</span>
-                                    <span class="text-[9px] text-gray-400">Click to upload</span>
-                                </div>
-                                <video class="hidden w-full h-full object-cover" playsinline></video>
-                                <img src="KB logo_NEW_1.png" onerror="this.onerror=null; this.src='https://placehold.co/100x100/191C1A/ffffff?text=KB';" class="watermark-logo absolute pointer-events-none select-none opacity-25 z-10 w-10 h-10 bottom-20 left-1/2 -translate-x-1/2 object-contain hidden" alt="Watermark">
+                                <video src="videos/reel1.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <img src="images/logo-watermark.png" class="watermark-overlay" alt="KB">
                                 
-                                <!-- Custom controls overlay -->
-                                <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-3.5 transition-all duration-300 hidden z-30">
+                                <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-3.5 transition-all duration-300 z-30">
                                     <div class="flex justify-between items-center">
                                         <span class="text-[8px] font-bold tracking-widest text-[#C5A27D] uppercase bg-[#1C1E24] px-2 py-0.5 rounded-full border border-brand-accentGold/20">Reel 1</span>
-                                        <div class="flex gap-1">
-                                            <button onclick="toggleUrlSettings(this)" class="text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-1 rounded-full"><i class="fa-solid fa-link text-[9px]"></i></button>
-                                            <button onclick="triggerUpload(this)" class="text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-1 rounded-full"><i class="fa-solid fa-arrows-rotate text-[9px]"></i></button>
-                                        </div>
-                                    </div>
-                                    <div class="url-subpanel bg-black/95 p-3 rounded-lg border border-white/10 absolute inset-x-2 top-10 z-40 hidden space-y-2">
-                                        <input type="text" placeholder="e.g. reel1.mp4" class="w-full bg-black/40 text-[9px] text-white rounded px-2 py-1 url-input">
-                                        <div class="flex justify-end gap-1"><button onclick="saveUrlSource(this)" class="bg-brand-accentGold text-[#0B0C0E] text-[8px] px-2 py-0.5 rounded">Save</button></div>
                                     </div>
                                     <div class="flex items-center justify-center gap-2">
                                         <button onclick="skipVideo(this, -5)" class="text-white bg-black/40 w-6 h-6 rounded-full flex items-center justify-center"><i class="fa-solid fa-backward text-[8px]"></i></button>
@@ -875,32 +663,18 @@
                                     </div>
                                 </div>
                             </div>
-                            <span class="inline-block bg-[#F3F4F6] text-gray-700 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-gray-200 cursor-pointer shadow-sm" data-draft-id="v-label-1" contenteditable="true" oninput="queueAutoSave()">High-Energy Unboxing</span>
+                            <span class="inline-block bg-[#F3F4F6] text-gray-500 px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider border border-gray-200 shadow-sm">Product Review</span>
                         </div>
 
-                        <!-- iPhone Frame Mockup 2 -->
+                        <!-- iPhone Frame Mockup 2 (Product Review) -->
                         <div class="flex flex-col items-center space-y-4">
                             <div class="w-full max-w-[260px] phone-frame relative group video-container-parent" id="container_v-video-2">
-                                <input type="file" accept="video/*" class="hidden video-file-input" id="v-video-2" onchange="handleVideoUpload(this)">
-                                <div onclick="triggerUpload(this)" class="video-placeholder-container absolute inset-0 flex flex-col items-center justify-center bg-[#F9F9FB] p-4 text-center space-y-3 z-20">
-                                    <i class="fa-solid fa-mobile-screen-button text-4xl text-gray-400"></i>
-                                    <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Reel 2</span>
-                                    <span class="text-[9px] text-gray-400">Click to upload</span>
-                                </div>
-                                <video class="hidden w-full h-full object-cover" playsinline></video>
-                                <img src="KB logo_NEW_1.png" onerror="this.onerror=null; this.src='https://placehold.co/100x100/191C1A/ffffff?text=KB';" class="watermark-logo absolute pointer-events-none select-none opacity-25 z-10 w-10 h-10 bottom-20 left-1/2 -translate-x-1/2 object-contain hidden" alt="Watermark">
+                                <video src="videos/reel2.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <img src="images/logo-watermark.png" class="watermark-overlay" alt="KB">
                                 
-                                <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-3.5 transition-all duration-300 hidden z-30">
+                                <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-3.5 transition-all duration-300 z-30">
                                     <div class="flex justify-between items-center">
                                         <span class="text-[8px] font-bold tracking-widest text-[#C5A27D] uppercase bg-[#1C1E24] px-2 py-0.5 rounded-full border border-brand-accentGold/20">Reel 2</span>
-                                        <div class="flex gap-1">
-                                            <button onclick="toggleUrlSettings(this)" class="text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-1 rounded-full transition-all"><i class="fa-solid fa-link text-[9px]"></i></button>
-                                            <button onclick="triggerUpload(this)" class="text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-1 rounded-full transition-all"><i class="fa-solid fa-arrows-rotate text-[9px]"></i></button>
-                                        </div>
-                                    </div>
-                                    <div class="url-subpanel bg-black/95 p-3 rounded-lg border border-white/10 absolute inset-x-2 top-10 z-40 hidden space-y-2">
-                                        <input type="text" placeholder="e.g. reel2.mp4" class="w-full bg-black/40 text-[9px] text-white rounded px-2 py-1 url-input">
-                                        <div class="flex justify-end gap-1"><button onclick="saveUrlSource(this)" class="bg-brand-accentGold text-[#0B0C0E] text-[8px] px-2 py-0.5 rounded">Save</button></div>
                                     </div>
                                     <div class="flex items-center justify-center gap-2">
                                         <button onclick="skipVideo(this, -5)" class="text-white bg-black/40 w-6 h-6 rounded-full flex items-center justify-center"><i class="fa-solid fa-backward text-[8px]"></i></button>
@@ -923,32 +697,18 @@
                                     </div>
                                 </div>
                             </div>
-                            <span class="inline-block bg-[#F3F4F6] text-gray-700 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-gray-200 cursor-pointer shadow-sm" data-draft-id="v-label-2" contenteditable="true" oninput="queueAutoSave()">Deep Technical Review</span>
+                            <span class="inline-block bg-[#F3F4F6] text-gray-500 px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider border border-gray-200 shadow-sm">Product Review</span>
                         </div>
 
-                        <!-- iPhone Frame Mockup 3 -->
+                        <!-- iPhone Frame Mockup 3 (Product Review) -->
                         <div class="flex flex-col items-center space-y-4">
                             <div class="w-full max-w-[260px] phone-frame relative group video-container-parent" id="container_v-video-3">
-                                <input type="file" accept="video/*" class="hidden video-file-input" id="v-video-3" onchange="handleVideoUpload(this)">
-                                <div onclick="triggerUpload(this)" class="video-placeholder-container absolute inset-0 flex flex-col items-center justify-center bg-[#F9F9FB] p-4 text-center space-y-3 z-20">
-                                    <i class="fa-solid fa-mobile-screen-button text-4xl text-gray-400"></i>
-                                    <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Reel 3</span>
-                                    <span class="text-[9px] text-gray-400">Click to upload</span>
-                                </div>
-                                <video class="hidden w-full h-full object-cover" playsinline></video>
-                                <img src="KB logo_NEW_1.png" onerror="this.onerror=null; this.src='https://placehold.co/100x100/191C1A/ffffff?text=KB';" class="watermark-logo absolute pointer-events-none select-none opacity-25 z-10 w-10 h-10 bottom-20 left-1/2 -translate-x-1/2 object-contain hidden" alt="Watermark">
+                                <video src="videos/reel3.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <img src="images/logo-watermark.png" class="watermark-overlay" alt="KB">
                                 
-                                <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-3.5 transition-all duration-300 hidden z-30">
+                                <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-3.5 transition-all duration-300 z-30">
                                     <div class="flex justify-between items-center">
                                         <span class="text-[8px] font-bold tracking-widest text-[#C5A27D] uppercase bg-[#1C1E24] px-2 py-0.5 rounded-full border border-brand-accentGold/20">Reel 3</span>
-                                        <div class="flex gap-1">
-                                            <button onclick="toggleUrlSettings(this)" class="text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-1 rounded-full transition-all"><i class="fa-solid fa-link text-[9px]"></i></button>
-                                            <button onclick="triggerUpload(this)" class="text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-1 rounded-full transition-all"><i class="fa-solid fa-arrows-rotate text-[9px]"></i></button>
-                                        </div>
-                                    </div>
-                                    <div class="url-subpanel bg-black/95 p-3 rounded-lg border border-white/10 absolute inset-x-2 top-10 z-40 hidden space-y-2">
-                                        <input type="text" placeholder="e.g. reel3.mp4" class="w-full bg-black/40 text-[9px] text-white rounded px-2 py-1 url-input">
-                                        <div class="flex justify-end gap-1"><button onclick="saveUrlSource(this)" class="bg-brand-accentGold text-[#0B0C0E] text-[8px] px-2 py-0.5 rounded">Save</button></div>
                                     </div>
                                     <div class="flex items-center justify-center gap-2">
                                         <button onclick="skipVideo(this, -5)" class="text-white bg-black/40 w-6 h-6 rounded-full flex items-center justify-center"><i class="fa-solid fa-backward text-[8px]"></i></button>
@@ -971,32 +731,18 @@
                                     </div>
                                 </div>
                             </div>
-                            <span class="inline-block bg-[#F3F4F6] text-gray-700 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-gray-200 cursor-pointer shadow-sm" data-draft-id="v-label-3" contenteditable="true" oninput="queueAutoSave()">Problem & Solution Pitch</span>
+                            <span class="inline-block bg-[#F3F4F6] text-gray-500 px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider border border-gray-200 shadow-sm">Product Review</span>
                         </div>
 
-                        <!-- iPhone Frame Mockup 4 -->
+                        <!-- iPhone Frame Mockup 4 (Aesthetic Unboxing) -->
                         <div class="flex flex-col items-center space-y-4">
                             <div class="w-full max-w-[260px] phone-frame relative group video-container-parent" id="container_v-video-4">
-                                <input type="file" accept="video/*" class="hidden video-file-input" id="v-video-4" onchange="handleVideoUpload(this)">
-                                <div onclick="triggerUpload(this)" class="video-placeholder-container absolute inset-0 flex flex-col items-center justify-center bg-[#F9F9FB] p-4 text-center space-y-3 z-20">
-                                    <i class="fa-solid fa-mobile-screen-button text-4xl text-gray-400"></i>
-                                    <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Reel 4</span>
-                                    <span class="text-[9px] text-gray-400">Click to upload</span>
-                                </div>
-                                <video class="hidden w-full h-full object-cover" playsinline></video>
-                                <img src="KB logo_NEW_1.png" onerror="this.onerror=null; this.src='https://placehold.co/100x100/191C1A/ffffff?text=KB';" class="watermark-logo absolute pointer-events-none select-none opacity-25 z-10 w-10 h-10 bottom-20 left-1/2 -translate-x-1/2 object-contain hidden" alt="Watermark">
+                                <video src="videos/reel4.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <img src="images/logo-watermark.png" class="watermark-overlay" alt="KB">
                                 
-                                <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-3.5 transition-all duration-300 hidden z-30">
+                                <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-3.5 transition-all duration-300 z-30">
                                     <div class="flex justify-between items-center">
                                         <span class="text-[8px] font-bold tracking-widest text-[#C5A27D] uppercase bg-[#1C1E24] px-2 py-0.5 rounded-full border border-brand-accentGold/20">Reel 4</span>
-                                        <div class="flex gap-1">
-                                            <button onclick="toggleUrlSettings(this)" class="text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-1 rounded-full transition-all"><i class="fa-solid fa-link text-[9px]"></i></button>
-                                            <button onclick="triggerUpload(this)" class="text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-1 rounded-full transition-all"><i class="fa-solid fa-arrows-rotate text-[9px]"></i></button>
-                                        </div>
-                                    </div>
-                                    <div class="url-subpanel bg-black/95 p-3 rounded-lg border border-white/10 absolute inset-x-2 top-10 z-40 hidden space-y-2">
-                                        <input type="text" placeholder="e.g. reel4.mp4" class="w-full bg-black/40 text-[9px] text-white rounded px-2 py-1 url-input">
-                                        <div class="flex justify-end gap-1"><button onclick="saveUrlSource(this)" class="bg-brand-accentGold text-[#0B0C0E] text-[8px] px-2 py-0.5 rounded">Save</button></div>
                                     </div>
                                     <div class="flex items-center justify-center gap-2">
                                         <button onclick="skipVideo(this, -5)" class="text-white bg-black/40 w-6 h-6 rounded-full flex items-center justify-center"><i class="fa-solid fa-backward text-[8px]"></i></button>
@@ -1019,32 +765,18 @@
                                     </div>
                                 </div>
                             </div>
-                            <span class="inline-block bg-[#F3F4F6] text-gray-700 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-gray-200 cursor-pointer shadow-sm" data-draft-id="v-label-4" contenteditable="true" oninput="queueAutoSave()">Aesthetic Workflow ASMR</span>
+                            <span class="inline-block bg-[#F3F4F6] text-gray-500 px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider border border-gray-200 shadow-sm">Aesthetic Unboxing</span>
                         </div>
 
-                        <!-- iPhone Frame Mockup 5 -->
+                        <!-- iPhone Frame Mockup 5 (Aesthetic Unboxing) -->
                         <div class="flex flex-col items-center space-y-4">
                             <div class="w-full max-w-[260px] phone-frame relative group video-container-parent" id="container_v-video-5">
-                                <input type="file" accept="video/*" class="hidden video-file-input" id="v-video-5" onchange="handleVideoUpload(this)">
-                                <div onclick="triggerUpload(this)" class="video-placeholder-container absolute inset-0 flex flex-col items-center justify-center bg-[#F9F9FB] p-4 text-center space-y-3 z-20">
-                                    <i class="fa-solid fa-mobile-screen-button text-4xl text-gray-400"></i>
-                                    <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Reel 5</span>
-                                    <span class="text-[9px] text-gray-400">Click to upload</span>
-                                </div>
-                                <video class="hidden w-full h-full object-cover" playsinline></video>
-                                <img src="KB logo_NEW_1.png" onerror="this.onerror=null; this.src='https://placehold.co/100x100/191C1A/ffffff?text=KB';" class="watermark-logo absolute pointer-events-none select-none opacity-25 z-10 w-10 h-10 bottom-20 left-1/2 -translate-x-1/2 object-contain hidden" alt="Watermark">
+                                <video src="videos/reel5.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <img src="images/logo-watermark.png" class="watermark-overlay" alt="KB">
                                 
-                                <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-3.5 transition-all duration-300 hidden z-30">
+                                <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-3.5 transition-all duration-300 z-30">
                                     <div class="flex justify-between items-center">
                                         <span class="text-[8px] font-bold tracking-widest text-[#C5A27D] uppercase bg-[#1C1E24] px-2 py-0.5 rounded-full border border-brand-accentGold/20">Reel 5</span>
-                                        <div class="flex gap-1">
-                                            <button onclick="toggleUrlSettings(this)" class="text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-1 rounded-full transition-all"><i class="fa-solid fa-link text-[9px]"></i></button>
-                                            <button onclick="triggerUpload(this)" class="text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-1 rounded-full transition-all"><i class="fa-solid fa-arrows-rotate text-[9px]"></i></button>
-                                        </div>
-                                    </div>
-                                    <div class="url-subpanel bg-black/95 p-3 rounded-lg border border-white/10 absolute inset-x-2 top-10 z-40 hidden space-y-2">
-                                        <input type="text" placeholder="e.g. reel5.mp4" class="w-full bg-black/40 text-[9px] text-white rounded px-2 py-1 url-input">
-                                        <div class="flex justify-end gap-1"><button onclick="saveUrlSource(this)" class="bg-brand-accentGold text-[#0B0C0E] text-[8px] px-2 py-0.5 rounded">Save</button></div>
                                     </div>
                                     <div class="flex items-center justify-center gap-2">
                                         <button onclick="skipVideo(this, -5)" class="text-white bg-black/40 w-6 h-6 rounded-full flex items-center justify-center"><i class="fa-solid fa-backward text-[8px]"></i></button>
@@ -1067,32 +799,18 @@
                                     </div>
                                 </div>
                             </div>
-                            <span class="inline-block bg-[#F3F4F6] text-gray-700 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-gray-200 cursor-pointer shadow-sm" data-draft-id="v-label-5" contenteditable="true" oninput="queueAutoSave()">Direct Talking Camera</span>
+                            <span class="inline-block bg-[#F3F4F6] text-gray-500 px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider border border-gray-200 shadow-sm">Aesthetic Unboxing</span>
                         </div>
 
-                        <!-- iPhone Frame Mockup 6 -->
+                        <!-- iPhone Frame Mockup 6 (Product Review) -->
                         <div class="flex flex-col items-center space-y-4">
                             <div class="w-full max-w-[260px] phone-frame relative group video-container-parent" id="container_v-video-6">
-                                <input type="file" accept="video/*" class="hidden video-file-input" id="v-video-6" onchange="handleVideoUpload(this)">
-                                <div onclick="triggerUpload(this)" class="video-placeholder-container absolute inset-0 flex flex-col items-center justify-center bg-[#F9F9FB] p-4 text-center space-y-3 z-20">
-                                    <i class="fa-solid fa-mobile-screen-button text-4xl text-gray-400"></i>
-                                    <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Reel 6</span>
-                                    <span class="text-[9px] text-gray-400">Click to upload</span>
-                                </div>
-                                <video class="hidden w-full h-full object-cover" playsinline></video>
-                                <img src="KB logo_NEW_1.png" onerror="this.onerror=null; this.src='https://placehold.co/100x100/191C1A/ffffff?text=KB';" class="watermark-logo absolute pointer-events-none select-none opacity-25 z-10 w-10 h-10 bottom-20 left-1/2 -translate-x-1/2 object-contain hidden" alt="Watermark">
+                                <video src="videos/reel6.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <img src="images/logo-watermark.png" class="watermark-overlay" alt="KB">
                                 
-                                <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-3.5 transition-all duration-300 hidden z-30">
+                                <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-3.5 transition-all duration-300 z-30">
                                     <div class="flex justify-between items-center">
                                         <span class="text-[8px] font-bold tracking-widest text-[#C5A27D] uppercase bg-[#1C1E24] px-2 py-0.5 rounded-full border border-brand-accentGold/20">Reel 6</span>
-                                        <div class="flex gap-1">
-                                            <button onclick="toggleUrlSettings(this)" class="text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-1 rounded-full transition-all"><i class="fa-solid fa-link text-[9px]"></i></button>
-                                            <button onclick="triggerUpload(this)" class="text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-1 rounded-full transition-all"><i class="fa-solid fa-arrows-rotate text-[9px]"></i></button>
-                                        </div>
-                                    </div>
-                                    <div class="url-subpanel bg-black/95 p-3 rounded-lg border border-white/10 absolute inset-x-2 top-10 z-40 hidden space-y-2">
-                                        <input type="text" placeholder="e.g. reel6.mp4" class="w-full bg-black/40 text-[9px] text-white rounded px-2 py-1 url-input">
-                                        <div class="flex justify-end gap-1"><button onclick="saveUrlSource(this)" class="bg-brand-accentGold text-[#0B0C0E] text-[8px] px-2 py-0.5 rounded">Save</button></div>
                                     </div>
                                     <div class="flex items-center justify-center gap-2">
                                         <button onclick="skipVideo(this, -5)" class="text-white bg-black/40 w-6 h-6 rounded-full flex items-center justify-center"><i class="fa-solid fa-backward text-[8px]"></i></button>
@@ -1115,40 +833,26 @@
                                     </div>
                                 </div>
                             </div>
-                            <span class="inline-block bg-[#F3F4F6] text-gray-700 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border border-gray-200 cursor-pointer shadow-sm" data-draft-id="v-label-6" contenteditable="true" oninput="queueAutoSave()">SaaS Screen walk</span>
+                            <span class="inline-block bg-[#F3F4F6] text-gray-500 px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider border border-gray-200 shadow-sm">Product Review</span>
                         </div>
 
                     </div>
                 </div>
 
-                <!-- Row 2: Horizontal Content (4x Laptop Mockups with Controls) -->
+                <!-- Row 2: Horizontal Content (4x Laptop Mockups with exact labels from Screenshot) -->
                 <div class="space-y-6 pt-12 scroll-reveal animate-delay">
                     <p class="text-xs font-bold uppercase tracking-[0.15em] text-gray-400">Horizontal Formats (16:9)</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
                         
-                        <!-- Laptop Frame Mockup 1 -->
+                        <!-- Laptop Frame Mockup 1 (Honest In-Depth Product Review) -->
                         <div class="space-y-3">
                             <div class="laptop-frame relative group video-container-parent widescreen-player" id="container_h-video-1">
-                                <input type="file" accept="video/*" class="hidden video-file-input" id="h-video-1" onchange="handleVideoUpload(this)">
-                                <div onclick="triggerUpload(this)" class="video-placeholder-container absolute inset-0 flex flex-col items-center justify-center bg-[#F9F9FB] p-6 text-center space-y-3 z-20">
-                                    <i class="fa-solid fa-laptop text-4xl text-gray-400"></i>
-                                    <span class="text-xs font-bold text-gray-500 uppercase tracking-widest">Upload Video Asset</span>
-                                    <span class="text-[10px] text-gray-400">Click to import video asset</span>
-                                </div>
-                                <video class="hidden w-full h-full object-cover" playsinline></video>
-                                <img src="KB logo_NEW_1.png" onerror="this.onerror=null; this.src='https://placehold.co/100x100/191C1A/ffffff?text=KB';" class="watermark-logo absolute pointer-events-none select-none opacity-25 z-10 w-12 h-12 bottom-16 right-6 object-contain hidden" alt="Watermark">
+                                <video src="videos/horizontal1.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <img src="images/logo-watermark.png" class="watermark-overlay-wide" alt="KB">
                                 
-                                <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-6 opacity-0 transition-all duration-300 hidden z-30">
+                                <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-6 opacity-0 transition-all duration-300 z-30">
                                     <div class="flex justify-between items-center">
-                                        
-                                        <div class="flex gap-1.5">
-                                            <button onclick="toggleUrlSettings(this)" class="text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-1.5 rounded-full"><i class="fa-solid fa-link text-xs"></i></button>
-                                            <button onclick="triggerUpload(this)" class="text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-2 rounded-full"><i class="fa-solid fa-arrows-rotate text-xs"></i></button>
-                                        </div>
-                                    </div>
-                                    <div class="url-subpanel bg-black/95 p-3 rounded-lg border border-white/10 absolute inset-x-4 top-14 z-40 hidden space-y-2">
-                                        <input type="text" placeholder="e.g. video.mp4" class="w-full bg-black/40 text-xs text-white rounded px-2.5 py-1.5 url-input">
-                                        <div class="flex justify-end gap-1.5"><button onclick="saveUrlSource(this)" class="bg-brand-accentGold text-[#0B0C0E] text-[10px] px-3 py-1 rounded">Save Link</button></div>
+                                        <span class="text-[10px] font-bold tracking-widest text-[#C5A27D] uppercase bg-[#1C1E24] px-3 py-1 rounded-full border border-brand-accentGold/20">Landscape Clip 1</span>
                                     </div>
                                     <div class="flex items-center justify-center gap-6">
                                         <button onclick="skipVideo(this, -5)" class="text-white bg-black/40 w-10 h-10 rounded-full flex items-center justify-center"><i class="fa-solid fa-backward text-sm"></i></button>
@@ -1171,32 +875,21 @@
                                     </div>
                                 </div>
                             </div>
-                            <p class="text-sm font-bold text-gray-700 tracking-tight" data-draft-id="h-label-1" contenteditable="true" oninput="queueAutoSave()">Desktop SaaS Product Integration Tutorial</p>
+                            <div class="space-y-1">
+                                <p class="text-sm font-semibold text-[#111215] tracking-tight">Honest In–Depth Product Review (Deep Dive)</p>
+                                <p class="text-xs text-gray-500 font-light leading-relaxed">Featured YouTube Case Study: LitOnes Desk Lamp. Highlights current high-end studio audio/video capture, multi-cam timeline management, and authentic product storytelling.</p>
+                            </div>
                         </div>
 
-                        <!-- Laptop Frame Mockup 2 -->
+                        <!-- Laptop Frame Mockup 2 (Commercial Showcase) -->
                         <div class="space-y-3">
                             <div class="laptop-frame relative group video-container-parent widescreen-player" id="container_h-video-2">
-                                <input type="file" accept="video/*" class="hidden video-file-input" id="h-video-2" onchange="handleVideoUpload(this)">
-                                <div onclick="triggerUpload(this)" class="video-placeholder-container absolute inset-0 flex flex-col items-center justify-center bg-[#F9F9FB] p-6 text-center space-y-3 z-20">
-                                    <i class="fa-solid fa-laptop text-4xl text-gray-400"></i>
-                                    <span class="text-xs font-bold text-gray-500 uppercase tracking-widest">Upload Video Asset</span>
-                                    <span class="text-[10px] text-gray-400">Click to import video asset</span>
-                                </div>
-                                <video class="hidden w-full h-full object-cover" playsinline></video>
-                                <img src="KB logo_NEW_1.png" onerror="this.onerror=null; this.src='https://placehold.co/100x100/191C1A/ffffff?text=KB';" class="watermark-logo absolute pointer-events-none select-none opacity-25 z-10 w-12 h-12 bottom-16 right-6 object-contain hidden" alt="Watermark">
+                                <video src="videos/horizontal2.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <img src="images/logo-watermark.png" class="watermark-overlay-wide" alt="KB">
                                 
-                                <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-6 opacity-0 transition-all duration-300 hidden z-30">
+                                <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-6 opacity-0 transition-all duration-300 z-30">
                                     <div class="flex justify-between items-center">
-                                        
-                                        <div class="flex gap-1.5">
-                                            <button onclick="toggleUrlSettings(this)" class="text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-1.5 rounded-full"><i class="fa-solid fa-link text-xs"></i></button>
-                                            <button onclick="triggerUpload(this)" class="text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-2 rounded-full"><i class="fa-solid fa-arrows-rotate text-xs"></i></button>
-                                        </div>
-                                    </div>
-                                    <div class="url-subpanel bg-black/95 p-3 rounded-lg border border-white/10 absolute inset-x-4 top-14 z-40 hidden space-y-2">
-                                        <input type="text" placeholder="e.g. video.mp4" class="w-full bg-black/40 text-xs text-white rounded px-2.5 py-1.5 url-input">
-                                        <div class="flex justify-end gap-1.5"><button onclick="saveUrlSource(this)" class="bg-brand-accentGold text-[#0B0C0E] text-[10px] px-3 py-1 rounded">Save Link</button></div>
+                                        <span class="text-[10px] font-bold tracking-widest text-[#C5A27D] uppercase bg-[#1C1E24] px-3 py-1 rounded-full border border-brand-accentGold/20">Landscape Clip 2</span>
                                     </div>
                                     <div class="flex items-center justify-center gap-6">
                                         <button onclick="skipVideo(this, -5)" class="text-white bg-black/40 w-10 h-10 rounded-full flex items-center justify-center"><i class="fa-solid fa-backward text-sm"></i></button>
@@ -1219,32 +912,18 @@
                                     </div>
                                 </div>
                             </div>
-                            <p class="text-sm font-bold text-gray-700 tracking-tight" data-draft-id="h-label-2" contenteditable="true" oninput="queueAutoSave()">Unboxing, Setup & Full Hardware Walkthrough</p>
+                            <p class="text-sm font-semibold text-[#111215] tracking-tight">Product Trailer</p>
                         </div>
 
-                        <!-- Laptop Frame Mockup 3 -->
+                        <!-- Laptop Frame Mockup 3 (Cinematic Unboxing) -->
                         <div class="space-y-3">
                             <div class="laptop-frame relative group video-container-parent widescreen-player" id="container_h-video-3">
-                                <input type="file" accept="video/*" class="hidden video-file-input" id="h-video-3" onchange="handleVideoUpload(this)">
-                                <div onclick="triggerUpload(this)" class="video-placeholder-container absolute inset-0 flex flex-col items-center justify-center bg-[#F9F9FB] p-6 text-center space-y-3 z-20">
-                                    <i class="fa-solid fa-laptop text-4xl text-gray-400"></i>
-                                    <span class="text-xs font-bold text-gray-500 uppercase tracking-widest">Upload Video Asset</span>
-                                    <span class="text-[10px] text-gray-400">Click to import video asset</span>
-                                </div>
-                                <video class="hidden w-full h-full object-cover" playsinline></video>
-                                <img src="KB logo_NEW_1.png" onerror="this.onerror=null; this.src='https://placehold.co/100x100/191C1A/ffffff?text=KB';" class="watermark-logo absolute pointer-events-none select-none opacity-25 z-10 w-12 h-12 bottom-16 right-6 object-contain hidden" alt="Watermark">
+                                <video src="videos/horizontal3.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <img src="images/logo-watermark.png" class="watermark-overlay-wide" alt="KB">
                                 
-                                <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-6 opacity-0 transition-all duration-300 hidden z-30">
+                                <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-6 opacity-0 transition-all duration-300 z-30">
                                     <div class="flex justify-between items-center">
-                                        
-                                        <div class="flex gap-1.5">
-                                            <button onclick="toggleUrlSettings(this)" class="text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-1.5 rounded-full"><i class="fa-solid fa-link text-xs"></i></button>
-                                            <button onclick="triggerUpload(this)" class="text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-2 rounded-full"><i class="fa-solid fa-arrows-rotate text-xs"></i></button>
-                                        </div>
-                                    </div>
-                                    <div class="url-subpanel bg-black/95 p-3 rounded-lg border border-white/10 absolute inset-x-4 top-14 z-40 hidden space-y-2">
-                                        <input type="text" placeholder="e.g. video.mp4" class="w-full bg-black/40 text-xs text-white rounded px-2.5 py-1.5 url-input">
-                                        <div class="flex justify-end gap-1.5"><button onclick="saveUrlSource(this)" class="bg-brand-accentGold text-[#0B0C0E] text-[10px] px-3 py-1 rounded">Save Link</button></div>
+                                        <span class="text-[10px] font-bold tracking-widest text-[#C5A27D] uppercase bg-[#1C1E24] px-3 py-1 rounded-full border border-brand-accentGold/20">Landscape Clip 3</span>
                                     </div>
                                     <div class="flex items-center justify-center gap-6">
                                         <button onclick="skipVideo(this, -5)" class="text-white bg-black/40 w-10 h-10 rounded-full flex items-center justify-center"><i class="fa-solid fa-backward text-sm"></i></button>
@@ -1267,32 +946,18 @@
                                     </div>
                                 </div>
                             </div>
-                            <p class="text-sm font-bold text-gray-700 tracking-tight" data-draft-id="h-label-3" contenteditable="true" oninput="queueAutoSave()">SaaS Workspace Workflow Strategy Overview</p>
+                            <p class="text-sm font-semibold text-[#111215] tracking-tight">Cinematic Unboxing</p>
                         </div>
 
-                        <!-- Laptop Frame Mockup 4 -->
+                        <!-- Laptop Frame Mockup 4 (Aesthetic Unboxing) -->
                         <div class="space-y-3">
                             <div class="laptop-frame relative group video-container-parent widescreen-player" id="container_h-video-4">
-                                <input type="file" accept="video/*" class="hidden video-file-input" id="h-video-4" onchange="handleVideoUpload(this)">
-                                <div onclick="triggerUpload(this)" class="video-placeholder-container absolute inset-0 flex flex-col items-center justify-center bg-[#F9F9FB] p-6 text-center space-y-3 z-20">
-                                    <i class="fa-solid fa-laptop text-4xl text-gray-400"></i>
-                                    <span class="text-xs font-bold text-gray-500 uppercase tracking-widest">Upload Video Asset</span>
-                                    <span class="text-[10px] text-gray-400">Click to import video asset</span>
-                                </div>
-                                <video class="hidden w-full h-full object-cover" playsinline></video>
-                                <img src="KB logo_NEW_1.png" onerror="this.onerror=null; this.src='https://placehold.co/100x100/191C1A/ffffff?text=KB';" class="watermark-logo absolute pointer-events-none select-none opacity-25 z-10 w-12 h-12 bottom-16 right-6 object-contain hidden" alt="Watermark">
+                                <video src="videos/horizontal4.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <img src="images/logo-watermark.png" class="watermark-overlay-wide" alt="KB">
                                 
-                                <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-6 opacity-0 transition-all duration-300 hidden z-30">
+                                <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-6 opacity-0 transition-all duration-300 z-30">
                                     <div class="flex justify-between items-center">
-                                        
-                                        <div class="flex gap-1.5">
-                                            <button onclick="toggleUrlSettings(this)" class="text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-1.5 rounded-full"><i class="fa-solid fa-link text-xs"></i></button>
-                                            <button onclick="triggerUpload(this)" class="text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-2 rounded-full"><i class="fa-solid fa-arrows-rotate text-xs"></i></button>
-                                        </div>
-                                    </div>
-                                    <div class="url-subpanel bg-black/95 p-3 rounded-lg border border-white/10 absolute inset-x-4 top-14 z-40 hidden space-y-2">
-                                        <input type="text" placeholder="e.g. video.mp4" class="w-full bg-black/40 text-xs text-white rounded px-2.5 py-1.5 url-input">
-                                        <div class="flex justify-end gap-1.5"><button onclick="saveUrlSource(this)" class="bg-brand-accentGold text-[#0B0C0E] text-[10px] px-3 py-1 rounded">Save Link</button></div>
+                                        <span class="text-[10px] font-bold tracking-widest text-[#C5A27D] uppercase bg-[#1C1E24] px-3 py-1 rounded-full border border-brand-accentGold/20">Landscape Clip 4</span>
                                     </div>
                                     <div class="flex items-center justify-center gap-6">
                                         <button onclick="skipVideo(this, -5)" class="text-white bg-black/40 w-10 h-10 rounded-full flex items-center justify-center"><i class="fa-solid fa-backward text-sm"></i></button>
@@ -1315,7 +980,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <p class="text-sm font-bold text-gray-700 tracking-tight" data-draft-id="h-label-4" contenteditable="true" oninput="queueAutoSave()">Long-Form Deep Dive: Hardware Review & Setup Tutorial</p>
+                            <p class="text-sm font-semibold text-[#111215] tracking-tight">Aesthetic Unboxing</p>
                         </div>
 
                     </div>
@@ -1323,11 +988,9 @@
             </div>
         </section>
 
-
         <!-- ==========================================
-             SECTION 3 — METRICS & SOCIAL PROOF
+             SECTION 3 — METRICS & SOCIAL PROOF (Screenshot verified values & labels)
              ========================================== -->
-        <!-- Metrics Section (Dark Textured Break with Glassmorphism Cards) -->
         <section id="metrics" class="bg-[#0E1013] text-white py-24 relative overflow-hidden grain-overlay">
             <div class="absolute inset-0 z-0 bg-[radial-gradient(circle_at_70%_50%,rgba(197,162,125,0.08),transparent_50%)]"></div>
             
@@ -1337,36 +1000,36 @@
                     <h2 class="text-4xl font-black tracking-tight mt-1">By the Numbers</h2>
                 </div>
 
-                <!-- Glassmorphism Stats Grid with Count-up Trigger Attributes -->
+                <!-- Stats Grid with exact layout & wording -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 scroll-reveal-children">
                     
                     <!-- Stat 1 -->
                     <div class="backdrop-blur-md bg-white/5 border border-white/10 p-8 rounded-2xl text-center space-y-2 shadow-xl hover:border-brand-accentGold/40 transition duration-500 glow-pulse">
-                        <p class="text-5xl font-black text-[#C5A27D] count-up-stat" data-count-target="150" data-draft-id="metric-val-1" contenteditable="true" oninput="queueAutoSave(); this.dataset.countTarget = this.textContent.replace(/[^0-9.]/g,'');">150+</p>
-                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest" data-draft-id="metric-label-1" contenteditable="true" oninput="queueAutoSave()">Videos Delivered</p>
+                        <p class="text-5xl font-black text-[#C5A27D] count-up-stat" data-count-target="150">150+</p>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-normal">Videos Delivered</p>
                     </div>
 
                     <!-- Stat 2 -->
                     <div class="backdrop-blur-md bg-white/5 border border-white/10 p-8 rounded-2xl text-center space-y-2 shadow-xl hover:border-brand-accentGold/40 transition duration-500 glow-pulse" style="animation-delay:1s">
-                        <p class="text-5xl font-black text-white count-up-stat" data-count-target="85" data-draft-id="metric-val-2" contenteditable="true" oninput="queueAutoSave(); this.dataset.countTarget = this.textContent.replace(/[^0-9.]/g,'');">85K+</p>
-                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest" data-draft-id="metric-label-2" contenteditable="true" oninput="queueAutoSave()">Avg. Video Views</p>
+                        <p class="text-5xl font-black text-white count-up-stat" data-count-target="85">85+</p>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-normal">Avg. Video Views</p>
                     </div>
 
                     <!-- Stat 3 -->
                     <div class="backdrop-blur-md bg-white/5 border border-white/10 p-8 rounded-2xl text-center space-y-2 shadow-xl hover:border-brand-accentGold/40 transition duration-500 glow-pulse" style="animation-delay:2s">
-                        <p class="text-5xl font-black text-[#C5A27D] count-up-stat-decimal" data-count-target="8.2" data-draft-id="metric-val-3" contenteditable="true" oninput="queueAutoSave(); this.dataset.countTarget = this.textContent.replace(/[^0-9.]/g,'');">8.2%</p>
-                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest" data-draft-id="metric-label-3" contenteditable="true" oninput="queueAutoSave()">Avg. Engagement Rate</p>
+                        <p class="text-5xl font-black text-[#C5A27D] count-up-stat-decimal" data-count-target="8.2">8.2%</p>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-normal">Avg. Engagement Rate</p>
                     </div>
 
                     <!-- Stat 4 -->
                     <div class="backdrop-blur-md bg-white/5 border border-white/10 p-8 rounded-2xl text-center space-y-2 shadow-xl hover:border-brand-accentGold/40 transition duration-500 glow-pulse" style="animation-delay:3s">
-                        <p class="text-5xl font-black text-white count-up-stat" data-count-target="40" data-draft-id="metric-val-4" contenteditable="true" oninput="queueAutoSave(); this.dataset.countTarget = this.textContent.replace(/[^0-9.]/g,'');">40+</p>
-                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest" data-draft-id="metric-label-4" contenteditable="true" oninput="queueAutoSave()">Brands Worked With</p>
+                        <p class="text-5xl font-black text-white count-up-stat" data-count-target="40">40+</p>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-normal">Brands Worked With</p>
                     </div>
 
                 </div>
 
-                <!-- Top Performing Content (No-Thumbnail Cards) -->
+                <!-- Top Performing Content (Case Studies - Wording matching Screenshot exactly) -->
                 <div class="space-y-6 pt-6 scroll-reveal">
                     <p class="text-xs font-bold uppercase tracking-[0.15em] text-[#C5A27D]">Top Performing Case Studies</p>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -1377,12 +1040,12 @@
                                 <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-[#C5A27D]">
                                     <i class="fa-solid fa-chart-line text-sm"></i>
                                 </div>
-                                <h4 class="text-sm font-bold tracking-tight text-white" data-draft-id="case-title-1" contenteditable="true" oninput="queueAutoSave()">Aesthetic Desktop Routine</h4>
+                                <h4 class="text-sm font-bold tracking-tight text-white">Problem Solving Unboxing Pitch</h4>
                             </div>
-                            <div class="space-y-2 text-xs text-gray-300">
-                                <div class="flex justify-between"><span class="text-gray-400">Views:</span><span class="font-bold" data-draft-id="case-stat-views-1" contenteditable="true" oninput="queueAutoSave()">185.2K</span></div>
-                                <div class="flex justify-between"><span class="text-gray-400">CTR (Click-Through):</span><span class="font-bold" data-draft-id="case-stat-ctr-1" contenteditable="true" oninput="queueAutoSave()">8.1%</span></div>
-                                <div class="flex justify-between"><span class="text-gray-400">Retention:</span><span class="font-bold" data-draft-id="case-stat-ret-1" contenteditable="true" oninput="queueAutoSave()">55% (Avg. Watch)</span></div>
+                            <div class="space-y-2 text-xs text-gray-300 font-sans">
+                                <div class="flex justify-between"><span class="text-gray-400 font-light">Views:</span><span class="font-bold">240.5K</span></div>
+                                <div class="flex justify-between"><span class="text-gray-400 font-light">CTR (Click-Through):</span><span class="font-bold">6.4%</span></div>
+                                <div class="flex justify-between"><span class="text-gray-400 font-light">Retention:</span><span class="font-bold">42% (Avg. Watch)</span></div>
                             </div>
                         </div>
 
@@ -1392,12 +1055,12 @@
                                 <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-[#C5A27D]">
                                     <i class="fa-solid fa-arrow-up-right-dots text-sm"></i>
                                 </div>
-                                <h4 class="text-sm font-bold tracking-tight text-white" data-draft-id="case-title-2" contenteditable="true" oninput="queueAutoSave()">Problem Solving Pitch</h4>
+                                <h4 class="text-sm font-bold tracking-tight text-white">Aesthetic Desktop Routine</h4>
                             </div>
-                            <div class="space-y-2 text-xs text-gray-300">
-                                <div class="flex justify-between"><span class="text-gray-400">Views:</span><span class="font-bold" data-draft-id="case-stat-views-2" contenteditable="true" oninput="queueAutoSave()">240.5K</span></div>
-                                <div class="flex justify-between"><span class="text-gray-400">CTR (Click-Through):</span><span class="font-bold" data-draft-id="case-stat-ctr-2" contenteditable="true" oninput="queueAutoSave()">6.4%</span></div>
-                                <div class="flex justify-between"><span class="text-gray-400">Retention:</span><span class="font-bold" data-draft-id="case-stat-ret-2" contenteditable="true" oninput="queueAutoSave()">42% (Avg. Watch)</span></div>
+                            <div class="space-y-2 text-xs text-gray-300 font-sans">
+                                <div class="flex justify-between"><span class="text-gray-400 font-light">Views:</span><span class="font-bold">185.2K</span></div>
+                                <div class="flex justify-between"><span class="text-gray-400 font-light">CTR (Click-Through):</span><span class="font-bold">8.1%</span></div>
+                                <div class="flex justify-between"><span class="text-gray-400 font-light">Retention:</span><span class="font-bold">55% (Avg. Watch)</span></div>
                             </div>
                         </div>
 
@@ -1407,12 +1070,12 @@
                                 <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-[#C5A27D]">
                                     <i class="fa-solid fa-chart-pie text-sm"></i>
                                 </div>
-                                <h4 class="text-sm font-bold tracking-tight text-white" data-draft-id="case-title-3" contenteditable="true" oninput="queueAutoSave()">SaaS Concept Demo Pitch</h4>
+                                <h4 class="text-sm font-bold tracking-tight text-white">SaaS Concept Demo Pitch</h4>
                             </div>
-                            <div class="space-y-2 text-xs text-gray-300">
-                                <div class="flex justify-between"><span class="text-gray-400">Views:</span><span class="font-bold" data-draft-id="case-stat-views-3" contenteditable="true" oninput="queueAutoSave()">92.0K</span></div>
-                                <div class="flex justify-between"><span class="text-gray-400">CTR (Click-Through):</span><span class="font-bold" data-draft-id="case-stat-ctr-3" contenteditable="true" oninput="queueAutoSave()">7.2%</span></div>
-                                <div class="flex justify-between"><span class="text-gray-400">Retention:</span><span class="font-bold" data-draft-id="case-stat-ret-3" contenteditable="true" oninput="queueAutoSave()">49% (Avg. Watch)</span></div>
+                            <div class="space-y-2 text-xs text-gray-300 font-sans">
+                                <div class="flex justify-between"><span class="text-gray-400 font-light">Views:</span><span class="font-bold">92.0K</span></div>
+                                <div class="flex justify-between"><span class="text-gray-400 font-light">CTR (Click-Through):</span><span class="font-bold">7.2%</span></div>
+                                <div class="flex justify-between"><span class="text-gray-400 font-light">Retention:</span><span class="font-bold">49% (Avg. Watch)</span></div>
                             </div>
                         </div>
 
@@ -1425,97 +1088,96 @@
                     <div class="inline-flex items-center justify-center w-12 h-12 bg-white/10 text-brand-accentGold rounded-full text-xl shadow-inner">
                         <i class="fa-solid fa-quote-right"></i>
                     </div>
-                    <blockquote class="text-xl md:text-2xl font-light italic text-gray-100 leading-relaxed" data-draft-id="testimonial-quote" contenteditable="true" oninput="queueAutoSave()">
+                    <blockquote class="text-xl md:text-2xl font-light italic text-gray-100 leading-relaxed font-sans">
                         "Working with Kamani was the smoothest collaboration we've had. The hook captured our target demographic perfectly and the retention rates were well above standard industry metrics!"
                     </blockquote>
-                    <p class="font-bold tracking-widest text-xs uppercase text-[#C5A27D]" data-draft-id="testimonial-author" contenteditable="true" oninput="queueAutoSave()">— Marketing Director, TechVault Gadgets</p>
+                    <p class="font-bold tracking-widest text-xs uppercase text-[#C5A27D] font-sans">— MARKETING DIRECTOR, TECHVAULT GADGETS</p>
                 </div>
             </div>
         </section>
 
-
         <!-- ==========================================
-             SECTION 4 — PACKAGES & RATES
+             SECTION 4 — PACKAGES & RATES (Wording from screenshot)
              ========================================== -->
-        <!-- Pricing Section (Porcelain Light Background rhythm) -->
+        <!-- Pricing Section (Porcelain Light Background) -->
         <section id="rates-packages" class="bg-[#F9F9FB] py-24 border-b border-gray-200">
             <div class="max-w-6xl mx-auto px-6 md:px-8 space-y-16">
 
                 <div class="border-b border-gray-200 pb-6 scroll-reveal">
-                    <h3 class="text-xs font-bold tracking-[0.25em] text-gray-400 uppercase" contenteditable="true" oninput="queueAutoSave()">Let's Collaborate</h3>
-                    <h2 class="text-4xl font-black tracking-tight mt-1" contenteditable="true" oninput="queueAutoSave()">Work With Me</h2>
+                    <h3 class="text-xs font-bold tracking-[0.25em] text-gray-400 uppercase">Let's Collaborate</h3>
+                    <h2 class="text-4xl font-black tracking-tight mt-1">Work With Me</h2>
                 </div>
 
                 <!-- Intro copy -->
-                <p class="text-gray-500 text-base md:text-lg font-light max-w-2xl -mt-8 scroll-reveal" contenteditable="true" oninput="queueAutoSave()">Every brand is different — so every collaboration is scoped individually. Here's what I offer. Reach out and let's find the right fit for your campaign.</p>
+                <p class="text-gray-500 text-base md:text-lg font-light max-w-2xl -mt-8 scroll-reveal">Every brand is different — so every collaboration is scoped individually. Here's what I offer. Reach out and let's find the right fit for your campaign.</p>
 
-                <!-- 3 service tier cards — deliverables only, no prices -->
+                <!-- 3 service tier cards -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch scroll-reveal">
 
-                    <!-- Tier 01 -->
+                    <!-- Tier 01: Starter -->
                     <div class="border border-gray-200 bg-white rounded-2xl p-8 flex flex-col justify-between shadow-sm pkg-card">
                         <div class="space-y-6">
                             <div class="space-y-2">
-                                <p class="text-xs font-bold uppercase tracking-widest text-gray-400" contenteditable="true" oninput="queueAutoSave()">Short-Form</p>
-                                <h3 class="text-2xl font-bold" data-draft-id="pkg-title-1" contenteditable="true" oninput="queueAutoSave()">Starter</h3>
-                                <p class="text-sm text-gray-400 font-light" contenteditable="true" oninput="queueAutoSave()">Best for: product seeding, brand awareness, quick hooks</p>
+                                <p class="text-xs font-bold uppercase tracking-widest text-gray-400 font-sans">SHORT-FORM</p>
+                                <h3 class="text-2xl font-bold font-sans text-[#111215]">Starter</h3>
+                                <p class="text-sm text-gray-400 font-light leading-relaxed">Best for: product seeding, brand awareness, quick hooks</p>
                             </div>
-                            <ul class="space-y-4 text-sm text-gray-600 border-t border-gray-100 pt-6">
-                                <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span data-draft-id="pkg-feature-1-1" contenteditable="true" oninput="queueAutoSave()">1 short-form vertical video (15–30s)</span></li>
-                                <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span data-draft-id="pkg-feature-1-2" contenteditable="true" oninput="queueAutoSave()">1 revision round</span></li>
-                                <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span data-draft-id="pkg-feature-1-3" contenteditable="true" oninput="queueAutoSave()">Concept brainstorming included</span></li>
-                                <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span data-draft-id="pkg-feature-1-4" contenteditable="true" oninput="queueAutoSave()">Color correction & basic edit</span></li>
+                            <ul class="space-y-4 text-sm text-gray-600 border-t border-gray-150 pt-6">
+                                <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span>1x Short-form vertical video (15-30s)</span></li>
+                                <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span>1x Revision included</span></li>
+                                <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span>Dedicated concept brainstorming</span></li>
+                                <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span>Raw footage color correction</span></li>
                             </ul>
                         </div>
                         <div class="pt-8">
-                            <a href="#footer-cta" class="block text-center bg-brand-dark hover:opacity-90 text-white font-medium py-3 rounded-lg text-sm transition" contenteditable="true" oninput="queueAutoSave()">
+                            <a href="#footer-cta" class="block text-center bg-brand-dark hover:opacity-90 text-white font-medium py-3 rounded-lg text-sm transition">
                                 Enquire About This
                             </a>
                         </div>
                     </div>
 
-                    <!-- Tier 02 — highlighted -->
+                    <!-- Tier 02 — Core Package (Standard - MOST REQUESTED) -->
                     <div class="border-2 border-[#C5A27D] bg-white rounded-2xl p-8 flex flex-col justify-between shadow-2xl relative transform md:scale-105 z-10 pkg-card" style="box-shadow: 0 0 40px rgba(197,162,125,0.15), 0 24px 48px rgba(0,0,0,0.08)">
-                        <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#C5A27D] text-[#0B0C0E] text-[10px] font-black tracking-[0.2em] uppercase px-5 py-1.5 rounded-full shadow" contenteditable="true" oninput="queueAutoSave()">
-                            Most Requested
+                        <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#C5A27D] text-[#0B0C0E] text-[10px] font-black tracking-[0.2em] uppercase px-5 py-1.5 rounded-full shadow">
+                            MOST REQUESTED
                         </div>
                         <div class="space-y-6">
                             <div class="space-y-2 pt-2">
-                                <p class="text-xs font-bold uppercase tracking-widest text-[#C5A27D]" contenteditable="true" oninput="queueAutoSave()">Standard</p>
-                                <h3 class="text-2xl font-bold" data-draft-id="pkg-title-2" contenteditable="true" oninput="queueAutoSave()">Core Package</h3>
-                                <p class="text-sm text-gray-400 font-light" contenteditable="true" oninput="queueAutoSave()">Best for: paid ads, social campaigns, product launches</p>
+                                <p class="text-xs font-bold uppercase tracking-widest text-[#C5A27D] font-sans">STANDARD</p>
+                                <h3 class="text-2xl font-bold font-sans text-[#111215]">Core Package</h3>
+                                <p class="text-sm text-gray-400 font-light leading-relaxed">Best for: paid ads, social campaigns, product launches</p>
                             </div>
-                            <ul class="space-y-4 text-sm text-gray-600 border-t border-gray-100 pt-6">
-                                <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span data-draft-id="pkg-feature-2-1" contenteditable="true" oninput="queueAutoSave()">1 polished video up to 60s</span></li>
-                                <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span data-draft-id="pkg-feature-2-2" contenteditable="true" oninput="queueAutoSave()">2 revision rounds</span></li>
-                                <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span data-draft-id="pkg-feature-2-3" contenteditable="true" oninput="queueAutoSave()">Hook + CTA scripting</span></li>
-                                <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span data-draft-id="pkg-feature-2-4" contenteditable="true" oninput="queueAutoSave()">Captions & subtitles included</span></li>
+                            <ul class="space-y-4 text-sm text-gray-600 border-t border-gray-150 pt-6">
+                                <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span>3x Highly targeted video (up to 60s)</span></li>
+                                <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span>2x Revisions included</span></li>
+                                <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span>Hook + CTA strategy & scripting</span></li>
+                                <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span>Aesthetic subtitles included</span></li>
                             </ul>
                         </div>
                         <div class="pt-8">
-                            <a href="#footer-cta" class="block text-center bg-[#C5A27D] text-[#0B0C0E] font-bold py-3.5 rounded-lg text-sm transition hover:bg-opacity-90" contenteditable="true" oninput="queueAutoSave()">
+                            <a href="#footer-cta" class="block text-center bg-[#C5A27D] text-[#0B0C0E] font-bold py-3.5 rounded-lg text-sm transition hover:bg-opacity-90">
                                 Enquire About This
                             </a>
                         </div>
                     </div>
 
-                    <!-- Tier 03 -->
+                    <!-- Tier 03: Deep Dive -->
                     <div class="border border-gray-200 bg-white rounded-2xl p-8 flex flex-col justify-between shadow-sm pkg-card">
                         <div class="space-y-6">
                             <div class="space-y-2">
-                                <p class="text-xs font-bold uppercase tracking-widest text-gray-400" contenteditable="true" oninput="queueAutoSave()">Tech / SaaS</p>
-                                <h3 class="text-2xl font-bold" data-draft-id="pkg-title-3" contenteditable="true" oninput="queueAutoSave()">Deep Dive</h3>
-                                <p class="text-sm text-gray-400 font-light" contenteditable="true" oninput="queueAutoSave()">Best for: complex products, app demos, tech walkthroughs</p>
+                                <p class="text-xs font-bold uppercase tracking-widest text-gray-400 font-sans">TECH / SAAS</p>
+                                <h3 class="text-2xl font-bold font-sans text-[#111215]">Deep Dive</h3>
+                                <p class="text-sm text-gray-400 font-light leading-relaxed">Best for: complex products, app demos, tech walkthroughs</p>
                             </div>
-                            <ul class="space-y-4 text-sm text-gray-600 border-t border-gray-100 pt-6">
-                                <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span data-draft-id="pkg-feature-3-1" contenteditable="true" oninput="queueAutoSave()">In-depth demo or walkthrough</span></li>
-                                <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span data-draft-id="pkg-feature-3-2" contenteditable="true" oninput="queueAutoSave()">Script research & strategy</span></li>
-                                <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span data-draft-id="pkg-feature-3-3" contenteditable="true" oninput="queueAutoSave()">3 revision rounds</span></li>
-                                <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span data-draft-id="pkg-feature-3-4" contenteditable="true" oninput="queueAutoSave()">Close-up macro B-roll footage</span></li>
+                            <ul class="space-y-4 text-sm text-gray-600 border-t border-gray-150 pt-6">
+                                <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span>5–10 minute in-depth walkthrough or demo</span></li>
+                                <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span>Comprehensive script research</span></li>
+                                <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span>3x Revisions included</span></li>
+                                <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span>Full close-up macro B-roll</span></li>
                             </ul>
                         </div>
                         <div class="pt-8">
-                            <a href="#footer-cta" class="block text-center bg-brand-dark hover:opacity-90 text-white font-medium py-3 rounded-lg text-sm transition" contenteditable="true" oninput="queueAutoSave()">
+                            <a href="#footer-cta" class="block text-center bg-brand-dark hover:opacity-90 text-white font-medium py-3 rounded-lg text-sm transition">
                                 Enquire About This
                             </a>
                         </div>
@@ -1523,48 +1185,49 @@
 
                 </div>
 
+                <!-- Customizations Options -->
                 <div class="pt-8 pb-4 scroll-reveal">
-                    <h3 class="text-base font-bold tracking-[0.15em] text-black uppercase text-center mb-8" data-draft-id="addons-main-header" contenteditable="true" oninput="queueAutoSave()">Customize Your Collaboration Package (Add-ons & Usage Rights)</h3>
+                    <h3 class="text-xs font-bold tracking-[0.15em] text-black uppercase text-center mb-8 font-sans">CUSTOMIZE YOUR COLLABORATION PACKAGE (ADD-ONS & USAGE RIGHTS)</h3>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <!-- Production Options -->
                         <div class="bg-[#F6F7F9] rounded-2xl p-8 border border-gray-200/60 shadow-sm">
-                            <h4 class="text-[11px] font-bold uppercase tracking-widest text-[#4A5D54] mb-6 pb-4 border-b border-gray-200/80" data-draft-id="addons-prod-title" contenteditable="true" oninput="queueAutoSave()">Production Options</h4>
+                            <h4 class="text-[11px] font-bold uppercase tracking-widest text-[#4A5D54] mb-6 pb-4 border-b border-gray-200/80 font-sans">PRODUCTION OPTIONS</h4>
                             <ul class="space-y-2">
-                                <li class="py-2.5 border-b border-gray-200/50 last:border-0 addon-row-hover font-semibold text-gray-800 text-sm" data-draft-id="addon-prod-1" contenteditable="true" oninput="queueAutoSave()">Extra hook variations (×3)</li>
-                                <li class="py-2.5 border-b border-gray-200/50 last:border-0 addon-row-hover font-semibold text-gray-800 text-sm" data-draft-id="addon-prod-2" contenteditable="true" oninput="queueAutoSave()">Rush delivery (&lt;48 hrs)</li>
-                                <li class="py-2.5 border-b border-gray-200/50 last:border-0 addon-row-hover font-semibold text-gray-800 text-sm" data-draft-id="addon-prod-3" contenteditable="true" oninput="queueAutoSave()">Raw footage delivery</li>
-                                <li class="py-2.5 border-b border-gray-200/50 last:border-0 addon-row-hover font-semibold text-gray-800 text-sm" data-draft-id="addon-prod-4" contenteditable="true" oninput="queueAutoSave()">Custom captions & overlays</li>
+                                <li class="py-2.5 border-b border-gray-200/50 last:border-0 addon-row-hover font-semibold text-gray-800 text-sm font-sans">Extra hook variations (x3)</li>
+                                <li class="py-2.5 border-b border-gray-200/50 last:border-0 addon-row-hover font-semibold text-gray-800 text-sm font-sans">Rush delivery (&lt;48 hrs)</li>
+                                <li class="py-2.5 border-b border-gray-200/50 last:border-0 addon-row-hover font-semibold text-gray-800 text-sm font-sans">Raw footage delivery</li>
+                                <li class="py-2.5 border-b border-gray-200/50 last:border-0 addon-row-hover font-semibold text-gray-800 text-sm font-sans">Custom captions & overlays</li>
                             </ul>
                         </div>
 
                         <!-- Paid Ads & Whitelisting Rights -->
                         <div class="bg-[#F6F7F9] rounded-2xl p-8 border border-gray-200/60 shadow-sm">
-                            <h4 class="text-[11px] font-bold uppercase tracking-widest text-[#4A5D54] mb-6 pb-4 border-b border-gray-200/80" data-draft-id="addons-rights-title" contenteditable="true" oninput="queueAutoSave()">Paid Ads & Whitelisting Rights</h4>
+                            <h4 class="text-[11px] font-bold uppercase tracking-widest text-[#4A5D54] mb-6 pb-4 border-b border-gray-200/80 font-sans">PAID ADS & WHITELISTING RIGHTS</h4>
                             <ul class="space-y-2">
-                                <li class="py-2.5 border-b border-gray-200/50 last:border-0 addon-row-hover font-semibold text-gray-800 text-sm" data-draft-id="addon-rights-1" contenteditable="true" oninput="queueAutoSave()">30-Day Paid Ads / Spark Ads Usage</li>
-                                <li class="py-2.5 border-b border-gray-200/50 last:border-0 addon-row-hover font-semibold text-gray-800 text-sm" data-draft-id="addon-rights-2" contenteditable="true" oninput="queueAutoSave()">90-Day Paid Ads / Spark Ads Usage</li>
-                                <li class="py-2.5 border-b border-gray-200/50 last:border-0 addon-row-hover font-semibold text-gray-800 text-sm" data-draft-id="addon-rights-3" contenteditable="true" oninput="queueAutoSave()">6-Month Paid Ads / Spark Ads Usage</li>
-                                <li class="py-2.5 border-b border-gray-200/50 last:border-0 addon-row-hover font-semibold text-gray-800 text-sm" data-draft-id="addon-rights-4" contenteditable="true" oninput="queueAutoSave()">12-Month Paid Ads / Spark Ads Usage</li>
-                                <li class="py-2.5 border-b border-gray-200/50 last:border-0 addon-row-hover font-semibold text-gray-800 text-sm" data-draft-id="addon-rights-5" contenteditable="true" oninput="queueAutoSave()">Perpetual / Unlimited Commercial Rights</li>
+                                <li class="py-2.5 border-b border-gray-200/50 last:border-0 addon-row-hover font-semibold text-gray-800 text-sm font-sans">30-Day Paid Ads / Spark Ads Usage</li>
+                                <li class="py-2.5 border-b border-gray-200/50 last:border-0 addon-row-hover font-semibold text-gray-800 text-sm font-sans">90-Day Paid Ads / Spark Ads Usage</li>
+                                <li class="py-2.5 border-b border-gray-200/50 last:border-0 addon-row-hover font-semibold text-gray-800 text-sm font-sans">6-Month Paid Ads / Spark Ads Usage</li>
+                                <li class="py-2.5 border-b border-gray-200/50 last:border-0 addon-row-hover font-semibold text-gray-800 text-sm font-sans">12-Month Paid Ads / Spark Ads Usage</li>
+                                <li class="py-2.5 border-b border-gray-200/50 last:border-0 addon-row-hover font-semibold text-gray-800 text-sm font-sans">Perpetual / Unlimited Commercial Rights</li>
                             </ul>
                         </div>
                     </div>
                 </div>
 
-                <!-- Custom scope callout -->
+                <!-- Custom scope callout (Wording verified from Screenshot) -->
                 <div class="scroll-reveal">
                     <div class="bg-[#0B0C0E] rounded-2xl p-10 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
                         <div class="space-y-3 max-w-xl">
-                            <span class="inline-block text-[10px] font-bold tracking-[0.2em] uppercase text-[#C5A27D] border border-[#C5A27D]/30 px-3 py-1 rounded-full" contenteditable="true" oninput="queueAutoSave()">Custom Scopes Welcome</span>
-                            <h4 class="text-2xl font-black text-white leading-snug" data-draft-id="custom-scope-headline" contenteditable="true" oninput="queueAutoSave()">Not sure which fits your campaign?</h4>
-                            <p class="text-gray-400 text-sm font-light leading-relaxed" data-draft-id="custom-scope-body" contenteditable="true" oninput="queueAutoSave()">Pricing is scoped to the project. Share your brief, timeline, and usage needs — and I'll come back with a tailored proposal within 24 hours. No templates, no guesswork.</p>
+                            <span class="inline-block text-[10px] font-bold tracking-[0.2em] uppercase text-[#C5A27D] border border-[#C5A27D]/30 px-3 py-1 rounded-full font-sans">CUSTOM SCOPES WELCOME</span>
+                            <h4 class="text-2xl font-black text-white leading-snug font-sans">Not sure which fits your campaign?</h4>
+                            <p class="text-gray-400 text-sm font-light leading-relaxed">Let's help you find the right one that fits your needs. Share your brief, timeline, and usage needs, and I'll come back with a tailored proposal within 24–48 hours.</p>
                         </div>
                         <div class="flex flex-col gap-3 items-center md:items-end shrink-0">
-                            <a href="mailto:kamani_brown@icloud.com" class="bg-[#C5A27D] text-[#0B0C0E] px-7 py-3.5 rounded-full font-bold text-sm hover:opacity-90 transition whitespace-nowrap shadow-lg shadow-[#C5A27D]/20">
+                            <a href="mailto:kamani_brown@icloud.com" class="bg-[#C5A27D] text-[#0B0C0E] px-7 py-3.5 rounded-full font-bold text-sm hover:opacity-90 transition whitespace-nowrap shadow-lg shadow-[#C5A27D]/20 font-sans">
                                 Let's Talk Scope
                             </a>
-                            <p class="text-[11px] text-gray-500" contenteditable="true" oninput="queueAutoSave()">Response within 24 hours · No obligation</p>
+                            <p class="text-[11px] text-gray-500 font-sans">Response within 24 hours · No obligation</p>
                         </div>
                     </div>
                 </div>
@@ -1573,9 +1236,9 @@
         </section>
 
         <!-- ==========================================
-             FOOTER CTA SECTION
+             FOOTER CTA SECTION (Verbatim Copy & Icons)
              ========================================== -->
-        <!-- Footer CTA (Dark Background with ambient looping linear gradient) -->
+        <!-- Footer CTA -->
         <section id="footer-cta" class="relative bg-[#0B0C0E] text-white py-24 text-center overflow-hidden">
             
             <!-- Slow Moving Ambient Gradient Loop -->
@@ -1585,27 +1248,27 @@
             <div class="absolute inset-0 z-0 opacity-[0.03] pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E');"></div>
 
             <div class="relative z-10 max-w-2xl mx-auto px-6 space-y-8 scroll-reveal">
-                <h2 class="text-4xl md:text-6xl font-black tracking-tighter" data-draft-id="footer-title" contenteditable="true" oninput="queueAutoSave()">
-                    Let's make content that converts.
+                <h2 class="text-4xl md:text-6xl font-black tracking-tighter font-sans leading-none">
+                    Let's make content <br>that converts
                 </h2>
-                <p class="text-gray-300 font-light text-base md:text-lg" data-draft-id="footer-sub" contenteditable="true" oninput="queueAutoSave()">
+                <p class="text-gray-300 font-light text-base md:text-lg">
                     Drop me an email with your project parameters, and let's structure a custom media kit or test project.
                 </p>
                 
                 <div class="space-y-4 pt-4">
                     <div class="space-y-3">
-                        <p class="text-xl md:text-2xl font-bold tracking-tight text-brand-accentGold hover:underline cursor-pointer" data-draft-id="footer-email" contenteditable="true" oninput="queueAutoSave()">
-                            collabs@kamanibrown.com
+                        <p class="text-xl md:text-2xl font-bold tracking-tight text-brand-accentGold hover:underline cursor-pointer font-sans">
+                            kamani_brown@icloud.com
                         </p>
                         
-                        <!-- Verified YouTube Link -->
-                        <a href="https://www.youtube.com/@KamaniBrown" target="_blank" class="inline-flex items-center gap-2 text-red-400 hover:text-red-300 transition text-sm md:text-base font-semibold bg-red-950/20 px-4 py-1.5 rounded-full border border-red-500/20 hover:scale-105 duration-200">
+                        <!-- Verified YouTube Link (Red design matching Screenshot verbatim) -->
+                        <a href="https://youtube.com/@KamaniBrown" target="_blank" class="inline-flex items-center gap-2 text-red-400 hover:text-red-300 transition text-sm md:text-base font-semibold bg-red-950/20 px-4 py-1.5 rounded-full border border-red-500/20 hover:scale-105 duration-200 font-sans">
                             <i class="fa-brands fa-youtube text-lg"></i> youtube.com/@KamaniBrown
                         </a>
                     </div>
                     
                     <div class="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-                        <a href="mailto:kamani_brown@icloud.com" class="bg-brand-accentGold text-[#0B0C0E] px-8 py-3.5 rounded-full font-bold tracking-wide transition-all duration-300 hover:scale-105 shadow-lg shadow-[#C5A27D]/20">
+                        <a href="mailto:kamani_brown@icloud.com" class="bg-brand-accentGold text-[#0B0C0E] px-8 py-3.5 rounded-full font-bold tracking-wide transition-all duration-300 hover:scale-105 shadow-lg shadow-[#C5A27D]/20 font-sans">
                             Get in Touch <i class="fa-solid fa-paper-plane text-xs ml-1"></i>
                         </a>
                     </div>
@@ -1615,108 +1278,20 @@
 
     </main>
 
-    <!-- Success Toast Notification Layer -->
-    <div id="toast" class="fixed bottom-6 right-6 z-[120] transform translate-y-12 opacity-0 transition-all duration-300 pointer-events-none">
-        <div class="bg-[#111215] text-white py-3.5 px-6 rounded-xl shadow-2xl flex items-center gap-3 border border-white/10">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <div class="text-sm">
-                <p class="font-bold text-white text-xs uppercase tracking-wide" id="toast-title">Saved Draft</p>
-                <p class="text-gray-300 font-light text-xs mt-0.5" id="toast-desc">Draft saved automatically to your device.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Script to enable native in-browser media previews, sound toggles, saving states, and HTML file compilation -->
+    <!-- Script to enable native in-browser media previews, sound toggles, and responsive adjustments -->
     <script>
-        let autoSaveTimeout;
         let fullscreenTimeout;
         let controlsIdleTimeout;
-        
-        // Setup local offline file store (IndexedDB)
-        const DB_NAME = 'ugc_video_database_v2';
-        const STORE_NAME = 'video_blobs';
 
-        function getDB() {
-            return new Promise((resolve, reject) => {
-                const request = indexedDB.open(DB_NAME, 1);
-                request.onerror = () => reject(request.error);
-                request.onsuccess = () => resolve(request.result);
-                request.onupgradeneeded = (e) => {
-                    const db = e.target.result;
-                    if (!db.objectStoreNames.contains(STORE_NAME)) {
-                        db.createObjectStore(STORE_NAME);
-                    }
-                };
-            });
-        }
-
-        async function saveVideoBlob(id, fileBlob) {
-            try {
-                const db = await getDB();
-                const transaction = db.transaction(STORE_NAME, 'readwrite');
-                transaction.objectStore(STORE_NAME).put(fileBlob, id);
-                return new Promise((resolve, reject) => {
-                    transaction.oncomplete = () => resolve();
-                    transaction.onerror = () => reject(transaction.error);
-                });
-            } catch (err) {
-                console.error("Failed to write blob to DB:", err);
-            }
-        }
-
-        async function loadAllVideoBlobs() {
-            try {
-                const db = await getDB();
-                const transaction = db.transaction(STORE_NAME, 'readonly');
-                const store = transaction.objectStore(STORE_NAME);
-                const keysRequest = store.getAllKeys();
-                
-                return new Promise((resolve, reject) => {
-                    keysRequest.onsuccess = () => {
-                        const keys = keysRequest.result;
-                        const promises = keys.map(key => {
-                            return new Promise((res) => {
-                                const getReq = store.get(key);
-                                getReq.onsuccess = () => {
-                                    res({ id: key, blob: getReq.result });
-                                };
-                            });
-                        });
-                        Promise.all(promises).then(resolve);
-                    };
-                    keysRequest.onerror = () => reject(keysRequest.error);
-                });
-            } catch (err) {
-                console.error("Failed to restore video draft list:", err);
-                return [];
-            }
-        }
-
-        async function clearVideoBlobs() {
-            try {
-                const db = await getDB();
-                const transaction = db.transaction(STORE_NAME, 'readwrite');
-                transaction.objectStore(STORE_NAME).clear();
-            } catch (err) {
-                console.error("Failed to purge video catalog:", err);
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', async () => {
-            // Load saved changes from local storage if available
-            loadSavedDraft();
-
-            // Load and restore saved local video previews
-            await restoreSavedVideos();
-
-            // Restore brand logos
-            restoreBrandLogos();
-
+        document.addEventListener('DOMContentLoaded', () => {
             // Set up fallback drag events for mobile / tablet visibility toggles
             setupResponsiveControls();
 
             // Explicit Scroll Smooth click handler
             setupSmoothScrollNavigation();
+
+            // Setup Video Metadata Listeners to dynamically grab correct file durations
+            setupVideoMetadataListeners();
 
             // Listen for native Fullscreen exits to safely toggle button icon sets
             document.addEventListener('fullscreenchange', handleFullScreenExit);
@@ -1733,6 +1308,40 @@
             setupStickyNavObserver();
             setupCountUpObserver();
         });
+
+        // Loop through all active video elements to map their triggers cleanly
+        function setupVideoMetadataListeners() {
+            document.querySelectorAll('.video-container-parent').forEach(container => {
+                const video = container.querySelector('video');
+                if (video) {
+                    // Force explicit metadata preloading for mobile performance safety
+                    video.setAttribute('preload', 'metadata');
+
+                    video.addEventListener('loadedmetadata', () => {
+                        const durationText = container.querySelector('.time-duration');
+                        if (durationText) durationText.textContent = formatTime(video.duration);
+                    });
+                    video.addEventListener('timeupdate', () => updateTimelineProgress(container));
+                    video.addEventListener('ended', () => resetVideoStateOnEnded(container));
+
+                    // Sync overlay UI controls if user enters/exits standard native iOS video fullscreen
+                    video.addEventListener('webkitbeginfullscreen', () => {
+                        video.muted = false;
+                        const soundToggleIcon = container.querySelector('.sound-toggle i');
+                        if (soundToggleIcon) {
+                            soundToggleIcon.className = 'fa-solid fa-volume-high text-[10px] md:text-xs';
+                        }
+                    });
+                    video.addEventListener('webkitendfullscreen', () => {
+                        video.muted = true;
+                        const soundToggleIcon = container.querySelector('.sound-toggle i');
+                        if (soundToggleIcon) {
+                            soundToggleIcon.className = 'fa-solid fa-volume-xmark text-[10px] md:text-xs';
+                        }
+                    });
+                }
+            });
+        }
 
         // Failsafe Scroll Navigator Helper
         function setupSmoothScrollNavigation() {
@@ -1751,235 +1360,6 @@
             });
         }
 
-        // Brand Logo Upload Trigger
-        function triggerLogoUpload(element) {
-            const container = element.closest('.logo-upload-container');
-            const fileInput = container.querySelector('.logo-file-input');
-            if (fileInput) fileInput.click();
-        }
-
-        // Handles brand logo image loading and storage
-        function handleLogoUpload(input) {
-            const file = input.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const base64Data = e.target.result;
-                    const container = input.closest('.logo-upload-container');
-                    const img = container.querySelector('.logo-image');
-                    const placeholder = container.querySelector('.logo-placeholder');
-                    
-                    img.src = base64Data;
-                    img.classList.remove('hidden');
-                    placeholder.classList.add('hidden');
-                    
-                    localStorage.setItem(`brand_logo_${input.id}`, base64Data);
-                    showToast("Logo Saved", "Brand partner logo updated successfully!");
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        // Clears Brand Logo from local storage
-        function removeLogo(button, event) {
-            event.stopPropagation();
-            const container = button.closest('.logo-upload-container');
-            const input = container.querySelector('.logo-file-input');
-            const img = container.querySelector('.logo-image');
-            const placeholder = container.querySelector('.logo-placeholder');
-            
-            input.value = '';
-            img.removeAttribute('src');
-            img.classList.add('hidden');
-            placeholder.classList.remove('hidden');
-            
-            localStorage.removeItem(`brand_logo_${input.id}`);
-            showToast("Logo Removed", "Partner logo cleared from layout.");
-        }
-
-        // Restore saved logos from LocalStorage
-        function restoreBrandLogos() {
-            document.querySelectorAll('.logo-file-input').forEach(input => {
-                const savedLogo = localStorage.getItem(`brand_logo_${input.id}`);
-                if (savedLogo) {
-                    const container = input.closest('.logo-upload-container');
-                    const img = container.querySelector('.logo-image');
-                    const placeholder = container.querySelector('.logo-placeholder');
-                    img.src = savedLogo;
-                    img.classList.remove('hidden');
-                    placeholder.classList.add('hidden');
-                }
-            });
-        }
-
-        // Triggers the file upload dialog for a specific frame slot
-        function triggerUpload(button) {
-            const container = button.closest('.video-container-parent');
-            const fileInput = container.querySelector('.video-file-input');
-            if (fileInput) {
-                fileInput.click();
-            }
-        }
-
-        // Toggle URL/Filename setting subpanel visibility
-        function toggleUrlSettings(button) {
-            const container = button.closest('.video-container-parent');
-            const subpanel = container.querySelector('.url-subpanel');
-            if (subpanel) {
-                subpanel.classList.toggle('hidden');
-                
-                // Prefill if there's already a saved URL in localStorage
-                const videoId = container.querySelector('.video-file-input').id;
-                const savedSrc = localStorage.getItem(`video_src_${videoId}`);
-                if (savedSrc && !savedSrc.startsWith('blob:')) {
-                    subpanel.querySelector('.url-input').value = savedSrc;
-                }
-            }
-        }
-
-        // Saves a typed URL link or relative filename as the video source
-        function saveUrlSource(button) {
-            const container = button.closest('.video-container-parent');
-            const inputField = container.querySelector('.url-input');
-            const videoId = container.querySelector('.video-file-input').id;
-            const sourceString = inputField.value.trim();
-
-            if (sourceString) {
-                const video = container.querySelector('video');
-                const placeholder = container.querySelector('.video-placeholder-container');
-                const controlsOverlay = container.querySelector('.custom-controls');
-                const watermark = container.querySelector('.watermark-logo');
-                
-                video.src = sourceString;
-                
-                placeholder.classList.add('hidden');
-                video.classList.remove('hidden');
-                controlsOverlay.classList.remove('hidden');
-                if (watermark) watermark.classList.remove('hidden');
-                
-                container.querySelector('.url-subpanel').classList.add('hidden');
-                localStorage.setItem(`video_src_${videoId}`, sourceString);
-                
-                video.muted = true;
-                video.pause();
-
-                video.ontimeupdate = () => updateTimelineProgress(container);
-                video.onended = () => resetVideoStateOnEnded(container);
-                video.onloadedmetadata = () => {
-                    const durationText = container.querySelector('.time-duration');
-                    if (durationText) {
-                        durationText.textContent = formatTime(video.duration);
-                    }
-                    updateOverlayUI(container);
-                };
-
-                showToast("Video Linked", "Direct media link updated successfully!");
-            }
-        }
-
-        // Handles actual local file extraction and controller initialization
-        async function handleVideoUpload(input) {
-            const file = input.files[0];
-            if (file) {
-                const fileURL = URL.createObjectURL(file);
-                const container = input.closest('.video-container-parent');
-                const video = container.querySelector('video');
-                const placeholder = container.querySelector('.video-placeholder-container');
-                const controlsOverlay = container.querySelector('.custom-controls');
-                const watermark = container.querySelector('.watermark-logo');
-                const inputId = input.id;
-                
-                video.src = fileURL;
-                await saveVideoBlob(inputId, file);
-                localStorage.removeItem(`video_src_${inputId}`);
-                
-                placeholder.classList.add('hidden');
-                video.classList.remove('hidden');
-                controlsOverlay.classList.remove('hidden');
-                if (watermark) watermark.classList.remove('hidden');
-                
-                video.muted = true;
-                video.pause();
-
-                video.ontimeupdate = () => updateTimelineProgress(container);
-                video.onended = () => resetVideoStateOnEnded(container);
-                video.onloadedmetadata = () => {
-                    const durationText = container.querySelector('.time-duration');
-                    if (durationText) {
-                        durationText.textContent = formatTime(video.duration);
-                    }
-                    updateOverlayUI(container);
-                };
-
-                showToast("Video Loaded & Saved", "File added and saved cleanly to local draft memory!");
-            }
-        }
-
-        // Restore saved videos on page load (from IndexedDB or hard-coded Links)
-        async function restoreSavedVideos() {
-            const storedVideoBlobs = await loadAllVideoBlobs();
-            
-            storedVideoBlobs.forEach(item => {
-                const inputEl = document.getElementById(item.id);
-                if (inputEl) {
-                    const container = inputEl.closest('.video-container-parent');
-                    const video = container.querySelector('video');
-                    const placeholder = container.querySelector('.video-placeholder-container');
-                    const controlsOverlay = container.querySelector('.custom-controls');
-                    const watermark = container.querySelector('.watermark-logo');
-                    
-                    const blobURL = URL.createObjectURL(item.blob);
-                    video.src = blobURL;
-                    
-                    placeholder.classList.add('hidden');
-                    video.classList.remove('hidden');
-                    controlsOverlay.classList.remove('hidden');
-                    if (watermark) watermark.classList.remove('hidden');
-                    
-                    video.muted = true;
-                    video.pause();
-                    
-                    video.ontimeupdate = () => updateTimelineProgress(container);
-                    video.onended = () => resetVideoStateOnEnded(container);
-                    video.onloadedmetadata = () => {
-                        const durationText = container.querySelector('.time-duration');
-                        if (durationText) durationText.textContent = formatTime(video.duration);
-                        updateOverlayUI(container);
-                    };
-                    updateOverlayUI(container);
-                }
-            });
-
-            document.querySelectorAll('.video-file-input').forEach(input => {
-                const savedSrc = localStorage.getItem(`video_src_${input.id}`);
-                if (savedSrc && !savedSrc.startsWith('blob:') && !storedVideoBlobs.some(item => item.id === input.id)) {
-                    const container = input.closest('.video-container-parent');
-                    const video = container.querySelector('video');
-                    const placeholder = container.querySelector('.video-placeholder-container');
-                    const controlsOverlay = container.querySelector('.custom-controls');
-                    const watermark = container.querySelector('.watermark-logo');
-                    
-                    video.src = savedSrc;
-                    placeholder.classList.add('hidden');
-                    video.classList.remove('hidden');
-                    controlsOverlay.classList.remove('hidden');
-                    if (watermark) watermark.classList.remove('hidden');
-                    
-                    video.muted = true;
-                    video.pause();
-                    
-                    video.ontimeupdate = () => updateTimelineProgress(container);
-                    video.onended = () => resetVideoStateOnEnded(container);
-                    video.onloadedmetadata = () => {
-                        const durationText = container.querySelector('.time-duration');
-                        if (durationText) durationText.textContent = formatTime(video.duration);
-                        updateOverlayUI(container);
-                    };
-                    updateOverlayUI(container);
-                }
-            });
-        }
-
         // Toggle playback state
         function togglePlayPause(button) {
             const container = button.closest('.video-container-parent');
@@ -1992,9 +1372,15 @@
             }
 
             if (video.paused) {
-                video.play();
-                icon.className = 'fa-solid fa-pause text-xs md:text-sm';
-                if (statusText) statusText.textContent = 'playing';
+                const playPromise = video.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        icon.className = 'fa-solid fa-pause text-xs md:text-sm';
+                        if (statusText) statusText.textContent = 'playing';
+                    }).catch(error => {
+                        console.log("Playback prevented on mobile Safari:", error);
+                    });
+                }
             } else {
                 video.pause();
                 icon.className = 'fa-solid fa-play text-xs md:text-sm pl-0.5';
@@ -2005,8 +1391,18 @@
         // Robust Full Screen Toggle on Parent Mockup
         function toggleFullScreen(button) {
             const container = button.closest('.video-container-parent');
+            const video = container.querySelector('video');
             const icon = button.querySelector('i');
-            if (!container) return;
+            if (!container || !video) return;
+
+            // Strict iOS mobile detection (iPhone/iPod browser)
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+            if (isIOS && video.webkitEnterFullscreen) {
+                // iPhone Safari demands triggering fullscreen directly on the video node
+                video.webkitEnterFullscreen();
+                return;
+            }
 
             if (!document.fullscreenElement && !document.webkitFullscreenElement) {
                 if (container.requestFullscreen) {
@@ -2014,7 +1410,7 @@
                 } else if (container.webkitRequestFullscreen) {
                     container.webkitRequestFullscreen();
                 }
-                icon.className = 'fa-solid fa-compress text-[10px]';
+                if (icon) icon.className = 'fa-solid fa-compress text-[10px]';
                 showFullscreenControls(container);
             } else {
                 if (document.exitFullscreen) {
@@ -2022,7 +1418,7 @@
                 } else if (document.webkitExitFullscreen) {
                     document.webkitExitFullscreen();
                 }
-                icon.className = 'fa-solid fa-expand text-[10px]';
+                if (icon) icon.className = 'fa-solid fa-expand text-[10px]';
             }
         }
 
@@ -2091,7 +1487,6 @@
 
                 const resetControlsTimer = () => {
                     const video = container.querySelector('video');
-                    // Only trigger auto-fade out when the video is actively playing
                     if (video && !video.paused && !video.ended) {
                         controls.style.opacity = '1';
                         controls.style.pointerEvents = 'auto';
@@ -2102,9 +1497,8 @@
                             controls.style.opacity = '0';
                             controls.style.pointerEvents = 'none';
                             container.classList.add('hide-cursor');
-                        }, 2000); // Fades completely after 2 seconds of zero active hover movements
+                        }, 2000);
                     } else {
-                        // Always show controls cleanly when paused
                         controls.style.opacity = '1';
                         controls.style.pointerEvents = 'auto';
                         container.classList.remove('hide-cursor');
@@ -2116,7 +1510,6 @@
                 container.addEventListener('click', resetControlsTimer);
                 container.addEventListener('touchstart', resetControlsTimer);
                 
-                // Keep visible on cursor leave when paused, fade on leave when playing
                 container.addEventListener('mouseleave', () => {
                     const video = container.querySelector('video');
                     if (video && !video.paused) {
@@ -2181,10 +1574,8 @@
             video.muted = !video.muted;
             if (video.muted) {
                 icon.className = 'fa-solid fa-volume-xmark text-[10px] md:text-xs';
-                showToast("Muted", "Mockup sound muted.");
             } else {
                 icon.className = 'fa-solid fa-volume-high text-[10px] md:text-xs';
-                showToast("Sound Unmuted", "Audio activated!");
             }
         }
 
@@ -2206,7 +1597,7 @@
         // Ensure proper button status symbols
         function updateOverlayUI(container) {
             const video = container.querySelector('video');
-            const playButton = container.querySelector('.play-pause-btn i') || container.querySelector('button[onclick*="togglePlayPause"] i');
+            const playButton = container.querySelector('button[onclick*="togglePlayPause"] i');
             const statusText = container.querySelector('.status-indicator');
 
             if (playButton) {
@@ -2232,12 +1623,12 @@
         function setupResponsiveControls() {
             document.querySelectorAll('.video-container-parent').forEach(container => {
                 container.addEventListener('click', function(e) {
-                    if (e.target.closest('.custom-controls button') || e.target.closest('.progress-bar-container') || e.target.closest('.url-subpanel')) {
+                    if (e.target.closest('.custom-controls button') || e.target.closest('.progress-bar-container')) {
                         return;
                     }
                     
                     const controls = this.querySelector('.custom-controls');
-                    if (controls && !controls.classList.contains('hidden')) {
+                    if (controls) {
                         const isVisible = controls.classList.contains('opacity-100');
                         if (isVisible) {
                             controls.classList.remove('opacity-100');
@@ -2291,7 +1682,6 @@
 
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    // When hero is NO LONGER intersecting (user has scrolled past it), show nav
                     if (!entry.isIntersecting) {
                         stickyNav.classList.add('opacity-100', 'translate-y-0');
                         stickyNav.classList.remove('opacity-0', 'translate-y-[-10px]', 'pointer-events-none');
@@ -2300,20 +1690,16 @@
                         stickyNav.classList.add('opacity-0', 'translate-y-[-10px]', 'pointer-events-none');
                     }
                 });
-            }, { threshold: 0.25 }); // Activates cleanly when 75% of hero is scrolled away
+            }, { threshold: 0.25 });
 
             observer.observe(heroSection);
         }
 
-        // High-performance numerical Count-Up trigger — skips elements being actively edited
+        // High-performance numerical Count-Up trigger
         function setupCountUpObserver() {
             const stats = document.querySelectorAll('.count-up-stat, .count-up-stat-decimal');
             
             const countUp = (element) => {
-                // Don't run animation if user is currently editing this element
-                if (document.activeElement === element) return;
-                if (element.classList.contains('user-edited')) return;
-
                 const target = parseFloat(element.getAttribute('data-count-target'));
                 if (isNaN(target)) return;
                 const isDecimal = element.classList.contains('count-up-stat-decimal');
@@ -2321,8 +1707,6 @@
                 const start = performance.now();
                 
                 const animateValue = (now) => {
-                    // Stop if user starts editing mid-animation
-                    if (document.activeElement === element) return;
                     const elapsed = now - start;
                     const progress = Math.min(elapsed / duration, 1);
                     const easeProgress = progress * (2 - progress);
@@ -2348,13 +1732,6 @@
                 requestAnimationFrame(animateValue);
             };
 
-            // Mark element as user-edited when they type in it
-            stats.forEach(stat => {
-                stat.addEventListener('focus', () => {
-                    stat.classList.add('user-edited');
-                });
-            });
-
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting && !entry.target.classList.contains('counted')) {
@@ -2365,172 +1742,6 @@
             }, { threshold: 0.5 });
 
             stats.forEach(stat => observer.observe(stat));
-        }
-
-        /* ========================================================
-           WORKSPACE STORAGE AND EXPORT CONTROLS
-           ======================================================== */
-
-        // Toast Helper
-        function showToast(title, desc) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-title').textContent = title;
-            document.getElementById('toast-desc').textContent = desc;
-            
-            toast.classList.remove('translate-y-12', 'opacity-0');
-            toast.classList.add('translate-y-0', 'opacity-100');
-            
-            setTimeout(() => {
-                toast.classList.remove('translate-y-0', 'opacity-100');
-                toast.classList.add('translate-y-12', 'opacity-0');
-            }, 3500);
-        }
-
-        // Auto Save Queue to prevent freezing on fast typing
-        function queueAutoSave() {
-            clearTimeout(autoSaveTimeout);
-            autoSaveTimeout = setTimeout(() => {
-                saveDraftToLocalStorage();
-            }, 800);
-        }
-
-        // Save customized changes to browser storage using dedicated robust ID tracking keys
-        function saveDraftToLocalStorage() {
-            const elements = document.querySelectorAll('[contenteditable="true"]');
-            const data = {};
-            elements.forEach((el) => {
-                const draftId = el.getAttribute('data-draft-id');
-                if (draftId) {
-                    data[draftId] = el.innerHTML;
-                }
-            });
-            localStorage.setItem('ugc_builder_backup', JSON.stringify(data));
-        }
-
-        // Restore custom states strictly using unique data keys
-        function loadSavedDraft() {
-            const saved = localStorage.getItem('ugc_builder_backup');
-            if (saved) {
-                try {
-                    const data = JSON.parse(saved);
-                    const elements = document.querySelectorAll('[contenteditable="true"]');
-                    elements.forEach((el) => {
-                        const draftId = el.getAttribute('data-draft-id');
-                        if (draftId && data[draftId] !== undefined) {
-                            el.innerHTML = data[draftId];
-                        }
-                    });
-                } catch (e) {
-                    console.error("Error restoring draft keys mapping", e);
-                }
-            }
-        }
-
-        // Reset elements and clear DB storage cleanly
-        async function resetTemplate() {
-            localStorage.clear();
-            await clearVideoBlobs();
-            
-            const watermarks = document.querySelectorAll('.watermark-logo');
-            watermarks.forEach(w => w.classList.add('hidden'));
-            
-            showToast("Draft Reset", "Settings and video local drafts cleared. Reloading page...");
-            setTimeout(() => {
-                window.location.reload();
-            }, 1000);
-        }
-
-        // Dynamic Export Engine
-        function exportHTML() {
-            const rootClone = document.documentElement.cloneNode(true);
-
-            // Strip out workspace builder banners and sticky widgets
-            const banner = rootClone.querySelector('#sandbox-banner');
-            if (banner) banner.remove();
-
-            const toast = rootClone.querySelector('#toast');
-            if (toast) toast.remove();
-
-            // Set all editable items to locked text for visitor safety
-            const editables = rootClone.querySelectorAll('[contenteditable="true"]');
-            editables.forEach(el => {
-                el.removeAttribute('contenteditable');
-                el.style.outline = 'none';
-                el.style.backgroundColor = 'transparent';
-            });
-
-            // Strip local upload inputs and URL subpanels to keep live build clean
-            const inputs = rootClone.querySelectorAll('.video-file-input');
-            inputs.forEach(i => i.remove());
-
-            const urlPanels = rootClone.querySelectorAll('.url-subpanel');
-            urlPanels.forEach(p => p.remove());
-
-            const settingsButtons = rootClone.querySelectorAll('button[onclick*="toggleUrlSettings"]');
-            settingsButtons.forEach(b => b.remove());
-
-            const logoInputs = rootClone.querySelectorAll('.logo-file-input');
-            logoInputs.forEach(li => li.remove());
-
-            const logoRemovers = rootClone.querySelectorAll('button[onclick*="removeLogo"]');
-            logoRemovers.forEach(lr => lr.remove());
-
-            // Make Logo containers standard static wrappers
-            const logoContainers = rootClone.querySelectorAll('.logo-upload-container');
-            logoContainers.forEach(container => {
-                container.removeAttribute('onclick');
-                container.style.cursor = 'default';
-                const placeholder = container.querySelector('.logo-placeholder');
-                const img = container.querySelector('.logo-image');
-                
-                if (img && img.classList.contains('hidden')) {
-                    if (placeholder) {
-                        const uploadLabel = placeholder.querySelector('span:last-child');
-                        if (uploadLabel) uploadLabel.remove();
-                    }
-                }
-            });
-
-            // For videos: If there is a manual URL linked in localstorage, write it directly as hardcoded src
-            const videos = rootClone.querySelectorAll('video');
-            videos.forEach(v => {
-                const parent = v.closest('.video-container-parent');
-                const containerId = parent ? parent.id : '';
-                const videoId = containerId ? containerId.replace('container_', '') : '';
-                
-                if (videoId) {
-                    const savedSrc = localStorage.getItem(`video_src_${videoId}`);
-                    if (savedSrc && !savedSrc.startsWith('blob:')) {
-                        v.src = savedSrc;
-                        v.classList.remove('hidden');
-                        
-                        const placeholder = parent.querySelector('.video-placeholder-container');
-                        if (placeholder) placeholder.classList.add('hidden');
-                        
-                        const watermark = parent.querySelector('.watermark-logo');
-                        if (watermark) watermark.classList.remove('hidden');
-                        
-                        const controls = parent.querySelector('.custom-controls');
-                        if (controls) controls.classList.remove('hidden');
-                    }
-                }
-                
-                v.removeAttribute('muted'); 
-            });
-
-            const serializedHTML = '<!DOCTYPE html>\n' + rootClone.outerHTML;
-            const textBlob = new Blob([serializedHTML], { type: 'text/html' });
-            const fileURL = URL.createObjectURL(textBlob);
-
-            const downloadAnchor = document.createElement('a');
-            downloadAnchor.href = fileURL;
-            downloadAnchor.download = 'kamani_brown_ugc_portfolio.html';
-            document.body.appendChild(downloadAnchor);
-            downloadAnchor.click();
-            document.body.removeChild(downloadAnchor);
-            URL.revokeObjectURL(fileURL);
-
-            showToast("Export Complete", "Pruned HTML file exported successfully with active playback dashboards!");
         }
     </script>
 </body>
