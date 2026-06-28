@@ -36,6 +36,72 @@
         }
     </script>
 
+    <!-- ============================================================
+         GIT LFS VIDEO CONFIG — EDIT FILENAMES HERE IF NEEDED
+         ============================================================
+         These must match the exact filenames in your /videos/ folder
+         that you pushed to GitHub with Git LFS.
+         ============================================================ -->
+    <script>
+        // Your GitHub details — update if you rename your repo
+        const githubUsername = 'kamanibrown';
+        const githubRepo    = 'kamanibrown';
+        const githubBranch  = 'main';
+        const isGitHubPages = window.location.hostname.endsWith('github.io');
+
+        // Maps each video element ID to its filename in /videos/
+        const VIDEO_FILE_MAP = {
+            'intro-video':   'videos/intro.mp4',
+            'v-video-1':     'videos/reel1.mp4',
+            'v-video-2':     'videos/reel2.mp4',
+            'v-video-3':     'videos/reel3.mp4',
+            'v-video-4':     'videos/reel4.mp4',
+            'v-video-5':     'videos/reel5.mp4',
+            'v-video-6':     'videos/reel6.mp4',
+            'h-video-1':     'videos/horizontal1.mp4',
+            'h-video-2':     'videos/horizontal2.mp4',
+            'h-video-3':     'videos/horizontal3.mp4',
+            'h-video-4':     'videos/horizontal4.mp4',
+        };
+
+        // Converts a local path to a GitHub raw media URL when live on GitHub Pages
+        function getPlayableVideoUrl(localPath) {
+            if (!localPath) return '';
+            if (isGitHubPages) {
+                return `https://media.githubusercontent.com/media/${githubUsername}/${githubRepo}/${githubBranch}/${localPath}`;
+            }
+            return localPath; // Falls back to local path when opened on your own computer
+        }
+
+        // Rewrites all video src attributes on page load
+        function initVideos() {
+            Object.entries(VIDEO_FILE_MAP).forEach(([videoId, localPath]) => {
+                const video = document.getElementById(videoId);
+                if (!video) return;
+                const resolvedUrl = getPlayableVideoUrl(localPath);
+                video.src = resolvedUrl;
+                video.load();
+
+                // Show video, hide placeholder once it can play
+                video.addEventListener('canplay', () => {
+                    video.classList.remove('hidden');
+                    const container = video.closest('.video-container-parent');
+                    if (container) {
+                        const placeholder = container.querySelector('.video-placeholder-container');
+                        if (placeholder) placeholder.classList.add('hidden');
+                    }
+                }, { once: true });
+
+                // Fallback: show error state if video fails
+                video.addEventListener('error', () => {
+                    console.warn(`Video failed to load: ${resolvedUrl}`);
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', initVideos);
+    </script>
+
     <style>
         body {
             background-color: #F9F9FB;
@@ -450,7 +516,7 @@
                     <!-- Intro Video Mockup Player -->
                     <div class="flex justify-center">
                         <div class="w-full max-w-[320px] phone-frame relative group video-container-parent" id="container_intro-video">
-                            <video src="videos/intro.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                            <video id="intro-video" src="videos/intro.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                             
                             <!-- Premium static logo overlay watermark pointing to images/logo-watermark.png -->
                             <img src="images/logo-watermark.png" class="watermark-overlay" alt="KB">
@@ -635,7 +701,7 @@
                         <!-- iPhone Frame Mockup 1 (Product Review) -->
                         <div class="flex flex-col items-center space-y-4">
                             <div class="w-full max-w-[260px] phone-frame relative group video-container-parent" id="container_v-video-1">
-                                <video src="videos/reel1.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <video id="v-video-1" src="videos/reel1.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay" alt="KB">
                                 
                                 <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-3.5 transition-all duration-300 z-30">
@@ -669,7 +735,7 @@
                         <!-- iPhone Frame Mockup 2 (Product Review) -->
                         <div class="flex flex-col items-center space-y-4">
                             <div class="w-full max-w-[260px] phone-frame relative group video-container-parent" id="container_v-video-2">
-                                <video src="videos/reel2.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <video id="v-video-2" src="videos/reel2.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay" alt="KB">
                                 
                                 <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-3.5 transition-all duration-300 z-30">
@@ -703,7 +769,7 @@
                         <!-- iPhone Frame Mockup 3 (Product Review) -->
                         <div class="flex flex-col items-center space-y-4">
                             <div class="w-full max-w-[260px] phone-frame relative group video-container-parent" id="container_v-video-3">
-                                <video src="videos/reel3.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <video id="v-video-3" src="videos/reel3.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay" alt="KB">
                                 
                                 <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-3.5 transition-all duration-300 z-30">
@@ -737,7 +803,7 @@
                         <!-- iPhone Frame Mockup 4 (Aesthetic Unboxing) -->
                         <div class="flex flex-col items-center space-y-4">
                             <div class="w-full max-w-[260px] phone-frame relative group video-container-parent" id="container_v-video-4">
-                                <video src="videos/reel4.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <video id="v-video-4" src="videos/reel4.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay" alt="KB">
                                 
                                 <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-3.5 transition-all duration-300 z-30">
@@ -771,7 +837,7 @@
                         <!-- iPhone Frame Mockup 5 (Aesthetic Unboxing) -->
                         <div class="flex flex-col items-center space-y-4">
                             <div class="w-full max-w-[260px] phone-frame relative group video-container-parent" id="container_v-video-5">
-                                <video src="videos/reel5.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <video id="v-video-5" src="videos/reel5.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay" alt="KB">
                                 
                                 <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-3.5 transition-all duration-300 z-30">
@@ -805,7 +871,7 @@
                         <!-- iPhone Frame Mockup 6 (Product Review) -->
                         <div class="flex flex-col items-center space-y-4">
                             <div class="w-full max-w-[260px] phone-frame relative group video-container-parent" id="container_v-video-6">
-                                <video src="videos/reel6.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <video id="v-video-6" src="videos/reel6.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay" alt="KB">
                                 
                                 <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-3.5 transition-all duration-300 z-30">
@@ -847,7 +913,7 @@
                         <!-- Laptop Frame Mockup 1 (Honest In-Depth Product Review) -->
                         <div class="space-y-3">
                             <div class="laptop-frame relative group video-container-parent widescreen-player" id="container_h-video-1">
-                                <video src="videos/horizontal1.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <video id="h-video-1" src="videos/horizontal1.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay-wide" alt="KB">
                                 
                                 <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-6 opacity-0 transition-all duration-300 z-30">
@@ -884,7 +950,7 @@
                         <!-- Laptop Frame Mockup 2 (Commercial Showcase) -->
                         <div class="space-y-3">
                             <div class="laptop-frame relative group video-container-parent widescreen-player" id="container_h-video-2">
-                                <video src="videos/horizontal2.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <video id="h-video-2" src="videos/horizontal2.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay-wide" alt="KB">
                                 
                                 <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-6 opacity-0 transition-all duration-300 z-30">
@@ -918,7 +984,7 @@
                         <!-- Laptop Frame Mockup 3 (Cinematic Unboxing) -->
                         <div class="space-y-3">
                             <div class="laptop-frame relative group video-container-parent widescreen-player" id="container_h-video-3">
-                                <video src="videos/horizontal3.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <video id="h-video-3" src="videos/horizontal3.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay-wide" alt="KB">
                                 
                                 <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-6 opacity-0 transition-all duration-300 z-30">
@@ -952,7 +1018,7 @@
                         <!-- Laptop Frame Mockup 4 (Aesthetic Unboxing) -->
                         <div class="space-y-3">
                             <div class="laptop-frame relative group video-container-parent widescreen-player" id="container_h-video-4">
-                                <video src="videos/horizontal4.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <video id="h-video-4" src="videos/horizontal4.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay-wide" alt="KB">
                                 
                                 <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-6 opacity-0 transition-all duration-300 z-30">
