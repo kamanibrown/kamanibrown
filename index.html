@@ -36,6 +36,72 @@
         }
     </script>
 
+    <!-- ============================================================
+         GIT LFS VIDEO CONFIG — EDIT FILENAMES HERE IF NEEDED
+         ============================================================
+         These must match the exact filenames in your /videos/ folder
+         that you pushed to GitHub with Git LFS.
+         ============================================================ -->
+    <script>
+        // Your GitHub details — update if you rename your repo
+        const githubUsername = 'kamanibrown';
+        const githubRepo    = 'kamanibrown';
+        const githubBranch  = 'main';
+        const isGitHubPages = window.location.hostname.endsWith('github.io');
+
+        // Maps each video element ID to its filename in /videos/
+        const VIDEO_FILE_MAP = {
+            'intro-video':   'videos/intro.mp4',
+            'v-video-1':     'videos/reel1.mp4',
+            'v-video-2':     'videos/reel2.mp4',
+            'v-video-3':     'videos/reel3.mp4',
+            'v-video-4':     'videos/reel4.mp4',
+            'v-video-5':     'videos/reel5.mp4',
+            'v-video-6':     'videos/reel6.mp4',
+            'h-video-1':     'videos/horizontal1.mp4',
+            'h-video-2':     'videos/horizontal2.mp4',
+            'h-video-3':     'videos/horizontal3.mp4',
+            'h-video-4':     'videos/horizontal4.mp4',
+        };
+
+        // Converts a local path to a GitHub raw media URL when live on GitHub Pages
+        function getPlayableVideoUrl(localPath) {
+            if (!localPath) return '';
+            if (isGitHubPages) {
+                return `https://media.githubusercontent.com/media/${githubUsername}/${githubRepo}/${githubBranch}/${localPath}`;
+            }
+            return localPath; // Falls back to local path when opened on your own computer
+        }
+
+        // Rewrites all video src attributes on page load
+        function initVideos() {
+            Object.entries(VIDEO_FILE_MAP).forEach(([videoId, localPath]) => {
+                const video = document.getElementById(videoId);
+                if (!video) return;
+                const resolvedUrl = getPlayableVideoUrl(localPath);
+                video.src = resolvedUrl;
+                video.load();
+
+                // Show video, hide placeholder once it can play
+                video.addEventListener('canplay', () => {
+                    video.classList.remove('hidden');
+                    const container = video.closest('.video-container-parent');
+                    if (container) {
+                        const placeholder = container.querySelector('.video-placeholder-container');
+                        if (placeholder) placeholder.classList.add('hidden');
+                    }
+                }, { once: true });
+
+                // Fallback: show error state if video fails
+                video.addEventListener('error', () => {
+                    console.warn(`Video failed to load: ${resolvedUrl}`);
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', initVideos);
+    </script>
+
     <style>
         body {
             background-color: #F9F9FB;
@@ -1127,7 +1193,7 @@
                                 <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span>1x Revision included</span></li>
                                 <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span>Dedicated concept brainstorming</span></li>
                                 <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span>Raw footage color correction</span></li>
-                                <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span>Amazon Influencer Storefront Integration</span></li>
+                                <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span>+ 1x Shoppable video for Amazon Influencer Storefront</span></li>
                             </ul>
                         </div>
                         <div class="pt-8">
@@ -1153,7 +1219,7 @@
                                 <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span>2x Revisions included</span></li>
                                 <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span>Hook + CTA strategy & scripting</span></li>
                                 <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span>Aesthetic subtitles included</span></li>
-                                <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span>Amazon Influencer Storefront Integration</span></li>
+                                <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span>+ 1x Shoppable video for Amazon Influencer Storefront</span></li>
                             </ul>
                         </div>
                         <div class="pt-8">
