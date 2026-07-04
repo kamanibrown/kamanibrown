@@ -9,7 +9,7 @@
     <!-- Google Fonts: Plus Jakarta Sans for clean modern typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- FontAwesome for sleek minimalist icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -37,13 +37,10 @@
     </script>
 
     <!-- ============================================================
-         GIT LFS VIDEO CONFIG — EDIT FILENAMES HERE IF NEEDED
-         ============================================================
-         These must match the exact filenames in your /videos/ folder
-         that you pushed to GitHub with Git LFS.
+         GIT LFS VIDEO CONFIG — FIXED INTEGRATION
          ============================================================ -->
     <script>
-        // Your GitHub details — update if you rename your repo
+        // Your GitHub details
         const githubUsername = 'kamanibrown';
         const githubRepo    = 'kamanibrown';
         const githubBranch  = 'main';
@@ -64,25 +61,35 @@
             'h-video-4':     'horizontal4.mp4',
         };
 
-        // Converts a local path to a GitHub raw media URL when live on GitHub Pages
+        // Converts local paths to raw GitHub Media Server streams
         function getPlayableVideoUrl(localPath) {
             if (!localPath) return '';
-            if (isGitHubPages) {
-                return `https://media.githubusercontent.com/media/${githubUsername}/${githubRepo}/${githubBranch}/${localPath}`;
+            
+            // Failsafe: Ensure video path is correctly prefixed with the "videos/" folder
+            let fullPath = localPath;
+            if (!fullPath.startsWith('videos/')) {
+                fullPath = 'videos/' + fullPath;
             }
-            return localPath; // Falls back to local path when opened on your own computer
+
+            if (isGitHubPages) {
+                return `https://media.githubusercontent.com/media/${githubUsername}/${githubRepo}/${githubBranch}/${fullPath}`;
+            }
+            return fullPath; // Falls back to local directory path for offline local development
         }
 
         // Rewrites all video src attributes on page load
         function initVideos() {
             Object.entries(VIDEO_FILE_MAP).forEach(([videoId, localPath]) => {
                 const video = document.getElementById(videoId);
-                if (!video) return;
+                if (!video) {
+                    console.warn(`Could not find video element with ID: ${videoId}`);
+                    return;
+                }
                 const resolvedUrl = getPlayableVideoUrl(localPath);
                 video.src = resolvedUrl;
                 video.load();
 
-                // Show video, hide placeholder once it can play
+                // Show video, hide placeholder once content streams in
                 video.addEventListener('canplay', () => {
                     video.classList.remove('hidden');
                     const container = video.closest('.video-container-parent');
@@ -92,9 +99,9 @@
                     }
                 }, { once: true });
 
-                // Fallback: show error state if video fails
+                // Fallback: alert details if stream resolves with a code 404
                 video.addEventListener('error', () => {
-                    console.warn(`Video failed to load: ${resolvedUrl}`);
+                    console.error(`Video stream resolution error: ${resolvedUrl}`);
                 });
             });
         }
@@ -451,7 +458,7 @@
     <main class="w-full">
 
         <!-- ==========================================
-             SECTION 1 — HERO & ABOUT ME (Verbatim Wording)
+             SECTION 1 — HERO & ABOUT ME
              ========================================== -->
         <section id="hero-about" class="relative w-full overflow-hidden bg-[#0B0C0E] text-white grain-overlay">
             
@@ -516,7 +523,8 @@
                     <!-- Intro Video Mockup Player -->
                     <div class="flex justify-center">
                         <div class="w-full max-w-[320px] phone-frame relative group video-container-parent" id="container_intro-video">
-                            <video src="videos/intro.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                            <!-- FIXED: Added ID parameter back -->
+                            <video id="intro-video" src="videos/intro.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                             
                             <!-- Premium static logo overlay watermark pointing to images/logo-watermark.png -->
                             <img src="images/logo-watermark.png" class="watermark-overlay" alt="KB">
@@ -584,7 +592,7 @@
                                 <div>
                                     <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Location</p>
                                     <p class="text-sm font-bold">NB, Canada (Available Worldwide)</p>
-                                </div>
+                                head/div>
                             </div>
                             <div class="flex items-center gap-3">
                                 <span class="w-10 h-10 rounded-full bg-[#F3F4F6] flex items-center justify-center text-gray-600 shadow-sm"><i class="fa-solid fa-envelope text-sm"></i></span>
@@ -656,12 +664,12 @@
                             <span class="hidden text-xs font-black text-gray-900 tracking-tighter">AP ALLPOWERS</span>
                         </div>
 
-                        <!-- Logo 10: INIU (Strictly removed [LOGO 10] text labels underneath) -->
+                        <!-- Logo 10: INIU -->
                         <div class="px-4 py-3 border border-gray-200 rounded-xl bg-white flex flex-col items-center justify-center h-16 shadow-sm hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300">
                             <img src="images/brand10.png" onerror="this.style.display='none';" class="max-w-full max-h-full object-contain" alt="INIU">
                         </div>
 
-                        <!-- Logo 11: extremeRate (Strictly removed [LOGO 11] text labels underneath) -->
+                        <!-- Logo 11: extremeRate -->
                         <div class="px-4 py-3 border border-gray-200 rounded-xl bg-white flex flex-col items-center justify-center h-16 shadow-sm hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300">
                             <img src="images/brand11.png" onerror="this.style.display='none';" class="max-w-full max-h-full object-contain" alt="extremeRate">
                         </div>
@@ -678,7 +686,7 @@
         </section>
 
         <!-- ==========================================
-             SECTION 2 — PORTFOLIO / FEATURED WORK (Exact labels & titles)
+             SECTION 2 — PORTFOLIO / FEATURED WORK
              ========================================== -->
         <section id="portfolio" class="bg-[#F1F2F5] py-24 border-b border-gray-200">
             <div class="max-w-6xl mx-auto px-6 md:px-8 space-y-16">
@@ -693,7 +701,7 @@
                     </p>
                 </div>
 
-                <!-- Row 1: Vertical Content (6x iPhone frames with exact tags) -->
+                <!-- Row 1: Vertical Content -->
                 <div class="space-y-6 scroll-reveal">
                     <p class="text-xs font-bold uppercase tracking-[0.15em] text-gray-400">Vertical Formats (9:16)</p>
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12">
@@ -701,7 +709,8 @@
                         <!-- iPhone Frame Mockup 1 (Product Review) -->
                         <div class="flex flex-col items-center space-y-4">
                             <div class="w-full max-w-[260px] phone-frame relative group video-container-parent" id="container_v-video-1">
-                                <video src="videos/reel1.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <!-- FIXED: Added ID parameter back -->
+                                <video id="v-video-1" src="videos/reel1.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay" alt="KB">
                                 
                                 <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-3.5 transition-all duration-300 z-30">
@@ -735,7 +744,8 @@
                         <!-- iPhone Frame Mockup 2 (Product Review) -->
                         <div class="flex flex-col items-center space-y-4">
                             <div class="w-full max-w-[260px] phone-frame relative group video-container-parent" id="container_v-video-2">
-                                <video src="videos/reel2.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <!-- FIXED: Added ID parameter back -->
+                                <video id="v-video-2" src="videos/reel2.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay" alt="KB">
                                 
                                 <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-3.5 transition-all duration-300 z-30">
@@ -769,7 +779,8 @@
                         <!-- iPhone Frame Mockup 3 (Product Review) -->
                         <div class="flex flex-col items-center space-y-4">
                             <div class="w-full max-w-[260px] phone-frame relative group video-container-parent" id="container_v-video-3">
-                                <video src="videos/reel3.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <!-- FIXED: Added ID parameter back -->
+                                <video id="v-video-3" src="videos/reel3.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay" alt="KB">
                                 
                                 <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-3.5 transition-all duration-300 z-30">
@@ -803,7 +814,8 @@
                         <!-- iPhone Frame Mockup 4 (Aesthetic Unboxing) -->
                         <div class="flex flex-col items-center space-y-4">
                             <div class="w-full max-w-[260px] phone-frame relative group video-container-parent" id="container_v-video-4">
-                                <video src="videos/reel4.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <!-- FIXED: Added ID parameter back -->
+                                <video id="v-video-4" src="videos/reel4.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay" alt="KB">
                                 
                                 <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-3.5 transition-all duration-300 z-30">
@@ -837,7 +849,8 @@
                         <!-- iPhone Frame Mockup 5 (Aesthetic Unboxing) -->
                         <div class="flex flex-col items-center space-y-4">
                             <div class="w-full max-w-[260px] phone-frame relative group video-container-parent" id="container_v-video-5">
-                                <video src="videos/reel5.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <!-- FIXED: Added ID parameter back -->
+                                <video id="v-video-5" src="videos/reel5.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay" alt="KB">
                                 
                                 <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-3.5 transition-all duration-300 z-30">
@@ -871,7 +884,8 @@
                         <!-- iPhone Frame Mockup 6 (Product Review) -->
                         <div class="flex flex-col items-center space-y-4">
                             <div class="w-full max-w-[260px] phone-frame relative group video-container-parent" id="container_v-video-6">
-                                <video src="videos/reel6.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <!-- FIXED: Added ID parameter back -->
+                                <video id="v-video-6" src="videos/reel6.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay" alt="KB">
                                 
                                 <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-3.5 transition-all duration-300 z-30">
@@ -905,7 +919,9 @@
                     </div>
                 </div>
 
-                <!-- Row 2: Horizontal Content (4x Laptop Mockups with exact labels from Screenshot) -->
+                <!-- ==========================================
+                     Row 2: Horizontal Content (4x Laptop Mockups)
+                     ========================================== -->
                 <div class="space-y-6 pt-12 scroll-reveal animate-delay">
                     <p class="text-xs font-bold uppercase tracking-[0.15em] text-gray-400">Horizontal Formats (16:9)</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -913,7 +929,8 @@
                         <!-- Laptop Frame Mockup 1 (Honest In-Depth Product Review) -->
                         <div class="space-y-3">
                             <div class="laptop-frame relative group video-container-parent widescreen-player" id="container_h-video-1">
-                                <video src="videos/horizontal1.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <!-- FIXED: Added ID parameter back -->
+                                <video id="h-video-1" src="videos/horizontal1.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay-wide" alt="KB">
                                 
                                 <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-6 opacity-0 transition-all duration-300 z-30">
@@ -950,7 +967,8 @@
                         <!-- Laptop Frame Mockup 2 (Commercial Showcase) -->
                         <div class="space-y-3">
                             <div class="laptop-frame relative group video-container-parent widescreen-player" id="container_h-video-2">
-                                <video src="videos/horizontal2.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <!-- FIXED: Added ID parameter back -->
+                                <video id="h-video-2" src="videos/horizontal2.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay-wide" alt="KB">
                                 
                                 <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-6 opacity-0 transition-all duration-300 z-30">
@@ -984,7 +1002,8 @@
                         <!-- Laptop Frame Mockup 3 (Cinematic Unboxing) -->
                         <div class="space-y-3">
                             <div class="laptop-frame relative group video-container-parent widescreen-player" id="container_h-video-3">
-                                <video src="videos/horizontal3.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <!-- FIXED: Added ID parameter back -->
+                                <video id="h-video-3" src="videos/horizontal3.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay-wide" alt="KB">
                                 
                                 <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-6 opacity-0 transition-all duration-300 z-30">
@@ -1018,7 +1037,8 @@
                         <!-- Laptop Frame Mockup 4 (Aesthetic Unboxing) -->
                         <div class="space-y-3">
                             <div class="laptop-frame relative group video-container-parent widescreen-player" id="container_h-video-4">
-                                <video src="videos/horizontal4.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <!-- FIXED: Added ID parameter back -->
+                                <video id="h-video-4" src="videos/horizontal4.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay-wide" alt="KB">
                                 
                                 <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-6 opacity-0 transition-all duration-300 z-30">
@@ -1055,7 +1075,7 @@
         </section>
 
         <!-- ==========================================
-             SECTION 3 — METRICS & SOCIAL PROOF (Screenshot verified values & labels)
+             SECTION 3 — METRICS & SOCIAL PROOF
              ========================================== -->
         <section id="metrics" class="bg-[#0E1013] text-white py-24 relative overflow-hidden grain-overlay">
             <div class="absolute inset-0 z-0 bg-[radial-gradient(circle_at_70%_50%,rgba(197,162,125,0.08),transparent_50%)]"></div>
@@ -1095,7 +1115,7 @@
 
                 </div>
 
-                <!-- Top Performing Content (Case Studies - Wording matching Screenshot exactly) -->
+                <!-- Top Performing Content (Case Studies) -->
                 <div class="space-y-6 pt-6 scroll-reveal">
                     <p class="text-xs font-bold uppercase tracking-[0.15em] text-[#C5A27D]">Top Performing Case Studies</p>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -1163,9 +1183,8 @@
         </section>
 
         <!-- ==========================================
-             SECTION 4 — PACKAGES & RATES (Wording from screenshot)
+             SECTION 4 — PACKAGES & RATES
              ========================================== -->
-        <!-- Pricing Section (Porcelain Light Background) -->
         <section id="rates-packages" class="bg-[#F9F9FB] py-24 border-b border-gray-200">
             <div class="max-w-6xl mx-auto px-6 md:px-8 space-y-16">
 
@@ -1203,7 +1222,7 @@
                         </div>
                     </div>
 
-                    <!-- Tier 02 — Core Package (Standard - MOST REQUESTED) -->
+                    <!-- Tier 02 — Core Package -->
                     <div class="border-2 border-[#C5A27D] bg-white rounded-2xl p-8 flex flex-col justify-between shadow-2xl relative transform md:scale-105 z-10 pkg-card" style="box-shadow: 0 0 40px rgba(197,162,125,0.15), 0 24px 48px rgba(0,0,0,0.08)">
                         <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#C5A27D] text-[#0B0C0E] text-[10px] font-black tracking-[0.2em] uppercase px-5 py-1.5 rounded-full shadow">
                             MOST REQUESTED
@@ -1283,7 +1302,7 @@
                     </div>
                 </div>
 
-                <!-- Custom scope callout (Wording verified from Screenshot) -->
+                <!-- Custom scope callout -->
                 <div class="scroll-reveal">
                     <div class="bg-[#0B0C0E] rounded-2xl p-10 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
                         <div class="space-y-3 max-w-xl">
@@ -1304,7 +1323,7 @@
         </section>
 
         <!-- ==========================================
-             FOOTER CTA SECTION (Verbatim Copy & Icons)
+             FOOTER CTA SECTION
              ========================================== -->
         <!-- Footer CTA -->
         <section id="footer-cta" class="relative bg-[#0B0C0E] text-white py-24 text-center overflow-hidden">
@@ -1329,7 +1348,7 @@
                             kamani_brown@icloud.com
                         </p>
                         
-                        <!-- Verified YouTube Link (Red design matching Screenshot verbatim) -->
+                        <!-- Verified YouTube Link -->
                         <a href="https://youtube.com/@KamaniBrown" target="_blank" class="inline-flex items-center gap-2 text-red-400 hover:text-red-300 transition text-sm md:text-base font-semibold bg-red-950/20 px-4 py-1.5 rounded-full border border-red-500/20 hover:scale-105 duration-200 font-sans">
                             <i class="fa-brands fa-youtube text-lg"></i> youtube.com/@KamaniBrown
                         </a>
