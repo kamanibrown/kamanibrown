@@ -55,6 +55,8 @@
             'v-video-4':     'reel4.mp4',
             'v-video-5':     'reel5.mp4',
             'v-video-6':     'reel6.mp4',
+            'v-video-7':     'reel7.mp4',
+            'v-video-8':     'reel8.mp4',
             'h-video-1':     'horizontal1.mp4',
             'h-video-2':     'horizontal2.mp4',
             'h-video-3':     'horizontal3.mp4',
@@ -598,7 +600,7 @@
                                 <span class="w-10 h-10 rounded-full bg-[#F3F4F6] flex items-center justify-center text-gray-600 shadow-sm"><i class="fa-solid fa-envelope text-sm"></i></span>
                                 <div>
                                     <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Email</p>
-                                    <p class="text-sm font-bold">kamani_brown@icloud.com</p>
+                                    <p class="text-sm font-bold">kamanibrown@gmail.com</p>
                                 </div>
                             </div>
                         </div>
@@ -891,6 +893,72 @@
                                 <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-3.5 transition-all duration-300 z-30">
                                     <div class="flex justify-between items-center">
                                         <span class="text-[8px] font-bold tracking-widest text-[#C5A27D] uppercase bg-[#1C1E24] px-2 py-0.5 rounded-full border border-brand-accentGold/20">Reel 6</span>
+                                    </div>
+                                    <div class="flex items-center justify-center gap-2">
+                                        <button onclick="skipVideo(this, -5)" class="text-white bg-black/40 w-6 h-6 rounded-full flex items-center justify-center"><i class="fa-solid fa-backward text-[8px]"></i></button>
+                                        <button onclick="togglePlayPause(this)" class="text-brand-dark bg-brand-accentGold w-8 h-8 rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-play text-[9px] pl-0.5"></i></button>
+                                        <button onclick="skipVideo(this, 5)" class="text-white bg-black/40 w-6 h-6 rounded-full flex items-center justify-center"><i class="fa-solid fa-forward text-[8px]"></i></button>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <div class="flex items-center gap-2">
+                                            <span class="time-current text-[8px] text-white/95">0:00</span>
+                                            <div onclick="seekVideo(event, this)" class="progress-bar-container flex-1 h-1 bg-white/20 rounded-full relative"><div class="progress-bar-fill h-full bg-[#C5A27D] rounded-full w-0"></div></div>
+                                            <span class="time-duration text-[8px] text-white/60 font-mono">0:00</span>
+                                        </div>
+                                        <div class="flex justify-between items-center">
+                                            <span class="status-indicator text-[8px] text-white/50">paused</span>
+                                            <div class="flex gap-1">
+                                                <button onclick="toggleFullScreen(this)" class="fullscreen-toggle-btn text-white bg-black/40 hover:bg-black/60 w-5 h-5 rounded-full flex items-center justify-center" title="Full Screen"><i class="fa-solid fa-expand text-[8px]"></i></button>
+                                                <button onclick="toggleMute(this)" class="sound-toggle text-white bg-black/40 hover:bg-black/60 w-5 h-5 rounded-full flex items-center justify-center"><i class="fa-solid fa-volume-xmark text-[8px]"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                                  <!-- iPhone Frame Mockup 7 (Product Review) -->
+                        <div class="flex flex-col items-center space-y-4">
+                            <div class="w-full max-w-[260px] phone-frame relative group video-container-parent" id="container_v-video-6">
+                                <!-- FIXED: Added ID parameter back -->
+                                <video id="v-video-6" src="videos/reel6.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <img src="images/logo-watermark.png" class="watermark-overlay" alt="KB">
+                                
+                                <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-3.5 transition-all duration-300 z-30">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-[8px] font-bold tracking-widest text-[#C5A27D] uppercase bg-[#1C1E24] px-2 py-0.5 rounded-full border border-brand-accentGold/20">Reel 7</span>
+                                    </div>
+                                    <div class="flex items-center justify-center gap-2">
+                                        <button onclick="skipVideo(this, -5)" class="text-white bg-black/40 w-6 h-6 rounded-full flex items-center justify-center"><i class="fa-solid fa-backward text-[8px]"></i></button>
+                                        <button onclick="togglePlayPause(this)" class="text-brand-dark bg-brand-accentGold w-8 h-8 rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-play text-[9px] pl-0.5"></i></button>
+                                        <button onclick="skipVideo(this, 5)" class="text-white bg-black/40 w-6 h-6 rounded-full flex items-center justify-center"><i class="fa-solid fa-forward text-[8px]"></i></button>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <div class="flex items-center gap-2">
+                                            <span class="time-current text-[8px] text-white/95">0:00</span>
+                                            <div onclick="seekVideo(event, this)" class="progress-bar-container flex-1 h-1 bg-white/20 rounded-full relative"><div class="progress-bar-fill h-full bg-[#C5A27D] rounded-full w-0"></div></div>
+                                            <span class="time-duration text-[8px] text-white/60 font-mono">0:00</span>
+                                        </div>
+                                        <div class="flex justify-between items-center">
+                                            <span class="status-indicator text-[8px] text-white/50">paused</span>
+                                            <div class="flex gap-1">
+                                                <button onclick="toggleFullScreen(this)" class="fullscreen-toggle-btn text-white bg-black/40 hover:bg-black/60 w-5 h-5 rounded-full flex items-center justify-center" title="Full Screen"><i class="fa-solid fa-expand text-[8px]"></i></button>
+                                                <button onclick="toggleMute(this)" class="sound-toggle text-white bg-black/40 hover:bg-black/60 w-5 h-5 rounded-full flex items-center justify-center"><i class="fa-solid fa-volume-xmark text-[8px]"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                                  <!-- iPhone Frame Mockup 8 (Product Review) -->
+                        <div class="flex flex-col items-center space-y-4">
+                            <div class="w-full max-w-[260px] phone-frame relative group video-container-parent" id="container_v-video-6">
+                                <!-- FIXED: Added ID parameter back -->
+                                <video id="v-video-6" src="videos/reel6.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <img src="images/logo-watermark.png" class="watermark-overlay" alt="KB">
+                                
+                                <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-3.5 transition-all duration-300 z-30">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-[8px] font-bold tracking-widest text-[#C5A27D] uppercase bg-[#1C1E24] px-2 py-0.5 rounded-full border border-brand-accentGold/20">Reel 8</span>
                                     </div>
                                     <div class="flex items-center justify-center gap-2">
                                         <button onclick="skipVideo(this, -5)" class="text-white bg-black/40 w-6 h-6 rounded-full flex items-center justify-center"><i class="fa-solid fa-backward text-[8px]"></i></button>
@@ -1484,7 +1552,7 @@
                             <p class="text-gray-400 text-sm font-light leading-relaxed">Let's help you find the right one that fits your needs. Share your brief, timeline, and usage needs, and I'll come back with a tailored proposal within 24–48 hours.</p>
                         </div>
                         <div class="flex flex-col gap-3 items-center md:items-end shrink-0">
-                            <a href="mailto:kamani_brown@icloud.com" class="bg-[#C5A27D] text-[#0B0C0E] px-7 py-3.5 rounded-full font-bold text-sm hover:opacity-90 transition whitespace-nowrap shadow-lg shadow-[#C5A27D]/20 font-sans">
+                            <a href="mailto:kamanibrown@gmail.com" class="bg-[#C5A27D] text-[#0B0C0E] px-7 py-3.5 rounded-full font-bold text-sm hover:opacity-90 transition whitespace-nowrap shadow-lg shadow-[#C5A27D]/20 font-sans">
                                 Let's Talk Scope
                             </a>
                             <p class="text-[11px] text-gray-500 font-sans">Response within 24 hours · No obligation</p>
@@ -1518,7 +1586,7 @@
                 <div class="space-y-4 pt-4">
                     <div class="space-y-3">
                         <p class="text-xl md:text-2xl font-bold tracking-tight text-brand-accentGold hover:underline cursor-pointer font-sans">
-                            kamani_brown@icloud.com
+                            kamanibrown@gmail.com
                         </p>
                         
                         <!-- Verified YouTube Link -->
@@ -1533,7 +1601,7 @@
                     </div>
                     
                     <div class="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-                        <a href="mailto:kamani_brown@icloud.com" class="bg-brand-accentGold text-[#0B0C0E] px-8 py-3.5 rounded-full font-bold tracking-wide transition-all duration-300 hover:scale-105 shadow-lg shadow-[#C5A27D]/20 font-sans">
+                        <a href="mailto:kamanibrown@gmail.com" class="bg-brand-accentGold text-[#0B0C0E] px-8 py-3.5 rounded-full font-bold tracking-wide transition-all duration-300 hover:scale-105 shadow-lg shadow-[#C5A27D]/20 font-sans">
                             Get in Touch <i class="fa-solid fa-paper-plane text-xs ml-1"></i>
                         </a>
                     </div>
