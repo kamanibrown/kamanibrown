@@ -37,7 +37,7 @@
     </script>
 
     <!-- ============================================================
-         GIT LFS VIDEO CONFIG — FIXED INTEGRATION
+         GIT LFS VIDEO CONFIG
          ============================================================ -->
     <script>
         // Your GitHub details
@@ -67,7 +67,6 @@
         function getPlayableVideoUrl(localPath) {
             if (!localPath) return '';
             
-            // Failsafe: Ensure video path is correctly prefixed with the "videos/" folder
             let fullPath = localPath;
             if (!fullPath.startsWith('videos/')) {
                 fullPath = 'videos/' + fullPath;
@@ -91,7 +90,6 @@
                 video.src = resolvedUrl;
                 video.load();
 
-                // Show video, hide placeholder once content streams in
                 video.addEventListener('canplay', () => {
                     video.classList.remove('hidden');
                     const container = video.closest('.video-container-parent');
@@ -101,7 +99,6 @@
                     }
                 }, { once: true });
 
-                // Fallback: alert details if stream resolves with a code 404
                 video.addEventListener('error', () => {
                     console.error(`Video stream resolution error: ${resolvedUrl}`);
                 });
@@ -122,7 +119,7 @@
         /* Device Mockup Aspect Ratios & Frames */
         .phone-frame {
             position: relative;
-            box-sizing: content-box !important; /* Forces internal viewport to 9:16, excluding borders */
+            box-sizing: content-box !important;
             aspect-ratio: 9/16;
             background: #000;
             border: 11px solid #191C1A;
@@ -132,7 +129,6 @@
             transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Premium hover lift + light glowing shadow on mockup frames */
         .phone-frame:hover {
             transform: translateY(-6px);
             box-shadow: 0 20px 40px rgba(197, 162, 125, 0.15), 0 0 15px rgba(197, 162, 125, 0.1);
@@ -171,19 +167,10 @@
         }
 
         /* Custom scrollbar styling */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0B0C0E;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #C5A27D;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #A88A65;
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0B0C0E; }
+        ::-webkit-scrollbar-thumb { background: #C5A27D; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #A88A65; }
 
         .watermark-overlay {
             position: absolute;
@@ -234,7 +221,6 @@
             margin: 0 auto !important;
         }
 
-        /* 16:9 horizontal video fullscreen */
         .video-container-parent.widescreen-player:fullscreen {
             background-color: #000000 !important;
             display: flex !important;
@@ -267,10 +253,7 @@
             pointer-events: auto !important;
         }
         
-        /* Interactive overlay and hiding cursor on inactivity */
-        .video-container-parent.hide-cursor {
-            cursor: none !important;
-        }
+        .video-container-parent.hide-cursor { cursor: none !important; }
         .video-container-parent.hide-cursor .custom-controls {
             opacity: 0 !important;
             pointer-events: none !important;
@@ -287,7 +270,6 @@
             transform: translateY(0);
         }
 
-        /* Staggered children reveal */
         .scroll-reveal-children > * {
             opacity: 0;
             transform: translateY(24px);
@@ -297,10 +279,7 @@
         .scroll-reveal-children.active > *:nth-child(2) { opacity:1; transform:translateY(0); transition-delay:100ms; }
         .scroll-reveal-children.active > *:nth-child(3) { opacity:1; transform:translateY(0); transition-delay:200ms; }
         .scroll-reveal-children.active > *:nth-child(4) { opacity:1; transform:translateY(0); transition-delay:300ms; }
-        .scroll-reveal-children.active > *:nth-child(5) { opacity:1; transform:translateY(0); transition-delay:400ms; }
-        .scroll-reveal-children.active > *:nth-child(6) { opacity:1; transform:translateY(0); transition-delay:500ms; }
 
-        /* Noise/grain texture overlay on dark sections */
         .grain-overlay::after {
             content: '';
             position: absolute;
@@ -311,7 +290,6 @@
             mix-blend-mode: overlay;
         }
 
-        /* Shimmer divider line */
         .shimmer-line {
             height: 1px;
             background: linear-gradient(90deg, transparent 0%, #C5A27D44 30%, #C5A27D99 50%, #C5A27D44 70%, transparent 100%);
@@ -323,7 +301,6 @@
             100% { background-position: -200% center; }
         }
 
-        /* Scrolling marquee ticker */
         .marquee-track {
             display: flex;
             width: max-content;
@@ -335,70 +312,32 @@
             to { transform: translateX(-50%); }
         }
 
-        /* Glowing card border pulse */
         @keyframes borderPulse {
             0%, 100% { box-shadow: 0 0 0 0 rgba(197,162,125,0); }
             50% { box-shadow: 0 0 20px 2px rgba(197,162,125,0.15); }
         }
         .glow-pulse { animation: borderPulse 4s ease-in-out infinite; }
 
-        /* Floating badge pulse */
         @keyframes floatBadge {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-4px); }
         }
         .float-badge { animation: floatBadge 3s ease-in-out infinite; }
 
-        .section-eyebrow {
-            position: relative;
-            display: inline-block;
-        }
-        .section-eyebrow::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0%;
-            height: 1px;
-            background: #C5A27D;
-            transition: width 0.8s cubic-bezier(0.16,1,0.3,1);
-        }
-        .scroll-reveal.active .section-eyebrow::after,
-        .active .section-eyebrow::after { width: 100%; }
-
-        /* Package card hover lift */
-        .pkg-card {
-            transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease;
-        }
+        .pkg-card { transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease; }
         .pkg-card:hover {
             transform: translateY(-6px);
             box-shadow: 0 24px 48px rgba(0,0,0,0.08);
         }
 
-        /* Horizontal scroll progress indicator */
         #scroll-progress {
             position: fixed;
-            top: 0;
-            left: 0;
+            top: 0; left: 0;
             height: 2px;
             background: linear-gradient(90deg, #C5A27D, #E8C99A);
             z-index: 999;
             width: 0%;
             transition: width 0.1s linear;
-        }
-
-        .bio-text {
-            position: relative;
-        }
-        .bio-text::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 3px;
-            background: linear-gradient(180deg, #C5A27D, transparent);
-            border-radius: 2px;
         }
 
         .quote-giant {
@@ -408,20 +347,16 @@
             opacity: 0.15;
             font-family: Georgia, serif;
             position: absolute;
-            top: 24px;
-            left: 24px;
+            top: 24px; left: 24px;
             pointer-events: none;
         }
 
-        .addon-row-hover {
-            transition: background 0.2s ease, padding-left 0.2s ease;
-        }
+        .addon-row-hover { transition: background 0.2s ease, padding-left 0.2s ease; }
         .addon-row-hover:hover {
             background: rgba(197,162,125,0.06);
             padding-left: 8px;
         }
 
-        /* Hero Abstract Ambient Orbs */
         .ambient-glow-orb-1 {
             filter: blur(140px);
             background: radial-gradient(circle, rgba(197,162,125,0.15) 0%, rgba(11,12,14,0) 70%);
@@ -441,10 +376,9 @@
     </style>
 </head>
 <body class="antialiased selection:bg-brand-accentGold/30">
-    <!-- Scroll progress bar -->
     <div id="scroll-progress"></div>
 
-    <!-- Glass Capsule Navigation (Fades in dynamically on scroll) -->
+    <!-- Sticky Navigation -->
     <nav id="sticky-nav" class="fixed top-8 left-1/2 -translate-x-1/2 z-[90] w-[90%] max-w-2xl bg-white/70 dark:bg-[#0B0C0E]/70 backdrop-blur-md rounded-full border border-white/20 dark:border-white/10 px-6 py-3 flex items-center justify-between shadow-lg opacity-0 pointer-events-none transition-all duration-500 transform translate-y-[-10px]">
         <span class="text-xs font-bold tracking-widest text-[#111215] dark:text-white uppercase font-sans">K.B</span>
         <div class="flex items-center gap-6">
@@ -456,35 +390,26 @@
         <a href="#footer-cta" class="bg-brand-dark dark:bg-brand-accentGold text-white dark:text-brand-dark text-xs font-bold px-4 py-1.5 rounded-full hover:opacity-90 transition">Get in Touch</a>
     </nav>
 
-    <!-- MAIN PORTFOLIO WRAPPER -->
     <main class="w-full">
 
-        <!-- ==========================================
-             SECTION 1 — HERO & ABOUT ME
-             ========================================== -->
+        <!-- HERO SECTION -->
         <section id="hero-about" class="relative w-full overflow-hidden bg-[#0B0C0E] text-white grain-overlay">
-            
-            <!-- Abstract Ambient Glowing Orbs -->
             <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
                 <div class="ambient-glow-orb-1 absolute top-[-10%] left-[10%] w-[500px] h-[500px] rounded-full"></div>
                 <div class="ambient-glow-orb-2 absolute bottom-[10%] right-[15%] w-[450px] h-[450px] rounded-full"></div>
             </div>
 
-            <!-- Hero Banner Content wrapper -->
-    <div class="relative z-10 max-w-6xl mx-auto px-6 md:px-8 pt-32 pb-24 text-center space-y-8 scroll-reveal active">
-        <div class="inline-flex items-center gap-2 bg-[#1C1E24] text-brand-accentGold px-4 py-1.5 rounded-full text-xs font-bold tracking-[0.2em] uppercase border border-[#C5A27D]/20 float-badge">
-            ✨ TECH CONTENT CREATOR
-        </div>
-        <!-- Editorial Scaled Typography -->
+            <div class="relative z-10 max-w-6xl mx-auto px-6 md:px-8 pt-32 pb-24 text-center space-y-8 scroll-reveal active">
+                <div class="inline-flex items-center gap-2 bg-[#1C1E24] text-brand-accentGold px-4 py-1.5 rounded-full text-xs font-bold tracking-[0.2em] uppercase border border-[#C5A27D]/20 float-badge">
+                    ✨ TECH CONTENT CREATOR & STRATEGIST
+                </div>
                 <h1 class="text-5xl md:text-8xl font-black tracking-tighter text-white font-sans uppercase">
                     KAMANI BROWN
                 </h1>
-                <!-- Subtle Gradient Text Effect on Tagline -->
                 <p class="text-xl md:text-3xl max-w-3xl mx-auto font-light leading-relaxed text-gray-400">
                     Authentic Tech & Product Content for <span class="text-white">Brands That Convert</span>
                 </p>
                 <div class="pt-6">
-                    <!-- Smooth Color Fill Hover CTA Button -->
                     <a href="#rates-packages" class="relative inline-flex items-center gap-2 group border border-brand-accentGold hover:border-white px-8 py-4 rounded-full font-medium tracking-wide text-brand-accentGold hover:text-[#0B0C0E] overflow-hidden transition-all duration-500 shadow-lg hover:shadow-[#C5A27D]/10">
                         <span class="absolute inset-0 bg-brand-accentGold transform scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500 ease-out z-0"></span>
                         <span class="relative z-10 flex items-center gap-2">Work With Me <i class="fa-solid fa-arrow-down text-xs"></i></span>
@@ -492,10 +417,8 @@
                 </div>
             </div>
 
-            <!-- Shimmer divider -->
             <div class="shimmer-line w-full"></div>
 
-            <!-- Marquee ticker strip -->
             <div class="bg-[#111418] border-y border-white/5 py-3 overflow-hidden relative z-10">
                 <div class="marquee-track text-[11px] font-bold tracking-[0.2em] uppercase text-[#C5A27D]/60 gap-0">
                     <span class="px-8">Tech Reviews</span><span class="px-3 text-white/10">✦</span>
@@ -506,7 +429,6 @@
                     <span class="px-8">Hook Strategy</span><span class="px-3 text-white/10">✦</span>
                     <span class="px-8">Content Creator</span><span class="px-3 text-white/10">✦</span>
                     <span class="px-8">Moncton, NB</span><span class="px-3 text-white/10">✦</span>
-                    <!-- Duplicate for seamless loop -->
                     <span class="px-8">Tech Reviews</span><span class="px-3 text-white/10">✦</span>
                     <span class="px-8">Unboxing Content</span><span class="px-3 text-white/10">✦</span>
                     <span class="px-8">Product Demos</span><span class="px-3 text-white/10">✦</span>
@@ -518,20 +440,13 @@
                 </div>
             </div>
 
-            <!-- About Me Block -->
             <div class="bg-[#F9F9FB] text-[#111215] py-24 border-b border-gray-100">
                 <div class="max-w-6xl mx-auto px-6 md:px-8 grid grid-cols-1 md:grid-cols-2 gap-16 items-center scroll-reveal">
-                    
-                    <!-- Intro Video Mockup Player -->
                     <div class="flex justify-center">
                         <div class="w-full max-w-[320px] phone-frame relative group video-container-parent" id="container_intro-video">
-                            <!-- FIXED: Added ID parameter back -->
                             <video id="intro-video" src="videos/intro.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
-                            
-                            <!-- Premium static logo overlay watermark pointing to images/logo-watermark.png -->
                             <img src="images/logo-watermark.png" class="watermark-overlay" alt="KB">
                             
-                            <!-- Rich Custom Playback Control Bar Overlay -->
                             <div class="custom-controls absolute inset-0 bg-[#111215]/80 backdrop-blur-[2px] flex flex-col justify-between p-4 transition-all duration-300 z-30">
                                 <div class="flex justify-between items-center">
                                     <span class="text-[9px] font-bold tracking-widest text-[#C5A27D] uppercase bg-[#1C1E24] px-2.5 py-1 rounded-full border border-brand-accentGold/20">Intro Clip</span>
@@ -572,7 +487,6 @@
                         </div>
                     </div>
 
-                    <!-- Biography Summary Column -->
                     <div class="space-y-8 flex flex-col justify-center">
                         <div class="space-y-4">
                             <h3 class="text-xs font-bold tracking-[0.25em] text-gray-400 uppercase">My Story</h3>
@@ -587,7 +501,6 @@
                             </div>
                         </div>
 
-                        <!-- Info Row (Cleaned location/email cards layout) -->
                         <div class="bg-white rounded-2xl p-6 border border-gray-100 flex flex-wrap gap-y-4 gap-x-8 items-center justify-between shadow-sm">
                             <div class="flex items-center gap-3">
                                 <span class="w-10 h-10 rounded-full bg-[#F3F4F6] flex items-center justify-center text-gray-600 shadow-sm"><i class="fa-solid fa-location-dot text-sm"></i></span>
@@ -607,76 +520,63 @@
                     </div>
                 </div>
 
-                <!-- Trusted by Brands Logo Grid (Restored to 6 columns / 2 rows structure) -->
                 <div class="pt-20 border-t border-gray-100 max-w-6xl mx-auto px-6 md:px-8 space-y-6">
                     <p class="text-center text-xs font-bold uppercase tracking-[0.25em] text-gray-400">Trusted By Brands</p>
                     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-5 max-w-5xl mx-auto text-center">
 
-                        <!-- Logo 1: TORRAS -->
                         <div class="px-3 py-2 border border-gray-200 rounded-xl bg-white flex flex-col items-center justify-center h-14 shadow-sm hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300">
                             <img src="images/brand1.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="max-w-[80%] max-h-full object-contain" alt="TORRAS">
                             <span class="hidden text-[10px] font-bold uppercase tracking-wider text-orange-500">TORRAS</span>
                         </div>
 
-                        <!-- Logo 2: ORICO -->
                         <div class="px-3 py-2 border border-gray-200 rounded-xl bg-white flex flex-col items-center justify-center h-14 shadow-sm hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300">
                             <img src="images/brand2.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="max-w-[80%] max-h-full object-contain" alt="ORICO">
                             <span class="hidden text-[10px] font-black uppercase tracking-wider text-red-600">ORICO®</span>
                         </div>
 
-                        <!-- Logo 3: IVANKY -->
                         <div class="px-3 py-2 border border-gray-200 rounded-xl bg-white flex flex-col items-center justify-center h-14 shadow-sm hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300">
                             <img src="images/brand3.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="max-w-[80%] max-h-full object-contain" alt="IVANKY">
                             <span class="hidden text-[10px] font-bold uppercase tracking-wider text-gray-800">IVANKY</span>
                         </div>
 
-                        <!-- Logo 4: maono -->
                         <div class="px-3 py-2 border border-gray-200 rounded-xl bg-white flex flex-col items-center justify-center h-14 shadow-sm hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300">
                             <img src="images/brand4.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="max-w-[80%] max-h-full object-contain" alt="maono">
                             <span class="hidden text-[10px] font-semibold tracking-wider text-yellow-600">maono</span>
                         </div>
 
-                        <!-- Logo 5: Abstract Leaf Design -->
                         <div class="px-3 py-2 border border-gray-200 rounded-xl bg-white flex flex-col items-center justify-center h-14 shadow-sm hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300">
                             <img src="images/brand5.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="max-w-[80%] max-h-full object-contain" alt="Green Design">
                             <span class="hidden text-[10px] font-bold text-emerald-600">🌿 GREEN DESIGN</span>
                         </div>
 
-                        <!-- Logo 6: NILLKIN -->
                         <div class="px-3 py-2 border border-gray-200 rounded-xl bg-white flex flex-col items-center justify-center h-14 shadow-sm hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300">
                             <img src="images/brand6.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="max-w-[80%] max-h-full object-contain" alt="NILLKIN">
                             <span class="hidden text-[10px] font-bold tracking-widest text-gray-800">NILLKIN</span>
                         </div>
 
-                        <!-- Logo 7: NEEWER -->
                         <div class="px-3 py-2 border border-gray-200 rounded-xl bg-white flex flex-col items-center justify-center h-14 shadow-sm hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300">
                             <img src="images/brand7.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="max-w-[80%] max-h-full object-contain" alt="NEEWER">
                             <span class="hidden text-[10px] font-bold tracking-widest text-black">NEEWER</span>
                         </div>
 
-                        <!-- Logo 8: YESOUL -->
                         <div class="px-3 py-2 border border-gray-200 rounded-xl bg-white flex flex-col items-center justify-center h-14 shadow-sm hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300">
                             <img src="images/brand8.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="max-w-[80%] max-h-full object-contain" alt="YESOUL">
                             <span class="hidden text-[10px] font-bold text-rose-500 tracking-wider">YESOUL</span>
                         </div>
 
-                        <!-- Logo 9: AP ALLPOWERS -->
                         <div class="px-3 py-2 border border-gray-200 rounded-xl bg-white flex flex-col items-center justify-center h-14 shadow-sm hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300">
                             <img src="images/brand9.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="max-w-[80%] max-h-full object-contain" alt="AP ALLPOWERS">
                             <span class="hidden text-[10px] font-black text-gray-900 tracking-tighter">AP ALLPOWERS</span>
                         </div>
 
-                        <!-- Logo 10: INIU -->
                         <div class="px-3 py-2 border border-gray-200 rounded-xl bg-white flex flex-col items-center justify-center h-14 shadow-sm hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300">
                             <img src="images/brand10.png" onerror="this.style.display='none';" class="max-w-[80%] max-h-full object-contain" alt="INIU">
                         </div>
 
-                        <!-- Logo 11: extremeRate -->
                         <div class="px-3 py-2 border border-gray-200 rounded-xl bg-white flex flex-col items-center justify-center h-14 shadow-sm hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300">
                             <img src="images/brand11.png" onerror="this.style.display='none';" class="max-w-[80%] max-h-full object-contain" alt="extremeRate">
                         </div>
 
-                        <!-- Logo 12: PUN CUBE -->
                         <div class="px-3 py-2 border border-gray-200 rounded-xl bg-white flex flex-col items-center justify-center h-14 shadow-sm hover:border-[#C5A27D] hover:-translate-y-1 transition duration-300">
                             <img src="images/brand12.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="max-w-[80%] max-h-full object-contain" alt="PUN CUBE">
                             <span class="hidden text-[10px] font-black tracking-widest text-black">PUN CUBE</span>
@@ -687,9 +587,7 @@
             </div>
         </section>
 
-        <!-- ==========================================
-             SECTION 2 — PORTFOLIO / FEATURED WORK (Exact labels & titles)
-             ========================================== -->
+        <!-- PORTFOLIO / FEATURED WORK -->
         <section id="portfolio" class="bg-[#F1F2F5] py-24 border-b border-gray-200">
             <div class="max-w-6xl mx-auto px-6 md:px-8 space-y-16">
                 
@@ -703,15 +601,14 @@
                     </p>
                 </div>
 
-                <!-- Row 1: Vertical Content -->
+                <!-- Vertical Formats (9:16) — 8 Reels in 2 Rows of 4 -->
                 <div class="space-y-6 scroll-reveal">
                     <p class="text-xs font-bold uppercase tracking-[0.15em] text-gray-400">Vertical Formats (9:16)</p>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                         
-                        <!-- iPhone Frame Mockup 1 (Product Review) -->
+                        <!-- Reel 1 -->
                         <div class="flex flex-col items-center space-y-4">
                             <div class="w-full max-w-[260px] phone-frame relative group video-container-parent" id="container_v-video-1">
-                                <!-- FIXED: Added ID parameter back -->
                                 <video id="v-video-1" src="videos/reel1.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay" alt="KB">
                                 
@@ -743,10 +640,9 @@
                             <span class="inline-block bg-[#F3F4F6] text-gray-500 px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider border border-gray-200 shadow-sm">Product Review</span>
                         </div>
 
-                        <!-- iPhone Frame Mockup 2 (Product Review) -->
+                        <!-- Reel 2 -->
                         <div class="flex flex-col items-center space-y-4">
                             <div class="w-full max-w-[260px] phone-frame relative group video-container-parent" id="container_v-video-2">
-                                <!-- FIXED: Added ID parameter back -->
                                 <video id="v-video-2" src="videos/reel2.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay" alt="KB">
                                 
@@ -778,10 +674,9 @@
                             <span class="inline-block bg-[#F3F4F6] text-gray-500 px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider border border-gray-200 shadow-sm">Product Review</span>
                         </div>
 
-                        <!-- iPhone Frame Mockup 3 (Product Review) -->
+                        <!-- Reel 3 -->
                         <div class="flex flex-col items-center space-y-4">
                             <div class="w-full max-w-[260px] phone-frame relative group video-container-parent" id="container_v-video-3">
-                                <!-- FIXED: Added ID parameter back -->
                                 <video id="v-video-3" src="videos/reel3.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay" alt="KB">
                                 
@@ -813,10 +708,9 @@
                             <span class="inline-block bg-[#F3F4F6] text-gray-500 px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider border border-gray-200 shadow-sm">Product Review</span>
                         </div>
 
-                        <!-- iPhone Frame Mockup 4 (Aesthetic Unboxing) -->
+                        <!-- Reel 4 -->
                         <div class="flex flex-col items-center space-y-4">
                             <div class="w-full max-w-[260px] phone-frame relative group video-container-parent" id="container_v-video-4">
-                                <!-- FIXED: Added ID parameter back -->
                                 <video id="v-video-4" src="videos/reel4.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay" alt="KB">
                                 
@@ -848,10 +742,9 @@
                             <span class="inline-block bg-[#F3F4F6] text-gray-500 px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider border border-gray-200 shadow-sm">Aesthetic Unboxing</span>
                         </div>
 
-                        <!-- iPhone Frame Mockup 5 (Aesthetic Unboxing) -->
+                        <!-- Reel 5 -->
                         <div class="flex flex-col items-center space-y-4">
                             <div class="w-full max-w-[260px] phone-frame relative group video-container-parent" id="container_v-video-5">
-                                <!-- FIXED: Added ID parameter back -->
                                 <video id="v-video-5" src="videos/reel5.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay" alt="KB">
                                 
@@ -883,10 +776,9 @@
                             <span class="inline-block bg-[#F3F4F6] text-gray-500 px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider border border-gray-200 shadow-sm">Aesthetic Unboxing</span>
                         </div>
 
-                        <!-- iPhone Frame Mockup 6 (Product Review) -->
+                        <!-- Reel 6 -->
                         <div class="flex flex-col items-center space-y-4">
                             <div class="w-full max-w-[260px] phone-frame relative group video-container-parent" id="container_v-video-6">
-                                <!-- FIXED: Added ID parameter back -->
                                 <video id="v-video-6" src="videos/reel6.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay" alt="KB">
                                 
@@ -915,8 +807,10 @@
                                     </div>
                                 </div>
                             </div>
+                            <span class="inline-block bg-[#F3F4F6] text-gray-500 px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider border border-gray-200 shadow-sm">Product Review</span>
+                        </div>
 
-                        <!-- iPhone Frame Mockup 7 (Premium Case Review) -->
+                        <!-- Reel 7 -->
                         <div class="flex flex-col items-center space-y-4">
                             <div class="w-full max-w-[260px] phone-frame relative group video-container-parent" id="container_v-video-7">
                                 <video id="v-video-7" src="videos/reel7.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
@@ -947,10 +841,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <span class="inline-block bg-[#F3F4F6] text-gray-500 px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider border border-gray-200 shadow-sm">Torras Case Review</span>
+                            <span class="inline-block bg-[#F3F4F6] text-gray-500 px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider border border-gray-200 shadow-sm">Product Review</span>
                         </div>
 
-                        <!-- iPhone Frame Mockup 8 (Premium Case Review) -->
+                        <!-- Reel 8 -->
                         <div class="flex flex-col items-center space-y-4">
                             <div class="w-full max-w-[260px] phone-frame relative group video-container-parent" id="container_v-video-8">
                                 <video id="v-video-8" src="videos/reel8.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
@@ -981,23 +875,20 @@
                                     </div>
                                 </div>
                             </div>
-                            <span class="inline-block bg-[#F3F4F6] text-gray-500 px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider border border-gray-200 shadow-sm">Torras Case Review</span>
+                            <span class="inline-block bg-[#F3F4F6] text-gray-500 px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider border border-gray-200 shadow-sm">Product Review</span>
                         </div>
 
                     </div>
-                </div>    
+                </div>
 
-                <!-- ==========================================
-                     Row 2: Horizontal Content (4x Laptop Mockups)
-                     ========================================== -->
+                <!-- Horizontal Formats (16:9) -->
                 <div class="space-y-6 pt-12 scroll-reveal animate-delay">
                     <p class="text-xs font-bold uppercase tracking-[0.15em] text-gray-400">Horizontal Formats (16:9)</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
                         
-                        <!-- Laptop Frame Mockup 1 (Honest In-Depth Product Review) -->
+                        <!-- Laptop Frame 1 -->
                         <div class="space-y-3">
-                            <div class="laptop-frame relative group video-container-parent widescreen-player" id="container_h-video-1">
-                                <!-- FIXED: Added ID parameter back -->
+                            <div class="w-full laptop-frame relative group video-container-parent widescreen-player" id="container_h-video-1">
                                 <video id="h-video-1" src="videos/horizontal1.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay-wide" alt="KB">
                                 
@@ -1032,10 +923,9 @@
                             </div>
                         </div>
 
-                        <!-- Laptop Frame Mockup 2 (Commercial Showcase) -->
+                        <!-- Laptop Frame 2 -->
                         <div class="space-y-3">
-                            <div class="laptop-frame relative group video-container-parent widescreen-player" id="container_h-video-2">
-                                <!-- FIXED: Added ID parameter back -->
+                            <div class="w-full laptop-frame relative group video-container-parent widescreen-player" id="container_h-video-2">
                                 <video id="h-video-2" src="videos/horizontal2.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay-wide" alt="KB">
                                 
@@ -1067,10 +957,9 @@
                             <p class="text-sm font-semibold text-[#111215] tracking-tight">Product Trailer</p>
                         </div>
 
-                        <!-- Laptop Frame Mockup 3 (Cinematic Unboxing) -->
+                        <!-- Laptop Frame 3 -->
                         <div class="space-y-3">
-                            <div class="laptop-frame relative group video-container-parent widescreen-player" id="container_h-video-3">
-                                <!-- FIXED: Added ID parameter back -->
+                            <div class="w-full laptop-frame relative group video-container-parent widescreen-player" id="container_h-video-3">
                                 <video id="h-video-3" src="videos/horizontal3.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay-wide" alt="KB">
                                 
@@ -1102,10 +991,9 @@
                             <p class="text-sm font-semibold text-[#111215] tracking-tight">Cinematic Unboxing</p>
                         </div>
 
-                        <!-- Laptop Frame Mockup 4 (Aesthetic Unboxing) -->
+                        <!-- Laptop Frame 4 -->
                         <div class="space-y-3">
-                            <div class="laptop-frame relative group video-container-parent widescreen-player" id="container_h-video-4">
-                                <!-- FIXED: Added ID parameter back -->
+                            <div class="w-full laptop-frame relative group video-container-parent widescreen-player" id="container_h-video-4">
                                 <video id="h-video-4" src="videos/horizontal4.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay-wide" alt="KB">
                                 
@@ -1142,9 +1030,7 @@
             </div>
         </section>
 
-        <!-- ==========================================
-             SECTION 3 — METRICS & SOCIAL PROOF
-             ========================================== -->
+        <!-- METRICS & SOCIAL PROOF -->
         <section id="metrics" class="bg-[#0E1013] text-white py-24 relative overflow-hidden grain-overlay">
             <div class="absolute inset-0 z-0 bg-[radial-gradient(circle_at_70%_50%,rgba(197,162,125,0.08),transparent_50%)]"></div>
             
@@ -1154,10 +1040,9 @@
                     <h2 class="text-4xl font-black tracking-tight mt-1">By the Numbers</h2>
                 </div>
 
-                <!-- MEDIA KIT AUDIENCE INTELLIGENCE & PERFORMANCE SECTION -->
+                <!-- AUDIENCE INTELLIGENCE & PERFORMANCE SECTION -->
                 <div class="space-y-12 scroll-reveal">
                     
-                    <!-- Top Big Metric Banner (4 Column Summary) -->
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
                         <div class="backdrop-blur-md bg-white/5 border border-white/10 p-6 rounded-2xl space-y-1 hover:border-[#C5A27D]/40 transition duration-300">
                             <p class="text-4xl md:text-5xl font-black text-white font-sans tracking-tight">1.4<span class="text-[#C5A27D]">M</span></p>
@@ -1181,7 +1066,6 @@
                         </div>
                     </div>
 
-                    <!-- Audience Intelligence Block (Geography & Ecosystem/Behaviour) -->
                     <div class="space-y-4">
                         <h4 class="text-xs font-bold tracking-[0.2em] text-gray-400 uppercase">Audience Intelligence</h4>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1190,7 +1074,6 @@
                             <div class="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8 space-y-6">
                                 <h5 class="text-[11px] font-bold uppercase tracking-[0.2em] text-[#C5A27D]">Geography</h5>
                                 <div class="space-y-4 font-sans text-xs">
-                                    <!-- US -->
                                     <div class="flex items-center gap-4">
                                         <span class="w-28 font-medium text-gray-300">United States</span>
                                         <div class="flex-1 bg-white/10 h-2.5 rounded-full overflow-hidden">
@@ -1198,7 +1081,6 @@
                                         </div>
                                         <span class="w-12 text-right font-bold text-white">~52%</span>
                                     </div>
-                                    <!-- UK -->
                                     <div class="flex items-center gap-4">
                                         <span class="w-28 font-medium text-gray-300">United Kingdom</span>
                                         <div class="flex-1 bg-white/10 h-2.5 rounded-full overflow-hidden">
@@ -1206,7 +1088,6 @@
                                         </div>
                                         <span class="w-12 text-right font-bold text-white">~18%</span>
                                     </div>
-                                    <!-- Canada -->
                                     <div class="flex items-center gap-4">
                                         <span class="w-28 font-medium text-gray-300">Canada</span>
                                         <div class="flex-1 bg-white/10 h-2.5 rounded-full overflow-hidden">
@@ -1214,7 +1095,6 @@
                                         </div>
                                         <span class="w-12 text-right font-bold text-white">~12%</span>
                                     </div>
-                                    <!-- Australia -->
                                     <div class="flex items-center gap-4">
                                         <span class="w-28 font-medium text-gray-300">Australia</span>
                                         <div class="flex-1 bg-white/10 h-2.5 rounded-full overflow-hidden">
@@ -1222,7 +1102,6 @@
                                         </div>
                                         <span class="w-12 text-right font-bold text-white">~8%</span>
                                     </div>
-                                    <!-- Other -->
                                     <div class="flex items-center gap-4">
                                         <span class="w-28 font-medium text-gray-300">Other</span>
                                         <div class="flex-1 bg-white/10 h-2.5 rounded-full overflow-hidden">
@@ -1259,12 +1138,11 @@
                         </div>
                     </div>
 
-                    <!-- Top-Performing Content (Media Kit Pillars) -->
+                    <!-- Top-Performing Content Pillars -->
                     <div class="space-y-4">
                         <h4 class="text-xs font-bold tracking-[0.2em] text-gray-400 uppercase">Top-Performing Content Niche Pillars</h4>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             
-                            <!-- Card 1: Primary Niche -->
                             <div class="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-6 space-y-4 hover:border-[#C5A27D]/30 transition duration-300">
                                 <span class="inline-block bg-[#1C1E24] text-[#C5A27D] text-[9px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border border-[#C5A27D]/30">Primary Niche</span>
                                 <h5 class="text-base font-bold text-white font-sans">iPhone Storage, Backup & Transfer Tutorials</h5>
@@ -1280,7 +1158,6 @@
                                 </div>
                             </div>
 
-                            <!-- Card 2: Top Performer -->
                             <div class="backdrop-blur-md bg-white/5 border border-[#C5A27D]/30 rounded-2xl p-6 space-y-4 hover:border-[#C5A27D]/60 transition duration-300">
                                 <span class="inline-block bg-[#C5A27D]/20 text-[#C5A27D] text-[9px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border border-[#C5A27D]/40">Top Performer</span>
                                 <h5 class="text-base font-bold text-white font-sans">iPhone-to-USB Flash Drive Tutorials</h5>
@@ -1296,7 +1173,6 @@
                                 </div>
                             </div>
 
-                            <!-- Card 3: Secondary Niche -->
                             <div class="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-6 space-y-4 hover:border-[#C5A27D]/30 transition duration-300">
                                 <span class="inline-block bg-[#1C1E24] text-gray-300 text-[9px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border border-white/10">Secondary Niche</span>
                                 <h5 class="text-base font-bold text-white font-sans">PlayStation Hardware & Accessories</h5>
@@ -1306,7 +1182,6 @@
                                 </div>
                             </div>
 
-                            <!-- Card 4: Audience Fit -->
                             <div class="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-6 space-y-4 hover:border-[#C5A27D]/30 transition duration-300">
                                 <span class="inline-block bg-[#1C1E24] text-gray-300 text-[9px] font-bold uppercase tracking-widest px-3 py-1 rounded-full border border-white/10">Audience Fit</span>
                                 <h5 class="text-base font-bold text-white font-sans">Step-by-Step Tech Troubleshooting</h5>
@@ -1323,41 +1198,32 @@
 
                 <div class="shimmer-line w-full my-8"></div>
 
-                <!-- Stats Grid with exact layout & wording -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 scroll-reveal-children">
-                    
-                    <!-- Stat 1 -->
                     <div class="backdrop-blur-md bg-white/5 border border-white/10 p-8 rounded-2xl text-center space-y-2 shadow-xl hover:border-brand-accentGold/40 transition duration-500 glow-pulse">
                         <p class="text-5xl font-black text-[#C5A27D] count-up-stat" data-count-target="150">150+</p>
                         <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-normal">Videos Delivered</p>
                     </div>
 
-                    <!-- Stat 2 -->
                     <div class="backdrop-blur-md bg-white/5 border border-white/10 p-8 rounded-2xl text-center space-y-2 shadow-xl hover:border-brand-accentGold/40 transition duration-500 glow-pulse" style="animation-delay:1s">
                         <p class="text-5xl font-black text-white count-up-stat" data-count-target="85">85+</p>
                         <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-normal">Avg. Video Views</p>
                     </div>
 
-                    <!-- Stat 3 -->
                     <div class="backdrop-blur-md bg-white/5 border border-white/10 p-8 rounded-2xl text-center space-y-2 shadow-xl hover:border-brand-accentGold/40 transition duration-500 glow-pulse" style="animation-delay:2s">
                         <p class="text-5xl font-black text-[#C5A27D] count-up-stat-decimal" data-count-target="8.2">8.2%</p>
                         <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-normal">Avg. Engagement Rate</p>
                     </div>
 
-                    <!-- Stat 4 -->
                     <div class="backdrop-blur-md bg-white/5 border border-white/10 p-8 rounded-2xl text-center space-y-2 shadow-xl hover:border-brand-accentGold/40 transition duration-500 glow-pulse" style="animation-delay:3s">
                         <p class="text-5xl font-black text-white count-up-stat" data-count-target="40">40+</p>
                         <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-normal">Brands Worked With</p>
                     </div>
-
                 </div>
 
-                <!-- Top Performing Content (Case Studies) -->
+                <!-- Case Studies -->
                 <div class="space-y-6 pt-6 scroll-reveal">
                     <p class="text-xs font-bold uppercase tracking-[0.15em] text-[#C5A27D]">Top Performing Case Studies</p>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        
-                        <!-- Case 1 -->
                         <div class="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-brand-accentGold/30 shadow-lg flex flex-col justify-between space-y-4 transition duration-500">
                             <div class="flex items-center gap-3 pb-3 border-b border-white/10">
                                 <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-[#C5A27D]">
@@ -1372,7 +1238,6 @@
                             </div>
                         </div>
 
-                        <!-- Case 2 -->
                         <div class="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-brand-accentGold/30 shadow-lg flex flex-col justify-between space-y-4 transition duration-500">
                             <div class="flex items-center gap-3 pb-3 border-b border-white/10">
                                 <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-[#C5A27D]">
@@ -1387,7 +1252,6 @@
                             </div>
                         </div>
 
-                        <!-- Case 3 -->
                         <div class="backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-brand-accentGold/30 shadow-lg flex flex-col justify-between space-y-4 transition duration-500">
                             <div class="flex items-center gap-3 pb-3 border-b border-white/10">
                                 <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-[#C5A27D]">
@@ -1401,11 +1265,10 @@
                                 <div class="flex justify-between"><span class="text-gray-400 font-light">Retention:</span><span class="font-bold">49% (Avg. Watch)</span></div>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
-                <!-- Testimonial Frosted Callout -->
+                <!-- Testimonial -->
                 <div class="backdrop-blur-md bg-white/5 border border-white/10 p-10 rounded-3xl max-w-4xl mx-auto space-y-6 text-center hover:border-brand-accentGold/30 transition duration-500 scroll-reveal relative overflow-hidden">
                     <span class="quote-giant">"</span>
                     <div class="inline-flex items-center justify-center w-12 h-12 bg-white/10 text-brand-accentGold rounded-full text-xl shadow-inner">
@@ -1419,9 +1282,7 @@
             </div>
         </section>
 
-        <!-- ==========================================
-             SECTION 4 — PACKAGES & RATES
-             ========================================== -->
+        <!-- PACKAGES & RATES -->
         <section id="rates-packages" class="bg-[#F9F9FB] py-24 border-b border-gray-200">
             <div class="max-w-6xl mx-auto px-6 md:px-8 space-y-16">
 
@@ -1430,21 +1291,19 @@
                     <h2 class="text-4xl font-black tracking-tight mt-1">Work With Me</h2>
                 </div>
 
-                <!-- Intro copy -->
                 <p class="text-gray-500 text-base md:text-lg font-light max-w-2xl -mt-8 scroll-reveal">Every brand is different — so every collaboration is scoped individually. Here's what I offer. Reach out and let's find the right fit for your campaign.</p>
 
-                <!-- 3 service tier cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch scroll-reveal">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch scroll-reveal">
 
-            <!-- Tier 01: Basic -->
-            <div class="border border-gray-200 bg-white rounded-2xl p-8 flex flex-col justify-between shadow-sm pkg-card">
-                <div class="space-y-6">
-                    <div class="space-y-2">
-                        <p class="text-xs font-bold uppercase tracking-widest text-gray-400 font-sans">SHORT-FORM</p>
-                        <h3 class="text-2xl font-bold font-sans text-[#111215]">Basic</h3>
-                        <p class="text-sm text-gray-400 font-light leading-relaxed">Best for: product seeding, brand awareness, quick hooks</p>
-                    </div>
-                    <ul class="space-y-4 text-sm text-gray-600 border-t border-gray-150 pt-6">
+                    <!-- Tier 01: Basic -->
+                    <div class="border border-gray-200 bg-white rounded-2xl p-8 flex flex-col justify-between shadow-sm pkg-card">
+                        <div class="space-y-6">
+                            <div class="space-y-2">
+                                <p class="text-xs font-bold uppercase tracking-widest text-gray-400 font-sans">SHORT-FORM</p>
+                                <h3 class="text-2xl font-bold font-sans text-[#111215]">Basic</h3>
+                                <p class="text-sm text-gray-400 font-light leading-relaxed">Best for: product seeding, brand awareness, quick hooks</p>
+                            </div>
+                            <ul class="space-y-4 text-sm text-gray-600 border-t border-gray-150 pt-6">
                                 <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span>1x Short-form vertical video (15-30s)</span></li>
                                 <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span>1x Revision included</span></li>
                                 <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span>Dedicated concept brainstorming</span></li>
@@ -1459,19 +1318,18 @@
                         </div>
                     </div>
 
-                    <!-- Tier 02 — Core Package -->
-            <!-- Tier 02 — Standard -->
-            <div class="border-2 border-[#C5A27D] bg-white rounded-2xl p-8 flex flex-col justify-between shadow-2xl relative transform md:scale-105 z-10 pkg-card" style="box-shadow: 0 0 40px rgba(197,162,125,0.15), 0 24px 48px rgba(0,0,0,0.08)">
-                <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#C5A27D] text-[#0B0C0E] text-[10px] font-black tracking-[0.2em] uppercase px-5 py-1.5 rounded-full shadow">
-                    MOST REQUESTED
-                </div>
-                <div class="space-y-6">
-                    <div class="space-y-2 pt-2">
-                        <p class="text-xs font-bold uppercase tracking-widest text-[#C5A27D] font-sans">STANDARD</p>
-                        <h3 class="text-2xl font-bold font-sans text-[#111215]">Standard</h3>
-                        <p class="text-sm text-gray-400 font-light leading-relaxed">Best for: paid ads, social campaigns, product launches</p>
-                    </div>
-                    <ul class="space-y-4 text-sm text-gray-600 border-t border-gray-150 pt-6">
+                    <!-- Tier 02: Standard -->
+                    <div class="border-2 border-[#C5A27D] bg-white rounded-2xl p-8 flex flex-col justify-between shadow-2xl relative transform md:scale-105 z-10 pkg-card" style="box-shadow: 0 0 40px rgba(197,162,125,0.15), 0 24px 48px rgba(0,0,0,0.08)">
+                        <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#C5A27D] text-[#0B0C0E] text-[10px] font-black tracking-[0.2em] uppercase px-5 py-1.5 rounded-full shadow">
+                            MOST REQUESTED
+                        </div>
+                        <div class="space-y-6">
+                            <div class="space-y-2 pt-2">
+                                <p class="text-xs font-bold uppercase tracking-widest text-[#C5A27D] font-sans">STANDARD</p>
+                                <h3 class="text-2xl font-bold font-sans text-[#111215]">Standard</h3>
+                                <p class="text-sm text-gray-400 font-light leading-relaxed">Best for: paid ads, social campaigns, product launches</p>
+                            </div>
+                            <ul class="space-y-4 text-sm text-gray-600 border-t border-gray-150 pt-6">
                                 <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span>3x Highly targeted video (up to 60s)</span></li>
                                 <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span>2x Revisions included</span></li>
                                 <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span>Hook + CTA strategy & scripting</span></li>
@@ -1486,16 +1344,15 @@
                         </div>
                     </div>
 
-                    <!-- Tier 03: Deep Dive -->
-            <!-- Tier 03: Premium -->
-            <div class="border border-gray-200 bg-white rounded-2xl p-8 flex flex-col justify-between shadow-sm pkg-card">
-                <div class="space-y-6">
-                    <div class="space-y-2">
-                        <p class="text-xs font-bold uppercase tracking-widest text-gray-400 font-sans">TECH / SAAS</p>
-                        <h3 class="text-2xl font-bold font-sans text-[#111215]">Premium</h3>
-                        <p class="text-sm text-gray-400 font-light leading-relaxed">Best for: complex products, app demos, tech walkthroughs</p>
-                    </div>
-                    <ul class="space-y-4 text-sm text-gray-600 border-t border-gray-150 pt-6">
+                    <!-- Tier 03: Premium -->
+                    <div class="border border-gray-200 bg-white rounded-2xl p-8 flex flex-col justify-between shadow-sm pkg-card">
+                        <div class="space-y-6">
+                            <div class="space-y-2">
+                                <p class="text-xs font-bold uppercase tracking-widest text-gray-400 font-sans">TECH / SAAS</p>
+                                <h3 class="text-2xl font-bold font-sans text-[#111215]">Premium</h3>
+                                <p class="text-sm text-gray-400 font-light leading-relaxed">Best for: complex products, app demos, tech walkthroughs</p>
+                            </div>
+                            <ul class="space-y-4 text-sm text-gray-600 border-t border-gray-150 pt-6">
                                 <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span>Longform 5–10 minute in-depth walkthrough or demo</span></li>
                                 <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span>1x Highly Targeted video (up to 60s)</span></li>
                                 <li class="flex items-start"><i class="fa-solid fa-circle-check text-emerald-500 mt-1 mr-2 text-xs flex-shrink-0"></i> <span>+ 1x Shoppable video for Amazon Influencer Storefront</span></li>
@@ -1518,7 +1375,6 @@
                     <h3 class="text-xs font-bold tracking-[0.15em] text-black uppercase text-center mb-8 font-sans">CUSTOMIZE YOUR COLLABORATION PACKAGE (ADD-ONS & USAGE RIGHTS)</h3>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <!-- Production Options -->
                         <div class="bg-[#F6F7F9] rounded-2xl p-8 border border-gray-200/60 shadow-sm">
                             <h4 class="text-[11px] font-bold uppercase tracking-widest text-[#4A5D54] mb-6 pb-4 border-b border-gray-200/80 font-sans">PRODUCTION OPTIONS</h4>
                             <ul class="space-y-2">
@@ -1529,7 +1385,6 @@
                             </ul>
                         </div>
 
-                        <!-- Paid Ads & Whitelisting Rights -->
                         <div class="bg-[#F6F7F9] rounded-2xl p-8 border border-gray-200/60 shadow-sm">
                             <h4 class="text-[11px] font-bold uppercase tracking-widest text-[#4A5D54] mb-6 pb-4 border-b border-gray-200/80 font-sans">PAID ADS & WHITELISTING RIGHTS</h4>
                             <ul class="space-y-2">
@@ -1543,7 +1398,6 @@
                     </div>
                 </div>
 
-                <!-- Custom scope callout -->
                 <div class="scroll-reveal">
                     <div class="bg-[#0B0C0E] rounded-2xl p-10 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
                         <div class="space-y-3 max-w-xl">
@@ -1563,16 +1417,9 @@
             </div>
         </section>
 
-        <!-- ==========================================
-             FOOTER CTA SECTION
-             ========================================== -->
-        <!-- Footer CTA -->
+        <!-- FOOTER CTA -->
         <section id="footer-cta" class="relative bg-[#0B0C0E] text-white py-24 text-center overflow-hidden">
-            
-            <!-- Slow Moving Ambient Gradient Loop -->
             <div class="absolute inset-0 z-0 bg-gradient-to-tr from-[#0B0C0E] via-[#121316] to-[#2C4A3E]/30 bg-[size:200%_200%] animate-[slowParallax_15s_infinite_alternate_ease-in-out]"></div>
-            
-            <!-- Noise Texture Overlay on Footer -->
             <div class="absolute inset-0 z-0 opacity-[0.03] pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E');"></div>
 
             <div class="relative z-10 max-w-2xl mx-auto px-6 space-y-8 scroll-reveal">
@@ -1589,12 +1436,10 @@
                             kamanibrown@gmail.com
                         </p>
                         
-                        <!-- Verified YouTube Link -->
                         <a href="https://youtube.com/@KamaniBrown" target="_blank" class="inline-flex items-center gap-2 text-red-400 hover:text-red-300 transition text-sm md:text-base font-semibold bg-red-950/20 px-4 py-1.5 rounded-full border border-red-500/20 hover:scale-105 duration-200 font-sans">
                             <i class="fa-brands fa-youtube text-lg"></i> youtube.com/@KamaniBrown
                         </a>
 
-                        <!-- Amazon Influencer Link -->
                         <a href="https://a.co/d/0eIhotX7" target="_blank" class="inline-flex items-center gap-2 text-orange-500 hover:text-orange-400 transition text-sm md:text-base font-semibold bg-orange-950/20 px-4 py-1.5 rounded-full border border-orange-500/20 hover:scale-105 duration-200 font-sans mt-3">
                             <i class="fa-brands fa-amazon text-lg"></i> Amazon Influencer Storefront
                         </a>
@@ -1611,43 +1456,30 @@
 
     </main>
 
-    <!-- Script to enable native in-browser media previews, sound toggles, and responsive adjustments -->
+    <!-- Interactive Media Handler Scripts -->
     <script>
         let fullscreenTimeout;
         let controlsIdleTimeout;
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Set up fallback drag events for mobile / tablet visibility toggles
             setupResponsiveControls();
-
-            // Explicit Scroll Smooth click handler
             setupSmoothScrollNavigation();
-
-            // Setup Video Metadata Listeners to dynamically grab correct file durations
             setupVideoMetadataListeners();
 
-            // Listen for native Fullscreen exits to safely toggle button icon sets
             document.addEventListener('fullscreenchange', handleFullScreenExit);
             document.addEventListener('webkitfullscreenchange', handleFullScreenExit);
 
-            // Setup fullscreen controls activity auto-hide trackers
             setupFullscreenActivityListeners();
-
-            // Setup custom controls idle hider to prevent controls stuck on screen
             setupControlsIdleTracker();
-
-            // Initialize IntersectionObservers for scroll reveals and count-ups
             setupScrollRevealObserver();
             setupStickyNavObserver();
             setupCountUpObserver();
         });
 
-        // Loop through all active video elements to map their triggers cleanly
         function setupVideoMetadataListeners() {
             document.querySelectorAll('.video-container-parent').forEach(container => {
                 const video = container.querySelector('video');
                 if (video) {
-                    // Force explicit metadata preloading for mobile performance safety
                     video.setAttribute('preload', 'metadata');
 
                     video.addEventListener('loadedmetadata', () => {
@@ -1657,7 +1489,6 @@
                     video.addEventListener('timeupdate', () => updateTimelineProgress(container));
                     video.addEventListener('ended', () => resetVideoStateOnEnded(container));
 
-                    // Sync overlay UI controls if user enters/exits standard native iOS video fullscreen
                     video.addEventListener('webkitbeginfullscreen', () => {
                         video.muted = false;
                         const soundToggleIcon = container.querySelector('.sound-toggle i');
@@ -1676,7 +1507,6 @@
             });
         }
 
-        // Failsafe Scroll Navigator Helper
         function setupSmoothScrollNavigation() {
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
@@ -1684,25 +1514,19 @@
                     const targetId = this.getAttribute('href');
                     const targetElement = document.querySelector(targetId);
                     if (targetElement) {
-                        targetElement.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }
                 });
             });
         }
 
-        // Toggle playback state
         function togglePlayPause(button) {
             const container = button.closest('.video-container-parent');
             const video = container.querySelector('video');
             const icon = button.querySelector('i');
             const statusText = container.querySelector('.status-indicator');
 
-            if (video.ended) {
-                video.currentTime = 0;
-            }
+            if (video.ended) { video.currentTime = 0; }
 
             if (video.paused) {
                 const playPromise = video.play();
@@ -1710,9 +1534,7 @@
                     playPromise.then(() => {
                         icon.className = 'fa-solid fa-pause text-xs md:text-sm';
                         if (statusText) statusText.textContent = 'playing';
-                    }).catch(error => {
-                        console.log("Playback prevented on mobile Safari:", error);
-                    });
+                    }).catch(error => { console.log("Playback prevented:", error); });
                 }
             } else {
                 video.pause();
@@ -1721,18 +1543,15 @@
             }
         }
 
-        // Robust Full Screen Toggle on Parent Mockup
         function toggleFullScreen(button) {
             const container = button.closest('.video-container-parent');
             const video = container.querySelector('video');
             const icon = button.querySelector('i');
             if (!container || !video) return;
 
-            // Strict iOS mobile detection (iPhone/iPod browser)
             const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
             if (isIOS && video.webkitEnterFullscreen) {
-                // iPhone Safari demands triggering fullscreen directly on the video node
                 video.webkitEnterFullscreen();
                 return;
             }
@@ -1755,7 +1574,6 @@
             }
         }
 
-        // Handle browser fullscreenchange event cleanly
         function handleFullScreenExit() {
             const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement;
             document.querySelectorAll('.video-container-parent').forEach(container => {
@@ -1768,22 +1586,18 @@
                     } else {
                         toggleBtnIcon.className = 'fa-solid fa-expand text-[10px]';
                         container.classList.remove('hide-cursor');
-                        if (controls) {
-                            controls.classList.remove('controls-active');
-                        }
+                        if (controls) { controls.classList.remove('controls-active'); }
                     }
                 }
             });
         }
 
-        // Fullscreen Controls Auto-Hide Mechanics
         function showFullscreenControls(container) {
             const controls = container.querySelector('.custom-controls');
             if (!controls) return;
 
             controls.classList.add('controls-active');
             container.classList.remove('hide-cursor');
-
             clearTimeout(fullscreenTimeout);
 
             fullscreenTimeout = setTimeout(() => {
@@ -1795,14 +1609,11 @@
             }, 2500);
         }
 
-        // Activity Listeners setup
         function setupFullscreenActivityListeners() {
             document.querySelectorAll('.video-container-parent').forEach(container => {
                 const activityHandler = () => {
                     const isFullscreen = document.fullscreenElement === container || document.webkitFullscreenElement === container;
-                    if (isFullscreen) {
-                        showFullscreenControls(container);
-                    }
+                    if (isFullscreen) { showFullscreenControls(container); }
                 };
 
                 container.addEventListener('mousemove', activityHandler);
@@ -1812,7 +1623,6 @@
             });
         }
 
-        // Idle control bar fade mechanics to fix stuck controls issue
         function setupControlsIdleTracker() {
             document.querySelectorAll('.video-container-parent').forEach(container => {
                 const controls = container.querySelector('.custom-controls');
@@ -1853,7 +1663,6 @@
             });
         }
 
-        // Reset display state cleanly when video concludes playing
         function resetVideoStateOnEnded(container) {
             const video = container.querySelector('video');
             const playButton = container.querySelector('button[onclick*="togglePlayPause"] i');
@@ -1861,21 +1670,12 @@
             const fill = container.querySelector('.progress-bar-fill');
             const currentText = container.querySelector('.time-current');
 
-            if (playButton) {
-                playButton.className = 'fa-solid fa-play text-xs md:text-sm pl-0.5';
-            }
-            if (statusText) {
-                statusText.textContent = 'ended';
-            }
-            if (fill) {
-                fill.style.width = '100%';
-            }
-            if (currentText && video.duration) {
-                currentText.textContent = formatTime(video.duration);
-            }
+            if (playButton) playButton.className = 'fa-solid fa-play text-xs md:text-sm pl-0.5';
+            if (statusText) statusText.textContent = 'ended';
+            if (fill) fill.style.width = '100%';
+            if (currentText && video.duration) currentText.textContent = formatTime(video.duration);
         }
 
-        // Skip forward or backward by specific seconds
         function skipVideo(button, seconds) {
             const container = button.closest('.video-container-parent');
             const video = container.querySelector('video');
@@ -1884,11 +1684,9 @@
             updateOverlayUI(container);
         }
 
-        // Seek timeline directly via user tracking bar click
         function seekVideo(event, progressContainer) {
             const container = progressContainer.closest('.video-container-parent');
             const video = container.querySelector('video');
-            
             const rect = progressContainer.getBoundingClientRect();
             const clickPosition = (event.clientX - rect.left) / rect.width;
             
@@ -1898,7 +1696,6 @@
             }
         }
 
-        // Toggle audio muting controls dynamically
         function toggleMute(button) {
             const container = button.closest('.video-container-parent');
             const video = container.querySelector('video');
@@ -1912,7 +1709,6 @@
             }
         }
 
-        // Update active seek line progress
         function updateTimelineProgress(container) {
             const video = container.querySelector('video');
             const fill = container.querySelector('.progress-bar-fill');
@@ -1927,7 +1723,6 @@
             }
         }
 
-        // Ensure proper button status symbols
         function updateOverlayUI(container) {
             const video = container.querySelector('video');
             const playButton = container.querySelector('button[onclick*="togglePlayPause"] i');
@@ -1944,7 +1739,6 @@
             }
         }
 
-        // Helper: Convert seconds into standard audio time format
         function formatTime(seconds) {
             if (isNaN(seconds)) return "0:00";
             const mins = Math.floor(seconds / 60);
@@ -1952,52 +1746,36 @@
             return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
         }
 
-        // Responsive Mobile Taps: Tapping a device container alternates dashboard visibility
         function setupResponsiveControls() {
             document.querySelectorAll('.video-container-parent').forEach(container => {
                 container.addEventListener('click', function(e) {
-                    if (e.target.closest('.custom-controls button') || e.target.closest('.progress-bar-container')) {
-                        return;
-                    }
-                    
+                    if (e.target.closest('.custom-controls button') || e.target.closest('.progress-bar-container')) return;
                     const controls = this.querySelector('.custom-controls');
                     if (controls) {
-                        const isVisible = controls.classList.contains('opacity-100');
-                        if (isVisible) {
-                            controls.classList.remove('opacity-100');
-                        } else {
-                            controls.classList.add('opacity-100');
-                        }
+                        controls.classList.toggle('opacity-100');
                     }
                 });
             });
         }
 
-        // Scroll Reveal Animations handler
         function setupScrollRevealObserver() {
             const revealElements = document.querySelectorAll('.scroll-reveal');
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                    }
+                    if (entry.isIntersecting) entry.target.classList.add('active');
                 });
             }, { threshold: 0.1 });
             revealElements.forEach(el => observer.observe(el));
 
-            // Staggered children reveals
             const childRevealElements = document.querySelectorAll('.scroll-reveal-children');
             const childObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                    }
+                    if (entry.isIntersecting) entry.target.classList.add('active');
                 });
             }, { threshold: 0.1 });
             childRevealElements.forEach(el => childObserver.observe(el));
         }
 
-        // Scroll progress bar
         window.addEventListener('scroll', () => {
             const scrollTop = window.scrollY;
             const docHeight = document.documentElement.scrollHeight - window.innerHeight;
@@ -2006,11 +1784,9 @@
             if (bar) bar.style.width = progress + '%';
         });
 
-        // Sticky Navigation entry trigger observer
         function setupStickyNavObserver() {
             const heroSection = document.getElementById('hero-about');
             const stickyNav = document.getElementById('sticky-nav');
-            
             if (!heroSection || !stickyNav) return;
 
             const observer = new IntersectionObserver((entries) => {
@@ -2028,7 +1804,6 @@
             observer.observe(heroSection);
         }
 
-        // High-performance numerical Count-Up trigger
         function setupCountUpObserver() {
             const stats = document.querySelectorAll('.count-up-stat, .count-up-stat-decimal');
             
