@@ -57,10 +57,14 @@
             'v-video-6':     'reel6.mp4',
             'v-video-7':     'reel7.mp4',
             'v-video-8':     'reel8.mp4',
-            'h-video-1':     'horizontal1.mp4',
-            'h-video-2':     'horizontal2.mp4',
-            'h-video-3':     'horizontal3.mp4',
-            'h-video-4':     'horizontal4.mp4',
+            'collab-video-1': 'collab1.mp4',
+            'collab-video-2': 'collab2.mp4',
+            'collab-video-3': 'collab3.mp4',
+            'collab-video-4': 'collab4.mp4',
+            'collab-video-5': 'collab5.mp4',
+            'collab-video-6': 'collab6.mp4',
+            'collab-video-7': 'collab7.mp4',
+            'collab-video-8': 'collab8.mp4',
         };
 
         // Converts local paths to raw GitHub Media Server streams
@@ -881,20 +885,19 @@
                     </div>
                 </div>
 
-                <!-- Horizontal Formats (16:9) -->
+                <!-- Brand Collaborations — 8 long-form brand collab slots (Oct 29, 2026). Videos are local compressed files in videos/ (collab1–8.mp4), mapped in VIDEO_FILE_MAP — the same flow as the reels. -->
                 <div class="space-y-6 pt-12 scroll-reveal animate-delay">
-                    <p class="text-xs font-bold uppercase tracking-[0.15em] text-gray-400">Horizontal Formats (16:9)</p>
+                    <p class="text-xs font-bold uppercase tracking-[0.15em] text-gray-400">Brand Collaborations</p>
+                    <p class="text-sm text-gray-500 font-light">Long-form brand reviews — the work brands hire me for.</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                        
-                        <!-- Laptop Frame 1 -->
+                        <!-- Slot 1: Blacklyte Athena Pro Gaming Chair — local file videos/collab1.mp4 (upload your compressed video under this name) -->
                         <div class="space-y-3">
-                            <div class="w-full laptop-frame relative group video-container-parent widescreen-player" id="container_h-video-1">
-                                <video id="h-video-1" src="videos/horizontal1.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                            <div class="w-full laptop-frame relative group video-container-parent widescreen-player" id="container_collab-video-1">
+                                <video id="collab-video-1" src="videos/collab1.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay-wide" alt="KB">
-                                
                                 <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-6 opacity-0 transition-all duration-300 z-30">
                                     <div class="flex justify-between items-center">
-                                        <span class="text-[10px] font-bold tracking-widest text-[#C5A27D] uppercase bg-[#1C1E24] px-3 py-1 rounded-full border border-brand-accentGold/20">Landscape Clip 1</span>
+                                        <span class="text-[10px] font-bold tracking-widest text-[#C5A27D] uppercase bg-[#1C1E24] px-3 py-1 rounded-full border border-brand-accentGold/20">Blacklyte</span>
                                     </div>
                                     <div class="flex items-center justify-center gap-6">
                                         <button onclick="skipVideo(this, -5)" class="text-white bg-black/40 w-10 h-10 rounded-full flex items-center justify-center"><i class="fa-solid fa-backward text-sm"></i></button>
@@ -918,20 +921,19 @@
                                 </div>
                             </div>
                             <div class="space-y-1">
-                                <p class="text-sm font-semibold text-[#111215] tracking-tight">Honest In–Depth Product Review (Deep Dive)</p>
-                                <p class="text-xs text-gray-500 font-light leading-relaxed">Long-form review sample (LitOnes desk lamp). Highlights current high-end studio audio/video capture, multi-cam timeline management, and authentic product storytelling.</p>
+                                <p class="text-sm font-semibold text-[#111215] tracking-tight">Blacklyte Athena Pro Gaming Chair</p>
+                                <p class="text-xs text-gray-500 font-light leading-relaxed">A gaming chair you can work, play, and sleep in.</p>
+                                <p class="text-xs font-medium"><a href="https://youtu.be/lGjY_e4FuM0" target="_blank" rel="noopener" class="text-[#C5A27D] hover:underline">Watch on YouTube <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a></p>
                             </div>
                         </div>
-
-                        <!-- Laptop Frame 2 -->
+                        <!-- Slot 2: PunCube Mech Wallet — local file videos/collab2.mp4 (upload your compressed video under this name) -->
                         <div class="space-y-3">
-                            <div class="w-full laptop-frame relative group video-container-parent widescreen-player" id="container_h-video-2">
-                                <video id="h-video-2" src="videos/horizontal2.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                            <div class="w-full laptop-frame relative group video-container-parent widescreen-player" id="container_collab-video-2">
+                                <video id="collab-video-2" src="videos/collab2.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay-wide" alt="KB">
-                                
                                 <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-6 opacity-0 transition-all duration-300 z-30">
                                     <div class="flex justify-between items-center">
-                                        <span class="text-[10px] font-bold tracking-widest text-[#C5A27D] uppercase bg-[#1C1E24] px-3 py-1 rounded-full border border-brand-accentGold/20">Landscape Clip 2</span>
+                                        <span class="text-[10px] font-bold tracking-widest text-[#C5A27D] uppercase bg-[#1C1E24] px-3 py-1 rounded-full border border-brand-accentGold/20">PunCube</span>
                                     </div>
                                     <div class="flex items-center justify-center gap-6">
                                         <button onclick="skipVideo(this, -5)" class="text-white bg-black/40 w-10 h-10 rounded-full flex items-center justify-center"><i class="fa-solid fa-backward text-sm"></i></button>
@@ -954,18 +956,20 @@
                                     </div>
                                 </div>
                             </div>
-                            <p class="text-sm font-semibold text-[#111215] tracking-tight">Product Trailer</p>
+                            <div class="space-y-1">
+                                <p class="text-sm font-semibold text-[#111215] tracking-tight">PunCube Mech Wallet</p>
+                                <p class="text-xs text-gray-500 font-light leading-relaxed">The most addictive MagSafe accessory I have ever used.</p>
+                                <p class="text-xs font-medium"><a href="https://youtu.be/NAxquov0NUU" target="_blank" rel="noopener" class="text-[#C5A27D] hover:underline">Watch on YouTube <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a></p>
+                            </div>
                         </div>
-
-                        <!-- Laptop Frame 3 -->
+                        <!-- Slot 3: iVANKY FusionDock Pro 1+ — local file videos/collab3.mp4 (upload your compressed video under this name) -->
                         <div class="space-y-3">
-                            <div class="w-full laptop-frame relative group video-container-parent widescreen-player" id="container_h-video-3">
-                                <video id="h-video-3" src="videos/horizontal3.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                            <div class="w-full laptop-frame relative group video-container-parent widescreen-player" id="container_collab-video-3">
+                                <video id="collab-video-3" src="videos/collab3.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay-wide" alt="KB">
-                                
                                 <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-6 opacity-0 transition-all duration-300 z-30">
                                     <div class="flex justify-between items-center">
-                                        <span class="text-[10px] font-bold tracking-widest text-[#C5A27D] uppercase bg-[#1C1E24] px-3 py-1 rounded-full border border-brand-accentGold/20">Landscape Clip 3</span>
+                                        <span class="text-[10px] font-bold tracking-widest text-[#C5A27D] uppercase bg-[#1C1E24] px-3 py-1 rounded-full border border-brand-accentGold/20">iVANKY</span>
                                     </div>
                                     <div class="flex items-center justify-center gap-6">
                                         <button onclick="skipVideo(this, -5)" class="text-white bg-black/40 w-10 h-10 rounded-full flex items-center justify-center"><i class="fa-solid fa-backward text-sm"></i></button>
@@ -988,18 +992,20 @@
                                     </div>
                                 </div>
                             </div>
-                            <p class="text-sm font-semibold text-[#111215] tracking-tight">Cinematic Unboxing</p>
+                            <div class="space-y-1">
+                                <p class="text-sm font-semibold text-[#111215] tracking-tight">iVANKY FusionDock Pro 1+</p>
+                                <p class="text-xs text-gray-500 font-light leading-relaxed">The Thunderbolt dock that unleashed my MacBook Air.</p>
+                                <p class="text-xs font-medium"><a href="https://youtu.be/jtUSuzVHLDU" target="_blank" rel="noopener" class="text-[#C5A27D] hover:underline">Watch on YouTube <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a></p>
+                            </div>
                         </div>
-
-                        <!-- Laptop Frame 4 -->
+                        <!-- Slot 4: eXtremeRate Transparent Purple DualSense Edge — local file videos/collab4.mp4 (upload your compressed video under this name) -->
                         <div class="space-y-3">
-                            <div class="w-full laptop-frame relative group video-container-parent widescreen-player" id="container_h-video-4">
-                                <video id="h-video-4" src="videos/horizontal4.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                            <div class="w-full laptop-frame relative group video-container-parent widescreen-player" id="container_collab-video-4">
+                                <video id="collab-video-4" src="videos/collab4.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
                                 <img src="images/logo-watermark.png" class="watermark-overlay-wide" alt="KB">
-                                
                                 <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-6 opacity-0 transition-all duration-300 z-30">
                                     <div class="flex justify-between items-center">
-                                        <span class="text-[10px] font-bold tracking-widest text-[#C5A27D] uppercase bg-[#1C1E24] px-3 py-1 rounded-full border border-brand-accentGold/20">Landscape Clip 4</span>
+                                        <span class="text-[10px] font-bold tracking-widest text-[#C5A27D] uppercase bg-[#1C1E24] px-3 py-1 rounded-full border border-brand-accentGold/20">eXtremeRate</span>
                                     </div>
                                     <div class="flex items-center justify-center gap-6">
                                         <button onclick="skipVideo(this, -5)" class="text-white bg-black/40 w-10 h-10 rounded-full flex items-center justify-center"><i class="fa-solid fa-backward text-sm"></i></button>
@@ -1022,9 +1028,156 @@
                                     </div>
                                 </div>
                             </div>
-                            <p class="text-sm font-semibold text-[#111215] tracking-tight">Aesthetic Unboxing</p>
+                            <div class="space-y-1">
+                                <p class="text-sm font-semibold text-[#111215] tracking-tight">eXtremeRate Transparent Purple DualSense Edge</p>
+                                <p class="text-xs text-gray-500 font-light leading-relaxed">A custom DualSense Edge rebuild that looks incredible.</p>
+                                <p class="text-xs font-medium"><a href="https://youtu.be/oJtIep-YtTk" target="_blank" rel="noopener" class="text-[#C5A27D] hover:underline">Watch on YouTube <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a></p>
+                            </div>
                         </div>
-
+                        <!-- Slot 5: Yesoul GM1 Spin Bike — local file videos/collab5.mp4 (upload your compressed video under this name) -->
+                        <div class="space-y-3">
+                            <div class="w-full laptop-frame relative group video-container-parent widescreen-player" id="container_collab-video-5">
+                                <video id="collab-video-5" src="videos/collab5.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <img src="images/logo-watermark.png" class="watermark-overlay-wide" alt="KB">
+                                <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-6 opacity-0 transition-all duration-300 z-30">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-[10px] font-bold tracking-widest text-[#C5A27D] uppercase bg-[#1C1E24] px-3 py-1 rounded-full border border-brand-accentGold/20">Yesoul</span>
+                                    </div>
+                                    <div class="flex items-center justify-center gap-6">
+                                        <button onclick="skipVideo(this, -5)" class="text-white bg-black/40 w-10 h-10 rounded-full flex items-center justify-center"><i class="fa-solid fa-backward text-sm"></i></button>
+                                        <button onclick="togglePlayPause(this)" class="text-brand-dark bg-brand-accentGold w-12 h-12 rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-play text-md pl-0.5"></i></button>
+                                        <button onclick="skipVideo(this, 5)" class="text-white bg-black/40 w-10 h-10 rounded-full flex items-center justify-center"><i class="fa-solid fa-forward text-sm"></i></button>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <div class="flex items-center gap-3">
+                                            <span class="time-current text-xs text-white/90">0:00</span>
+                                            <div onclick="seekVideo(event, this)" class="progress-bar-container flex-1 h-1.5 bg-white/20 rounded-full relative"><div class="progress-bar-fill h-full bg-[#C5A27D] rounded-full w-0"></div></div>
+                                            <span class="time-duration text-xs text-white/60 font-mono">0:00</span>
+                                        </div>
+                                        <div class="flex justify-between items-center">
+                                            <span class="status-indicator text-xs text-white/50">paused</span>
+                                            <div class="flex gap-1.5">
+                                                <button onclick="toggleFullScreen(this)" class="fullscreen-toggle-btn text-white bg-black/40 hover:bg-black/60 w-8 h-8 rounded-full flex items-center justify-center" title="Full Screen"><i class="fa-solid fa-expand text-xs"></i></button>
+                                                <button onclick="toggleMute(this)" class="sound-toggle text-white bg-black/40 hover:bg-black/60 w-8 h-8 rounded-full flex items-center justify-center"><i class="fa-solid fa-volume-xmark text-xs"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-y-1">
+                                <p class="text-sm font-semibold text-[#111215] tracking-tight">Yesoul GM1 Spin Bike</p>
+                                <p class="text-xs text-gray-500 font-light leading-relaxed">The most fun you will have while exercising.</p>
+                                <p class="text-xs font-medium"><a href="https://youtu.be/fhIDkaA80jg" target="_blank" rel="noopener" class="text-[#C5A27D] hover:underline">Watch on YouTube <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a></p>
+                            </div>
+                        </div>
+                        <!-- Slot 6: Neewer MagSafe Neck Mount — local file videos/collab6.mp4 (upload your compressed video under this name) -->
+                        <div class="space-y-3">
+                            <div class="w-full laptop-frame relative group video-container-parent widescreen-player" id="container_collab-video-6">
+                                <video id="collab-video-6" src="videos/collab6.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <img src="images/logo-watermark.png" class="watermark-overlay-wide" alt="KB">
+                                <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-6 opacity-0 transition-all duration-300 z-30">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-[10px] font-bold tracking-widest text-[#C5A27D] uppercase bg-[#1C1E24] px-3 py-1 rounded-full border border-brand-accentGold/20">Neewer</span>
+                                    </div>
+                                    <div class="flex items-center justify-center gap-6">
+                                        <button onclick="skipVideo(this, -5)" class="text-white bg-black/40 w-10 h-10 rounded-full flex items-center justify-center"><i class="fa-solid fa-backward text-sm"></i></button>
+                                        <button onclick="togglePlayPause(this)" class="text-brand-dark bg-brand-accentGold w-12 h-12 rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-play text-md pl-0.5"></i></button>
+                                        <button onclick="skipVideo(this, 5)" class="text-white bg-black/40 w-10 h-10 rounded-full flex items-center justify-center"><i class="fa-solid fa-forward text-sm"></i></button>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <div class="flex items-center gap-3">
+                                            <span class="time-current text-xs text-white/90">0:00</span>
+                                            <div onclick="seekVideo(event, this)" class="progress-bar-container flex-1 h-1.5 bg-white/20 rounded-full relative"><div class="progress-bar-fill h-full bg-[#C5A27D] rounded-full w-0"></div></div>
+                                            <span class="time-duration text-xs text-white/60 font-mono">0:00</span>
+                                        </div>
+                                        <div class="flex justify-between items-center">
+                                            <span class="status-indicator text-xs text-white/50">paused</span>
+                                            <div class="flex gap-1.5">
+                                                <button onclick="toggleFullScreen(this)" class="fullscreen-toggle-btn text-white bg-black/40 hover:bg-black/60 w-8 h-8 rounded-full flex items-center justify-center" title="Full Screen"><i class="fa-solid fa-expand text-xs"></i></button>
+                                                <button onclick="toggleMute(this)" class="sound-toggle text-white bg-black/40 hover:bg-black/60 w-8 h-8 rounded-full flex items-center justify-center"><i class="fa-solid fa-volume-xmark text-xs"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-y-1">
+                                <p class="text-sm font-semibold text-[#111215] tracking-tight">Neewer MagSafe Neck Mount</p>
+                                <p class="text-xs text-gray-500 font-light leading-relaxed">Hands-free mobile content creation.</p>
+                                <p class="text-xs font-medium"><a href="https://youtu.be/FG9sItRPDJE" target="_blank" rel="noopener" class="text-[#C5A27D] hover:underline">Watch on YouTube <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a></p>
+                            </div>
+                        </div>
+                        <!-- Slot 7: Maono PD200W Microphone — local file videos/collab7.mp4 (upload your compressed video under this name) -->
+                        <div class="space-y-3">
+                            <div class="w-full laptop-frame relative group video-container-parent widescreen-player" id="container_collab-video-7">
+                                <video id="collab-video-7" src="videos/collab7.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <img src="images/logo-watermark.png" class="watermark-overlay-wide" alt="KB">
+                                <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-6 opacity-0 transition-all duration-300 z-30">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-[10px] font-bold tracking-widest text-[#C5A27D] uppercase bg-[#1C1E24] px-3 py-1 rounded-full border border-brand-accentGold/20">Maono</span>
+                                    </div>
+                                    <div class="flex items-center justify-center gap-6">
+                                        <button onclick="skipVideo(this, -5)" class="text-white bg-black/40 w-10 h-10 rounded-full flex items-center justify-center"><i class="fa-solid fa-backward text-sm"></i></button>
+                                        <button onclick="togglePlayPause(this)" class="text-brand-dark bg-brand-accentGold w-12 h-12 rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-play text-md pl-0.5"></i></button>
+                                        <button onclick="skipVideo(this, 5)" class="text-white bg-black/40 w-10 h-10 rounded-full flex items-center justify-center"><i class="fa-solid fa-forward text-sm"></i></button>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <div class="flex items-center gap-3">
+                                            <span class="time-current text-xs text-white/90">0:00</span>
+                                            <div onclick="seekVideo(event, this)" class="progress-bar-container flex-1 h-1.5 bg-white/20 rounded-full relative"><div class="progress-bar-fill h-full bg-[#C5A27D] rounded-full w-0"></div></div>
+                                            <span class="time-duration text-xs text-white/60 font-mono">0:00</span>
+                                        </div>
+                                        <div class="flex justify-between items-center">
+                                            <span class="status-indicator text-xs text-white/50">paused</span>
+                                            <div class="flex gap-1.5">
+                                                <button onclick="toggleFullScreen(this)" class="fullscreen-toggle-btn text-white bg-black/40 hover:bg-black/60 w-8 h-8 rounded-full flex items-center justify-center" title="Full Screen"><i class="fa-solid fa-expand text-xs"></i></button>
+                                                <button onclick="toggleMute(this)" class="sound-toggle text-white bg-black/40 hover:bg-black/60 w-8 h-8 rounded-full flex items-center justify-center"><i class="fa-solid fa-volume-xmark text-xs"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-y-1">
+                                <p class="text-sm font-semibold text-[#111215] tracking-tight">Maono PD200W Microphone</p>
+                                <p class="text-xs text-gray-500 font-light leading-relaxed">The most versatile mic for gaming, streaming, and podcasts.</p>
+                                <p class="text-xs font-medium"><a href="https://youtu.be/rXFF27Cv1vI" target="_blank" rel="noopener" class="text-[#C5A27D] hover:underline">Watch on YouTube <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a></p>
+                            </div>
+                        </div>
+                        <!-- Slot 8: LiteOnes H01 Desk Lamp — local file videos/collab8.mp4 (upload your compressed video under this name) -->
+                        <div class="space-y-3">
+                            <div class="w-full laptop-frame relative group video-container-parent widescreen-player" id="container_collab-video-8">
+                                <video id="collab-video-8" src="videos/collab8.mp4" preload="metadata" class="w-full h-full object-cover" playsinline loop muted></video>
+                                <img src="images/logo-watermark.png" class="watermark-overlay-wide" alt="KB">
+                                <div class="custom-controls absolute inset-0 bg-black/80 backdrop-blur-[2px] flex flex-col justify-between p-6 opacity-0 transition-all duration-300 z-30">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-[10px] font-bold tracking-widest text-[#C5A27D] uppercase bg-[#1C1E24] px-3 py-1 rounded-full border border-brand-accentGold/20">LiteOnes</span>
+                                    </div>
+                                    <div class="flex items-center justify-center gap-6">
+                                        <button onclick="skipVideo(this, -5)" class="text-white bg-black/40 w-10 h-10 rounded-full flex items-center justify-center"><i class="fa-solid fa-backward text-sm"></i></button>
+                                        <button onclick="togglePlayPause(this)" class="text-brand-dark bg-brand-accentGold w-12 h-12 rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-play text-md pl-0.5"></i></button>
+                                        <button onclick="skipVideo(this, 5)" class="text-white bg-black/40 w-10 h-10 rounded-full flex items-center justify-center"><i class="fa-solid fa-forward text-sm"></i></button>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <div class="flex items-center gap-3">
+                                            <span class="time-current text-xs text-white/90">0:00</span>
+                                            <div onclick="seekVideo(event, this)" class="progress-bar-container flex-1 h-1.5 bg-white/20 rounded-full relative"><div class="progress-bar-fill h-full bg-[#C5A27D] rounded-full w-0"></div></div>
+                                            <span class="time-duration text-xs text-white/60 font-mono">0:00</span>
+                                        </div>
+                                        <div class="flex justify-between items-center">
+                                            <span class="status-indicator text-xs text-white/50">paused</span>
+                                            <div class="flex gap-1.5">
+                                                <button onclick="toggleFullScreen(this)" class="fullscreen-toggle-btn text-white bg-black/40 hover:bg-black/60 w-8 h-8 rounded-full flex items-center justify-center" title="Full Screen"><i class="fa-solid fa-expand text-xs"></i></button>
+                                                <button onclick="toggleMute(this)" class="sound-toggle text-white bg-black/40 hover:bg-black/60 w-8 h-8 rounded-full flex items-center justify-center"><i class="fa-solid fa-volume-xmark text-xs"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-y-1">
+                                <p class="text-sm font-semibold text-[#111215] tracking-tight">LiteOnes H01 Desk Lamp</p>
+                                <p class="text-xs text-gray-500 font-light leading-relaxed">A desk lamp that does way more than it should.</p>
+                                <p class="text-xs font-medium"><a href="https://youtu.be/jC59AoleBAA" target="_blank" rel="noopener" class="text-[#C5A27D] hover:underline">Watch on YouTube <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a></p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
