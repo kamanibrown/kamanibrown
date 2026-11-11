@@ -16,16 +16,44 @@
 
         // Maps each video element ID to its object key in the bucket.
         // Hero phone videos are the last three entries.
+        //
+        // FULL-LENGTH FIX (Nov 10, 2026): the reels used to point at
+        // loops/reel-N.mp4, but those R2 objects are only the 7.5–12 s
+        // preview cuts the animated WebP previews were made from — so
+        // the pop-out player could never play more than a few seconds.
+        // The reels now point at full/reel-N.mp4: web encodes of the
+        // complete featured videos (the GitHub LFS masters, hash-
+        // verified), full length from beginning to end — 141 s, 73 s,
+        // 63 s, 117 s, 46 s, 12 s, 7.6 s and 52 s. Reel 7's featured
+        // video genuinely is 7.6 s long; nothing was cut from it.
+        // Never point a player at loops/*.mp4 again: preview cuts only.
+        // intro.mp4 (68 s) and collabs/*.mp4 were always full length
+        // and are unchanged. All full/* durations were verified live
+        // on R2 after upload.
+        //
+        // HERO PHONES (Nov 10, 2026): the three hero phones do NOT
+        // use this map for lazy-loading and there is no hero pop-out
+        // player. Each hero phone is two-layered in ONE inline
+        // <video> (see setupHeroLoops): idle mode plays the muted
+        // short loop cut set in the markup (loops/reel-1.mp4 /
+        // loops/reel-5.mp4; the Intro phone loops intro.mp4 itself,
+        // muted). A tap swaps that same element, in the same frame,
+        // to the full-length file listed here (full/reel-1.mp4 /
+        // intro.mp4 / full/reel-5.mp4) and plays it there — small,
+        // in-frame, no controls, no pop-out, no fullscreen. Further
+        // taps pause/play the full video; when it ends the phone
+        // returns to its muted loop. The players down the page are
+        // separate and keep their full controls.
         const VIDEO_FILE_MAP = {
             'intro-video':   'intro.mp4',
-            'v-video-1':     'loops/reel-1.mp4',
-            'v-video-2':     'loops/reel-2.mp4',
-            'v-video-3':     'loops/reel-3.mp4',
-            'v-video-4':     'loops/reel-4.mp4',
-            'v-video-5':     'loops/reel-5.mp4',
-            'v-video-6':     'loops/reel-6.mp4',
-            'v-video-7':     'loops/reel-7.mp4',
-            'v-video-8':     'loops/reel-8.mp4',
+            'v-video-1':     'full/reel-1.mp4',
+            'v-video-2':     'full/reel-2.mp4',
+            'v-video-3':     'full/reel-3.mp4',
+            'v-video-4':     'full/reel-4.mp4',
+            'v-video-5':     'full/reel-5.mp4',
+            'v-video-6':     'full/reel-6.mp4',
+            'v-video-7':     'full/reel-7.mp4',
+            'v-video-8':     'full/reel-8.mp4',
             'collab-video-1': 'collabs/collab-1.mp4',
             'collab-video-2': 'collabs/collab-2.mp4',
             'collab-video-3': 'collabs/collab-3.mp4',
@@ -35,8 +63,8 @@
             'collab-video-7': 'collabs/collab-7.mp4',
             'collab-video-8': 'collabs/collab-8.mp4',
             'hero-video-intro':   'intro.mp4',
-            'hero-video-torras':  'loops/reel-1.mp4',
-            'hero-video-puncube': 'loops/reel-5.mp4',
+            'hero-video-torras':  'full/reel-1.mp4',
+            'hero-video-puncube': 'full/reel-5.mp4',
         };
 
         // Resolves an R2 object key to its public URL. Absolute R2 URLs
@@ -74,6 +102,9 @@
             };
 
             const entries = Object.entries(VIDEO_FILE_MAP).filter(([videoId]) => {
+                // Hero phones carry their ambient loop src in the
+                // markup; never lazy-load a full-length file into them.
+                if (videoId.indexOf('hero-video-') === 0) return false;
                 if (!document.getElementById(videoId)) {
                     console.warn(`Could not find video element with ID: ${videoId}`);
                     return false;
@@ -262,8 +293,6 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
 @keyframes pulse-drift{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 @keyframes pulse-ring{0%{transform:scale(.72);opacity:.7}100%{transform:scale(1.12);opacity:0}}
 .phone-chip{position:absolute;bottom:5.5%;left:50%;transform:translateX(-50%);z-index:30;font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-hi);background:rgba(7,8,10,.78);border:1px solid rgba(197,162,125,.4);padding:5px 11px;border-radius:999px;white-space:nowrap;backdrop-filter:blur(6px)}
-.reel-sound-badge{position:absolute;top:4.5%;left:50%;transform:translateX(-50%);z-index:26;display:inline-flex;align-items:center;gap:6px;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:rgba(7,8,10,.62);border:1px solid rgba(255,255,255,.16);padding:5px 10px;border-radius:999px;backdrop-filter:blur(6px);transition:.3s;pointer-events:none;white-space:nowrap}
-.reel-sound-badge.sound-on{background:rgba(197,162,125,.9);color:#0B0C0E;border-color:transparent}
 
 /* custom controls (shared) */
 .custom-controls{position:absolute;inset:0;z-index:30;display:flex;flex-direction:column;justify-content:space-between;transition:opacity .3s}
@@ -549,7 +578,12 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
    dead. Now a tap opens this in-page panel instead: it cannot
    fail silently, and it offers the mail app, Gmail compose, and
    a copyable address. The anchors keep their plain mailto href
-   as the no-JS / long-press fallback. */
+   as the no-JS / long-press fallback.
+   Round two (Nov 10): inside an iframe, iOS ALSO ignores the
+   panel's own mailto: tap — so every mailto here now carries
+   target="_top", and the wiring script (bottom of page) routes
+   framed mailto taps through window.top.location in the same
+   gesture, with a hint line as the never-silent fallback. */
 .btn{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 @media (hover:none){
   /* touch devices: a :hover lift can eat the first tap — kill it */
@@ -569,8 +603,19 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
 .enquire-copy:hover{background:rgba(197,162,125,.22)}
 .enquire-actions{margin-top:18px;display:flex;flex-direction:column;gap:10px}
 .enquire-actions .btn{justify-content:center;width:100%}
+.enquire-hint{margin:14px 0 0;font-size:12.5px;line-height:1.6;color:var(--silver);font-weight:300;text-align:center}
+.enquire-hint b{color:var(--gold-hi);font-weight:700}
 .enquire-close{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);color:var(--silver);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.25s}
 .enquire-close:hover{color:var(--gold-hi);border-color:rgba(197,162,125,.55)}
+/* ---------- hero phones: loop idle, full video in-frame ----------
+   The hero phones idle as muted, looping inline previews inside
+   their frames — no controls, no overlays and no pop-out. A tap
+   plays the full-length video in that same small frame (still no
+   controls, no pop-out, no fullscreen); further taps pause/play
+   it, and when it ends the phone returns to its loop. Only the
+   cursor signals they are tappable. Body/featured and collab
+   players are untouched and keep playing in their frames. */
+.hero-phone .phone-frame{cursor:pointer}
 </style>
 </head>
 <body>
@@ -632,7 +677,7 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
           <div class="hero-phone-float">
             <div class="phone-pulse" aria-hidden="true"></div>
             <div class="phone-frame video-container-parent">
-              <div class="phone-screen"><img class="loop-webp" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/loops/reel-1.webp" alt="" aria-hidden="true"><video id="hero-video-torras" data-loop="true" preload="auto" poster="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/posters/reel-1.jpg" playsinline loop muted></video></div>
+              <div class="phone-screen"><video id="hero-video-torras" class="hero-loop-video" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/loops/reel-1.mp4" data-loop-src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/loops/reel-1.mp4" data-full-src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/full/reel-1.mp4" preload="auto" poster="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/posters/reel-1.jpg" autoplay playsinline loop muted aria-label="TORRAS Q3 Air video preview"></video></div>
               <img src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/iphone-frame.png" class="phone-frame-img" alt="" aria-hidden="true">
               <span class="phone-chip">TORRAS Q3 Air</span>
             </div>
@@ -642,7 +687,7 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
           <div class="hero-phone-float">
             <div class="phone-pulse" aria-hidden="true"></div>
             <div class="phone-frame video-container-parent">
-              <div class="phone-screen"><img class="loop-webp" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/loops/intro.webp" alt="" aria-hidden="true"><video id="hero-video-intro" data-loop="true" preload="auto" poster="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/posters/intro.jpg" playsinline loop muted></video></div>
+              <div class="phone-screen"><video id="hero-video-intro" class="hero-loop-video" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/intro.mp4" data-loop-src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/intro.mp4" data-full-src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/intro.mp4" preload="auto" poster="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/posters/intro.jpg" autoplay playsinline loop muted aria-label="Intro video preview"></video></div>
               <img src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/iphone-frame.png" class="phone-frame-img" alt="" aria-hidden="true">
               <span class="phone-chip">Intro</span>
             </div>
@@ -652,7 +697,7 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
           <div class="hero-phone-float">
             <div class="phone-pulse" aria-hidden="true"></div>
             <div class="phone-frame video-container-parent">
-              <div class="phone-screen"><img class="loop-webp" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/loops/reel-5.webp" alt="" aria-hidden="true"><video id="hero-video-puncube" data-loop="true" preload="auto" poster="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/posters/reel-5.jpg" playsinline loop muted></video></div>
+              <div class="phone-screen"><video id="hero-video-puncube" class="hero-loop-video" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/loops/reel-5.mp4" data-loop-src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/loops/reel-5.mp4" data-full-src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/full/reel-5.mp4" preload="auto" poster="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/posters/reel-5.jpg" autoplay playsinline loop muted aria-label="PunCube video preview"></video></div>
               <img src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/iphone-frame.png" class="phone-frame-img" alt="" aria-hidden="true">
               <span class="phone-chip">PunCube</span>
             </div>
@@ -728,9 +773,8 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
           <div class="phone-screen"><img class="loop-webp" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/loops/intro.webp" alt="" aria-hidden="true"><video id="intro-video" data-loop="true" preload="auto" poster="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/posters/intro.jpg" playsinline loop muted></video></div>
           <img src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/iphone-frame.png" class="phone-frame-img" alt="" aria-hidden="true">
           <img loading="lazy" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/logo-watermark.webp" class="watermark-overlay" alt="KB">
-          <span class="reel-sound-badge"><i class="fa-solid fa-volume-xmark"></i> Tap for sound</span>
           <div class="custom-controls" style="padding:14px">
-            <div class="cc-top"><span class="cc-tag cc-tag-lg">Intro Clip</span></div>
+            <div class="cc-top"><span class="cc-tag cc-tag-lg">Intro Clip</span><button onclick="togglePictureInPicture(this)" class="cc-btn pip-toggle-btn" style="width:26px;height:26px" title="Picture in Picture" aria-label="Picture in picture"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:12px;height:12px;display:block"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5" stroke="currentColor" stroke-width="2"/><rect x="12" y="12" width="7" height="5" rx="1" fill="currentColor"/></svg></button></div>
             <div class="cc-mid" style="gap:10px">
               <button onclick="skipVideo(this, -5)" class="cc-btn" style="width:32px;height:32px" aria-label="Back 5 seconds"><i class="fa-solid fa-backward" style="font-size:10px"></i></button>
               <button onclick="togglePlayPause(this)" class="cc-btn cc-play" style="width:44px;height:44px" aria-label="Play or pause"><i class="fa-solid fa-play" style="font-size:12px;padding-left:2px"></i></button>
@@ -760,7 +804,7 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
         <p class="lede">With years of production experience, I take care of everything from hook scripting to editing and adding aesthetic overlays, so you get scroll-stopping creative content on autopilot.</p>
         <div class="data-rows">
           <div class="data-row"><span class="k">Location</span><span class="v">NB, Canada (Available Worldwide)</span></div>
-          <div class="data-row"><span class="k">Email</span><span class="v"><a href="mailto:kamanibrown@gmail.com">kamanibrown@gmail.com</a></span></div>
+          <div class="data-row"><span class="k">Email</span><span class="v"><a href="mailto:kamanibrown@gmail.com" target="_top">kamanibrown@gmail.com</a></span></div>
           <div class="data-row"><span class="k">Studio</span><span class="v">Filmed, Directed &amp; Edited In-House</span></div>
         </div>
       </div>
@@ -823,9 +867,8 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
           <div class="phone-screen"><img class="loop-webp" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/loops/reel-1.webp" alt="" aria-hidden="true"><video id="v-video-1" data-loop="true" preload="auto" poster="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/posters/reel-1.jpg" playsinline loop muted></video></div>
           <img src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/iphone-frame.png" class="phone-frame-img" alt="" aria-hidden="true">
           <img loading="lazy" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/logo-watermark.webp" class="watermark-overlay" alt="KB">
-          <span class="reel-sound-badge"><i class="fa-solid fa-volume-xmark"></i> Tap for sound</span>
           <div class="custom-controls" style="padding:12px">
-            <div class="cc-top"><span class="cc-tag">Reel 1</span></div>
+            <div class="cc-top"><span class="cc-tag">Reel 1</span><button onclick="togglePictureInPicture(this)" class="cc-btn pip-toggle-btn" style="width:22px;height:22px" title="Picture in Picture" aria-label="Picture in picture"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:10px;height:10px;display:block"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5" stroke="currentColor" stroke-width="2"/><rect x="12" y="12" width="7" height="5" rx="1" fill="currentColor"/></svg></button></div>
             <div class="cc-mid" style="gap:8px">
               <button onclick="skipVideo(this, -5)" class="cc-btn" style="width:26px;height:26px" aria-label="Back 5 seconds"><i class="fa-solid fa-backward" style="font-size:9px"></i></button>
               <button onclick="togglePlayPause(this)" class="cc-btn cc-play" style="width:36px;height:36px" aria-label="Play or pause"><i class="fa-solid fa-play" style="font-size:10px;padding-left:2px"></i></button>
@@ -857,9 +900,8 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
           <div class="phone-screen"><img class="loop-webp" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/loops/reel-2.webp" alt="" aria-hidden="true"><video id="v-video-2" data-loop="true" preload="auto" poster="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/posters/reel-2.jpg" playsinline loop muted></video></div>
           <img src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/iphone-frame.png" class="phone-frame-img" alt="" aria-hidden="true">
           <img loading="lazy" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/logo-watermark.webp" class="watermark-overlay" alt="KB">
-          <span class="reel-sound-badge"><i class="fa-solid fa-volume-xmark"></i> Tap for sound</span>
           <div class="custom-controls" style="padding:12px">
-            <div class="cc-top"><span class="cc-tag">Reel 2</span></div>
+            <div class="cc-top"><span class="cc-tag">Reel 2</span><button onclick="togglePictureInPicture(this)" class="cc-btn pip-toggle-btn" style="width:22px;height:22px" title="Picture in Picture" aria-label="Picture in picture"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:10px;height:10px;display:block"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5" stroke="currentColor" stroke-width="2"/><rect x="12" y="12" width="7" height="5" rx="1" fill="currentColor"/></svg></button></div>
             <div class="cc-mid" style="gap:8px">
               <button onclick="skipVideo(this, -5)" class="cc-btn" style="width:26px;height:26px" aria-label="Back 5 seconds"><i class="fa-solid fa-backward" style="font-size:9px"></i></button>
               <button onclick="togglePlayPause(this)" class="cc-btn cc-play" style="width:36px;height:36px" aria-label="Play or pause"><i class="fa-solid fa-play" style="font-size:10px;padding-left:2px"></i></button>
@@ -891,9 +933,8 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
           <div class="phone-screen"><img class="loop-webp" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/loops/reel-3.webp" alt="" aria-hidden="true"><video id="v-video-3" data-loop="true" preload="auto" poster="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/posters/reel-3.jpg" playsinline loop muted></video></div>
           <img src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/iphone-frame.png" class="phone-frame-img" alt="" aria-hidden="true">
           <img loading="lazy" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/logo-watermark.webp" class="watermark-overlay" alt="KB">
-          <span class="reel-sound-badge"><i class="fa-solid fa-volume-xmark"></i> Tap for sound</span>
           <div class="custom-controls" style="padding:12px">
-            <div class="cc-top"><span class="cc-tag">Reel 3</span></div>
+            <div class="cc-top"><span class="cc-tag">Reel 3</span><button onclick="togglePictureInPicture(this)" class="cc-btn pip-toggle-btn" style="width:22px;height:22px" title="Picture in Picture" aria-label="Picture in picture"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:10px;height:10px;display:block"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5" stroke="currentColor" stroke-width="2"/><rect x="12" y="12" width="7" height="5" rx="1" fill="currentColor"/></svg></button></div>
             <div class="cc-mid" style="gap:8px">
               <button onclick="skipVideo(this, -5)" class="cc-btn" style="width:26px;height:26px" aria-label="Back 5 seconds"><i class="fa-solid fa-backward" style="font-size:9px"></i></button>
               <button onclick="togglePlayPause(this)" class="cc-btn cc-play" style="width:36px;height:36px" aria-label="Play or pause"><i class="fa-solid fa-play" style="font-size:10px;padding-left:2px"></i></button>
@@ -926,9 +967,8 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
           <div class="phone-screen"><img class="loop-webp" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/loops/reel-4.webp" alt="" aria-hidden="true"><video id="v-video-4" data-loop="true" preload="auto" poster="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/posters/reel-4.jpg" playsinline loop muted></video></div>
           <img src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/iphone-frame.png" class="phone-frame-img" alt="" aria-hidden="true">
           <img loading="lazy" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/logo-watermark.webp" class="watermark-overlay" alt="KB">
-          <span class="reel-sound-badge"><i class="fa-solid fa-volume-xmark"></i> Tap for sound</span>
           <div class="custom-controls" style="padding:12px">
-            <div class="cc-top"><span class="cc-tag">Reel 4</span></div>
+            <div class="cc-top"><span class="cc-tag">Reel 4</span><button onclick="togglePictureInPicture(this)" class="cc-btn pip-toggle-btn" style="width:22px;height:22px" title="Picture in Picture" aria-label="Picture in picture"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:10px;height:10px;display:block"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5" stroke="currentColor" stroke-width="2"/><rect x="12" y="12" width="7" height="5" rx="1" fill="currentColor"/></svg></button></div>
             <div class="cc-mid" style="gap:8px">
               <button onclick="skipVideo(this, -5)" class="cc-btn" style="width:26px;height:26px" aria-label="Back 5 seconds"><i class="fa-solid fa-backward" style="font-size:9px"></i></button>
               <button onclick="togglePlayPause(this)" class="cc-btn cc-play" style="width:36px;height:36px" aria-label="Play or pause"><i class="fa-solid fa-play" style="font-size:10px;padding-left:2px"></i></button>
@@ -961,9 +1001,8 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
           <div class="phone-screen"><img class="loop-webp" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/loops/reel-5.webp" alt="" aria-hidden="true"><video id="v-video-5" data-loop="true" preload="auto" poster="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/posters/reel-5.jpg" playsinline loop muted></video></div>
           <img src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/iphone-frame.png" class="phone-frame-img" alt="" aria-hidden="true">
           <img loading="lazy" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/logo-watermark.webp" class="watermark-overlay" alt="KB">
-          <span class="reel-sound-badge"><i class="fa-solid fa-volume-xmark"></i> Tap for sound</span>
           <div class="custom-controls" style="padding:12px">
-            <div class="cc-top"><span class="cc-tag">Reel 5</span></div>
+            <div class="cc-top"><span class="cc-tag">Reel 5</span><button onclick="togglePictureInPicture(this)" class="cc-btn pip-toggle-btn" style="width:22px;height:22px" title="Picture in Picture" aria-label="Picture in picture"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:10px;height:10px;display:block"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5" stroke="currentColor" stroke-width="2"/><rect x="12" y="12" width="7" height="5" rx="1" fill="currentColor"/></svg></button></div>
             <div class="cc-mid" style="gap:8px">
               <button onclick="skipVideo(this, -5)" class="cc-btn" style="width:26px;height:26px" aria-label="Back 5 seconds"><i class="fa-solid fa-backward" style="font-size:9px"></i></button>
               <button onclick="togglePlayPause(this)" class="cc-btn cc-play" style="width:36px;height:36px" aria-label="Play or pause"><i class="fa-solid fa-play" style="font-size:10px;padding-left:2px"></i></button>
@@ -996,9 +1035,8 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
           <div class="phone-screen"><img class="loop-webp" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/loops/reel-6.webp" alt="" aria-hidden="true"><video id="v-video-6" data-loop="true" preload="auto" poster="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/posters/reel-6.jpg" playsinline loop muted></video></div>
           <img src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/iphone-frame.png" class="phone-frame-img" alt="" aria-hidden="true">
           <img loading="lazy" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/logo-watermark.webp" class="watermark-overlay" alt="KB">
-          <span class="reel-sound-badge"><i class="fa-solid fa-volume-xmark"></i> Tap for sound</span>
           <div class="custom-controls" style="padding:12px">
-            <div class="cc-top"><span class="cc-tag">Reel 6</span></div>
+            <div class="cc-top"><span class="cc-tag">Reel 6</span><button onclick="togglePictureInPicture(this)" class="cc-btn pip-toggle-btn" style="width:22px;height:22px" title="Picture in Picture" aria-label="Picture in picture"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:10px;height:10px;display:block"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5" stroke="currentColor" stroke-width="2"/><rect x="12" y="12" width="7" height="5" rx="1" fill="currentColor"/></svg></button></div>
             <div class="cc-mid" style="gap:8px">
               <button onclick="skipVideo(this, -5)" class="cc-btn" style="width:26px;height:26px" aria-label="Back 5 seconds"><i class="fa-solid fa-backward" style="font-size:9px"></i></button>
               <button onclick="togglePlayPause(this)" class="cc-btn cc-play" style="width:36px;height:36px" aria-label="Play or pause"><i class="fa-solid fa-play" style="font-size:10px;padding-left:2px"></i></button>
@@ -1031,9 +1069,8 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
           <div class="phone-screen"><img class="loop-webp" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/loops/reel-7.webp" alt="" aria-hidden="true"><video id="v-video-7" data-loop="true" preload="auto" poster="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/posters/reel-7.jpg" playsinline loop muted></video></div>
           <img src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/iphone-frame.png" class="phone-frame-img" alt="" aria-hidden="true">
           <img loading="lazy" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/logo-watermark.webp" class="watermark-overlay" alt="KB">
-          <span class="reel-sound-badge"><i class="fa-solid fa-volume-xmark"></i> Tap for sound</span>
           <div class="custom-controls" style="padding:12px">
-            <div class="cc-top"><span class="cc-tag">Reel 7</span></div>
+            <div class="cc-top"><span class="cc-tag">Reel 7</span><button onclick="togglePictureInPicture(this)" class="cc-btn pip-toggle-btn" style="width:22px;height:22px" title="Picture in Picture" aria-label="Picture in picture"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:10px;height:10px;display:block"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5" stroke="currentColor" stroke-width="2"/><rect x="12" y="12" width="7" height="5" rx="1" fill="currentColor"/></svg></button></div>
             <div class="cc-mid" style="gap:8px">
               <button onclick="skipVideo(this, -5)" class="cc-btn" style="width:26px;height:26px" aria-label="Back 5 seconds"><i class="fa-solid fa-backward" style="font-size:9px"></i></button>
               <button onclick="togglePlayPause(this)" class="cc-btn cc-play" style="width:36px;height:36px" aria-label="Play or pause"><i class="fa-solid fa-play" style="font-size:10px;padding-left:2px"></i></button>
@@ -1065,9 +1102,8 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
           <div class="phone-screen"><img class="loop-webp" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/loops/reel-8.webp" alt="" aria-hidden="true"><video id="v-video-8" data-loop="true" preload="auto" poster="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/posters/reel-8.jpg" playsinline loop muted></video></div>
           <img src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/iphone-frame.png" class="phone-frame-img" alt="" aria-hidden="true">
           <img loading="lazy" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/logo-watermark.webp" class="watermark-overlay" alt="KB">
-          <span class="reel-sound-badge"><i class="fa-solid fa-volume-xmark"></i> Tap for sound</span>
           <div class="custom-controls" style="padding:12px">
-            <div class="cc-top"><span class="cc-tag">Reel 8</span></div>
+            <div class="cc-top"><span class="cc-tag">Reel 8</span><button onclick="togglePictureInPicture(this)" class="cc-btn pip-toggle-btn" style="width:22px;height:22px" title="Picture in Picture" aria-label="Picture in picture"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:10px;height:10px;display:block"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5" stroke="currentColor" stroke-width="2"/><rect x="12" y="12" width="7" height="5" rx="1" fill="currentColor"/></svg></button></div>
             <div class="cc-mid" style="gap:8px">
               <button onclick="skipVideo(this, -5)" class="cc-btn" style="width:26px;height:26px" aria-label="Back 5 seconds"><i class="fa-solid fa-backward" style="font-size:9px"></i></button>
               <button onclick="togglePlayPause(this)" class="cc-btn cc-play" style="width:36px;height:36px" aria-label="Play or pause"><i class="fa-solid fa-play" style="font-size:10px;padding-left:2px"></i></button>
@@ -1116,7 +1152,7 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
             <video id="collab-video-1" preload="none" poster="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/posters/collab-1.jpg" playsinline loop muted></video>
             <img loading="lazy" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/logo-watermark.webp" class="watermark-overlay-wide" alt="KB">
             <div class="custom-controls">
-              <div class="cc-top"><span class="cc-tag cc-tag-lg">Blacklyte</span></div>
+              <div class="cc-top"><span class="cc-tag cc-tag-lg">Blacklyte</span><button onclick="togglePictureInPicture(this)" class="cc-btn pip-toggle-btn" style="width:32px;height:32px" title="Picture in Picture" aria-label="Picture in picture"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:14px;height:14px;display:block"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5" stroke="currentColor" stroke-width="2"/><rect x="12" y="12" width="7" height="5" rx="1" fill="currentColor"/></svg></button></div>
               <div class="cc-mid" style="gap:14px">
                 <button onclick="skipVideo(this, -5)" class="cc-btn" style="width:42px;height:42px" aria-label="Back 5 seconds"><i class="fa-solid fa-backward" style="font-size:13px"></i></button>
                 <button onclick="togglePlayPause(this)" class="cc-btn cc-play" style="width:54px;height:54px" aria-label="Play or pause"><i class="fa-solid fa-play" style="font-size:15px;padding-left:2px"></i></button>
@@ -1153,7 +1189,7 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
             <video id="collab-video-2" preload="none" poster="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/posters/collab-2.jpg" playsinline loop muted></video>
             <img loading="lazy" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/logo-watermark.webp" class="watermark-overlay-wide" alt="KB">
             <div class="custom-controls">
-              <div class="cc-top"><span class="cc-tag cc-tag-lg">PunCube</span></div>
+              <div class="cc-top"><span class="cc-tag cc-tag-lg">PunCube</span><button onclick="togglePictureInPicture(this)" class="cc-btn pip-toggle-btn" style="width:32px;height:32px" title="Picture in Picture" aria-label="Picture in picture"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:14px;height:14px;display:block"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5" stroke="currentColor" stroke-width="2"/><rect x="12" y="12" width="7" height="5" rx="1" fill="currentColor"/></svg></button></div>
               <div class="cc-mid" style="gap:14px">
                 <button onclick="skipVideo(this, -5)" class="cc-btn" style="width:42px;height:42px" aria-label="Back 5 seconds"><i class="fa-solid fa-backward" style="font-size:13px"></i></button>
                 <button onclick="togglePlayPause(this)" class="cc-btn cc-play" style="width:54px;height:54px" aria-label="Play or pause"><i class="fa-solid fa-play" style="font-size:15px;padding-left:2px"></i></button>
@@ -1190,7 +1226,7 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
             <video id="collab-video-3" preload="none" poster="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/posters/collab-3.jpg" playsinline loop muted></video>
             <img loading="lazy" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/logo-watermark.webp" class="watermark-overlay-wide" alt="KB">
             <div class="custom-controls">
-              <div class="cc-top"><span class="cc-tag cc-tag-lg">iVANKY</span></div>
+              <div class="cc-top"><span class="cc-tag cc-tag-lg">iVANKY</span><button onclick="togglePictureInPicture(this)" class="cc-btn pip-toggle-btn" style="width:32px;height:32px" title="Picture in Picture" aria-label="Picture in picture"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:14px;height:14px;display:block"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5" stroke="currentColor" stroke-width="2"/><rect x="12" y="12" width="7" height="5" rx="1" fill="currentColor"/></svg></button></div>
               <div class="cc-mid" style="gap:14px">
                 <button onclick="skipVideo(this, -5)" class="cc-btn" style="width:42px;height:42px" aria-label="Back 5 seconds"><i class="fa-solid fa-backward" style="font-size:13px"></i></button>
                 <button onclick="togglePlayPause(this)" class="cc-btn cc-play" style="width:54px;height:54px" aria-label="Play or pause"><i class="fa-solid fa-play" style="font-size:15px;padding-left:2px"></i></button>
@@ -1227,7 +1263,7 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
             <video id="collab-video-4" preload="none" poster="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/posters/collab-4.jpg" playsinline loop muted></video>
             <img loading="lazy" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/logo-watermark.webp" class="watermark-overlay-wide" alt="KB">
             <div class="custom-controls">
-              <div class="cc-top"><span class="cc-tag cc-tag-lg">eXtremeRate</span></div>
+              <div class="cc-top"><span class="cc-tag cc-tag-lg">eXtremeRate</span><button onclick="togglePictureInPicture(this)" class="cc-btn pip-toggle-btn" style="width:32px;height:32px" title="Picture in Picture" aria-label="Picture in picture"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:14px;height:14px;display:block"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5" stroke="currentColor" stroke-width="2"/><rect x="12" y="12" width="7" height="5" rx="1" fill="currentColor"/></svg></button></div>
               <div class="cc-mid" style="gap:14px">
                 <button onclick="skipVideo(this, -5)" class="cc-btn" style="width:42px;height:42px" aria-label="Back 5 seconds"><i class="fa-solid fa-backward" style="font-size:13px"></i></button>
                 <button onclick="togglePlayPause(this)" class="cc-btn cc-play" style="width:54px;height:54px" aria-label="Play or pause"><i class="fa-solid fa-play" style="font-size:15px;padding-left:2px"></i></button>
@@ -1264,7 +1300,7 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
             <video id="collab-video-5" preload="none" poster="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/posters/collab-5.jpg" playsinline loop muted></video>
             <img loading="lazy" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/logo-watermark.webp" class="watermark-overlay-wide" alt="KB">
             <div class="custom-controls">
-              <div class="cc-top"><span class="cc-tag cc-tag-lg">Yesoul</span></div>
+              <div class="cc-top"><span class="cc-tag cc-tag-lg">Yesoul</span><button onclick="togglePictureInPicture(this)" class="cc-btn pip-toggle-btn" style="width:32px;height:32px" title="Picture in Picture" aria-label="Picture in picture"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:14px;height:14px;display:block"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5" stroke="currentColor" stroke-width="2"/><rect x="12" y="12" width="7" height="5" rx="1" fill="currentColor"/></svg></button></div>
               <div class="cc-mid" style="gap:14px">
                 <button onclick="skipVideo(this, -5)" class="cc-btn" style="width:42px;height:42px" aria-label="Back 5 seconds"><i class="fa-solid fa-backward" style="font-size:13px"></i></button>
                 <button onclick="togglePlayPause(this)" class="cc-btn cc-play" style="width:54px;height:54px" aria-label="Play or pause"><i class="fa-solid fa-play" style="font-size:15px;padding-left:2px"></i></button>
@@ -1301,7 +1337,7 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
             <video id="collab-video-6" preload="none" poster="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/posters/collab-6.jpg" playsinline loop muted></video>
             <img loading="lazy" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/logo-watermark.webp" class="watermark-overlay-wide" alt="KB">
             <div class="custom-controls">
-              <div class="cc-top"><span class="cc-tag cc-tag-lg">Neewer</span></div>
+              <div class="cc-top"><span class="cc-tag cc-tag-lg">Neewer</span><button onclick="togglePictureInPicture(this)" class="cc-btn pip-toggle-btn" style="width:32px;height:32px" title="Picture in Picture" aria-label="Picture in picture"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:14px;height:14px;display:block"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5" stroke="currentColor" stroke-width="2"/><rect x="12" y="12" width="7" height="5" rx="1" fill="currentColor"/></svg></button></div>
               <div class="cc-mid" style="gap:14px">
                 <button onclick="skipVideo(this, -5)" class="cc-btn" style="width:42px;height:42px" aria-label="Back 5 seconds"><i class="fa-solid fa-backward" style="font-size:13px"></i></button>
                 <button onclick="togglePlayPause(this)" class="cc-btn cc-play" style="width:54px;height:54px" aria-label="Play or pause"><i class="fa-solid fa-play" style="font-size:15px;padding-left:2px"></i></button>
@@ -1338,7 +1374,7 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
             <video id="collab-video-7" preload="none" poster="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/posters/collab-7.jpg" playsinline loop muted></video>
             <img loading="lazy" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/logo-watermark.webp" class="watermark-overlay-wide" alt="KB">
             <div class="custom-controls">
-              <div class="cc-top"><span class="cc-tag cc-tag-lg">Maono</span></div>
+              <div class="cc-top"><span class="cc-tag cc-tag-lg">Maono</span><button onclick="togglePictureInPicture(this)" class="cc-btn pip-toggle-btn" style="width:32px;height:32px" title="Picture in Picture" aria-label="Picture in picture"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:14px;height:14px;display:block"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5" stroke="currentColor" stroke-width="2"/><rect x="12" y="12" width="7" height="5" rx="1" fill="currentColor"/></svg></button></div>
               <div class="cc-mid" style="gap:14px">
                 <button onclick="skipVideo(this, -5)" class="cc-btn" style="width:42px;height:42px" aria-label="Back 5 seconds"><i class="fa-solid fa-backward" style="font-size:13px"></i></button>
                 <button onclick="togglePlayPause(this)" class="cc-btn cc-play" style="width:54px;height:54px" aria-label="Play or pause"><i class="fa-solid fa-play" style="font-size:15px;padding-left:2px"></i></button>
@@ -1375,7 +1411,7 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
             <video id="collab-video-8" preload="none" poster="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/posters/collab-8.jpg" playsinline loop muted></video>
             <img loading="lazy" src="https://pub-ce876c73fc7d4e1a830a749fa9195f81.r2.dev/portfolio/assets-v2/assets/images/logo-watermark.webp" class="watermark-overlay-wide" alt="KB">
             <div class="custom-controls">
-              <div class="cc-top"><span class="cc-tag cc-tag-lg">LiteOnes</span></div>
+              <div class="cc-top"><span class="cc-tag cc-tag-lg">LiteOnes</span><button onclick="togglePictureInPicture(this)" class="cc-btn pip-toggle-btn" style="width:32px;height:32px" title="Picture in Picture" aria-label="Picture in picture"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:14px;height:14px;display:block"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5" stroke="currentColor" stroke-width="2"/><rect x="12" y="12" width="7" height="5" rx="1" fill="currentColor"/></svg></button></div>
               <div class="cc-mid" style="gap:14px">
                 <button onclick="skipVideo(this, -5)" class="cc-btn" style="width:42px;height:42px" aria-label="Back 5 seconds"><i class="fa-solid fa-backward" style="font-size:13px"></i></button>
                 <button onclick="togglePlayPause(this)" class="cc-btn cc-play" style="width:54px;height:54px" aria-label="Play or pause"><i class="fa-solid fa-play" style="font-size:15px;padding-left:2px"></i></button>
@@ -1569,7 +1605,7 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
           <li><i class="fa-solid fa-check"></i> Dedicated concept brainstorming</li>
           <li><i class="fa-solid fa-check"></i> Raw footage color correction</li>
         </ul>
-        <a class="btn btn-ghost" href="mailto:kamanibrown@gmail.com" data-enquire="Basic">Enquire About This</a>
+        <a class="btn btn-ghost" href="mailto:kamanibrown@gmail.com" target="_top" data-enquire="Basic">Enquire About This</a>
       </article>
       <article class="tier panel hot">
         <span class="tier-flag">MOST REQUESTED</span>
@@ -1582,7 +1618,7 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
           <li><i class="fa-solid fa-check"></i> Hook + CTA strategy &amp; scripting</li>
           <li><i class="fa-solid fa-check"></i> Aesthetic subtitles included</li>
         </ul>
-        <a class="btn btn-gold" href="mailto:kamanibrown@gmail.com" data-enquire="Standard">Enquire About This</a>
+        <a class="btn btn-gold" href="mailto:kamanibrown@gmail.com" target="_top" data-enquire="Standard">Enquire About This</a>
       </article>
       <article class="tier panel">
         <span class="tier-cat">Tech / SaaS</span>
@@ -1595,7 +1631,7 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
           <li><i class="fa-solid fa-check"></i> 3x Revisions included</li>
           <li><i class="fa-solid fa-check"></i> Full close-up macro B-roll</li>
         </ul>
-        <a class="btn btn-ghost" href="mailto:kamanibrown@gmail.com" data-enquire="Premium">Enquire About This</a>
+        <a class="btn btn-ghost" href="mailto:kamanibrown@gmail.com" target="_top" data-enquire="Premium">Enquire About This</a>
       </article>
     </div>
 
@@ -1640,7 +1676,7 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
         <p>Let's help you find the right one that fits your needs. Share your brief, timeline, and usage needs, and I'll come back with a tailored proposal within 24–48 hours.</p>
         <div class="scope-note">RESPONSE WITHIN 24 HOURS · NO OBLIGATION</div>
       </div>
-      <a class="btn btn-gold" href="mailto:kamanibrown@gmail.com" data-enquire="Custom Scope">Let's Talk Scope</a>
+      <a class="btn btn-gold" href="mailto:kamanibrown@gmail.com" target="_top" data-enquire="Custom Scope">Let's Talk Scope</a>
     </div>
   </div>
 </section>
@@ -1658,7 +1694,7 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
     <h2>Let's Make Something <span class="gold-line">They Can't Scroll Past.</span></h2>
     <p>Drop me an email with your project parameters, and let's structure a custom media kit or test project.</p>
     <div class="cta-btns">
-      <a class="btn btn-gold" href="mailto:kamanibrown@gmail.com"><i class="fa-solid fa-envelope" style="font-size:13px"></i> kamanibrown@gmail.com</a>
+      <a class="btn btn-gold" href="mailto:kamanibrown@gmail.com" target="_top"><i class="fa-solid fa-envelope" style="font-size:13px"></i> kamanibrown@gmail.com</a>
       <a class="btn btn-ghost" href="https://www.youtube.com/@KamaniBrown" target="_blank" rel="noopener"><i class="fa-brands fa-youtube" style="color:var(--gold)"></i> youtube.com/@KamaniBrown</a>
       <a class="btn btn-ghost" href="https://a.co/d/0eIhotX7" target="_blank" rel="noopener"><i class="fa-brands fa-amazon" style="color:var(--gold)"></i> Amazon Influencer Storefront</a>
     </div>
@@ -1667,7 +1703,7 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
     <div class="footer-bar">
       <span>© 2026 Kamani Brown — All Rights Reserved</span>
       <span>Moncton, NB · Available Worldwide</span>
-      <span><a href="mailto:kamanibrown@gmail.com">Get in Touch</a> &nbsp;·&nbsp; <a href="#hero-about">Back to Top ↑</a></span>
+      <span><a href="mailto:kamanibrown@gmail.com" target="_top">Get in Touch</a> &nbsp;·&nbsp; <a href="#hero-about">Back to Top ↑</a></span>
     </div>
   </div>
 </footer>
@@ -1681,6 +1717,7 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
             setupSmoothScrollNavigation();
             setupVideoMetadataListeners();
             initReelLoops();
+            setupHeroLoops();
 
             document.addEventListener('fullscreenchange', handleFullScreenExit);
             document.addEventListener('webkitfullscreenchange', handleFullScreenExit);
@@ -1696,9 +1733,10 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
             document.querySelectorAll('.video-container-parent').forEach(container => {
                 const video = container.querySelector('video');
                 if (video) {
-                    // Reel loops keep preload="metadata" so the tiny loop files
-                    // start instantly; everything else stays preload="none".
-                    if (!video.hasAttribute('data-loop')) {
+                    // Reel players keep their preload setting (their full
+                    // video loads on first tap); everything else stays
+                    // preload="none".
+                    if (!video.hasAttribute('data-loop') && video.id.indexOf('hero-video-') !== 0) {
                         video.setAttribute('preload', 'none');
                     }
 
@@ -1734,12 +1772,13 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
            stays hidden with no src until a tap: then it loads and plays
            the FULL Short once, with sound; when it ends it drops back
            to the WebP preview. Applies to the 8 reels (v-video-*) and
-           the 3 hero phones (hero-video-*), plus the About intro-video
-           (intro-video, round 9 — same treatment, reusing intro.webp).
-           The loop-mode helpers are
+           the About intro-video (intro-video, round 9 — same
+           treatment, reusing intro.webp). The 3 hero phones are NOT
+           part of this system: they are pure ambient loops (see
+           setupHeroLoops). The loop-mode helpers are
            top-level so togglePlayPause can enter full mode too. */
         const isLoopVideo = (video) => {
-            return video.id.indexOf('v-video-') === 0 || video.id.indexOf('hero-video-') === 0 || video.id === 'intro-video';
+            return video.id.indexOf('v-video-') === 0 || video.id === 'intro-video';
         };
 
         const isFullMode = (video) => video.dataset.fullMode === 'true';
@@ -1770,8 +1809,6 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
         };
 
         const syncLoopSoundUI = (container, muted) => {
-            const badge = container.querySelector('.reel-sound-badge');
-            if (badge) badge.classList.toggle('sound-on', !muted);
             const icon = container.querySelector('.sound-toggle i');
             if (icon) icon.className = muted ? 'fa-solid fa-volume-xmark text-[10px] md:text-xs' : 'fa-solid fa-volume-high text-[10px] md:text-xs';
         };
@@ -1811,6 +1848,133 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
             const p = video.play();
             if (p !== undefined) p.then(() => { if (container) setLoopPlayState(container, true); }).catch(() => {});
         };
+
+        /* Hero phones — loop idle, full video in the same frame
+           (Nov 10, 2026): each hero phone starts as a muted,
+           looping preview (the short loop cuts loops/reel-1.mp4 /
+           loops/reel-5.mp4 on R2; the Intro phone loops intro.mp4
+           itself). The loop is only the idle face: a tap swaps the
+           SAME <video> element, inside the SAME phone frame, to the
+           full-length file (data-full-src) and plays it there —
+           with sound, from the beginning, with NO controls, NO
+           overlays, NO pop-out and NO fullscreen, so the viewer
+           stays small in the frame and can keep scrolling to the
+           full players down the page. Further taps pause/play the
+           full video in place. When the full video ends, the phone
+           returns to its muted loop. Starting one hero's full video
+           returns any other hero already in full mode to its loop,
+           so two soundtracks never play at once. */
+        function setupHeroLoops() {
+            const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const controllers = [];
+            document.querySelectorAll('.hero-phone .phone-frame').forEach((frame) => {
+                const video = frame.querySelector('video.hero-loop-video');
+                if (!video) return;
+                const loopSrc = video.getAttribute('data-loop-src') || video.getAttribute('src');
+                const fullSrc = video.getAttribute('data-full-src') || loopSrc;
+                const chip = frame.querySelector('.phone-chip');
+                const title = chip ? chip.textContent.trim() : 'Video';
+                let mode = 'loop'; // 'loop' (idle preview) | 'full' (real video)
+                let inView = true;
+                video.muted = true;
+                video.loop = true;
+                frame.setAttribute('tabindex', '0');
+                frame.setAttribute('role', 'button');
+                const syncLabel = () => {
+                    if (mode === 'full') {
+                        frame.setAttribute('aria-label', (video.paused ? 'Play video: ' : 'Pause video: ') + title);
+                    } else {
+                        frame.setAttribute('aria-label', 'Play full video in this frame: ' + title);
+                    }
+                };
+                const tryPlay = () => {
+                    const playPromise = video.play();
+                    if (playPromise !== undefined) playPromise.catch(() => {});
+                };
+                const setSrc = (src) => {
+                    if (!src) return;
+                    if (video.getAttribute('src') !== src) {
+                        video.src = src;
+                        video.load();
+                    }
+                };
+                const enterLoopMode = (autoplay) => {
+                    mode = 'loop';
+                    video.dataset.heroMode = 'loop';
+                    video.loop = true;
+                    video.muted = true;
+                    setSrc(loopSrc);
+                    try { video.currentTime = 0; } catch (e) {}
+                    if (autoplay && !reduceMotion && inView) tryPlay();
+                    syncLabel();
+                };
+                const enterFullMode = () => {
+                    // Only one hero plays its full video at a time.
+                    controllers.forEach((c) => {
+                        if (c !== controller && c.isFull()) c.toLoop();
+                    });
+                    mode = 'full';
+                    video.dataset.heroMode = 'full';
+                    video.loop = false;
+                    video.muted = false;
+                    if (fullSrc === loopSrc) {
+                        // Intro: the loop and the full video are the
+                        // same file — just restart it, unmuted, once.
+                        try { video.currentTime = 0; } catch (e) {}
+                    } else {
+                        setSrc(fullSrc);
+                    }
+                    tryPlay();
+                    syncLabel();
+                };
+                const controller = {
+                    isFull: () => mode === 'full',
+                    toLoop: () => enterLoopMode(true)
+                };
+                controllers.push(controller);
+                // Full video finished: hand the phone back to its loop.
+                video.addEventListener('ended', () => {
+                    if (mode === 'full') enterLoopMode(true);
+                });
+                video.addEventListener('play', syncLabel);
+                video.addEventListener('pause', syncLabel);
+                const handleTap = () => {
+                    if (mode === 'loop') {
+                        enterFullMode();
+                    } else if (video.paused) {
+                        tryPlay();
+                    } else {
+                        video.pause();
+                    }
+                    syncLabel();
+                };
+                frame.addEventListener('click', handleTap);
+                frame.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        handleTap();
+                    }
+                });
+                if (!reduceMotion) tryPlay();
+                syncLabel();
+                // Pause whatever is showing when the phone scrolls
+                // off-screen. On return, only the muted loop resumes
+                // on its own; a full video stays paused until tapped,
+                // so sound never restarts uninvited.
+                if ('IntersectionObserver' in window) {
+                    new IntersectionObserver((entries) => {
+                        entries.forEach((entry) => {
+                            inView = entry.isIntersecting;
+                            if (entry.isIntersecting) {
+                                if (mode === 'loop' && !reduceMotion && video.paused) tryPlay();
+                            } else if (!video.paused) {
+                                video.pause();
+                            }
+                        });
+                    }, { threshold: 0.12 }).observe(frame);
+                }
+            });
+        }
 
         function initReelLoops() {
             const loops = document.querySelectorAll('video[data-loop]');
@@ -1863,6 +2027,7 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
                     img.addEventListener('click', (e) => {
                         e.stopPropagation();
                         if (!isLoopVideo(video)) return;
+                        // Loop videos play in their frame.
                         delete video.dataset.userPaused;
                         enterFullMode(video);
                         playLoopVideo(video);
@@ -2082,6 +2247,62 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
                 icon.className = 'fa-solid fa-volume-xmark text-[10px] md:text-xs';
             } else {
                 icon.className = 'fa-solid fa-volume-high text-[10px] md:text-xs';
+            }
+        }
+
+        /* Picture in Picture: the PiP button sits in the top-right of
+           every player's control bar, in the same round .cc-btn style
+           as the rest of the controls; the layout is otherwise
+           unchanged. Tapping it floats that video so it keeps playing
+           while the viewer scrolls on; tapping it again (or the PiP
+           window's own return control) brings it back. Loop players
+           idle behind a WebP preview with no src loaded, so they are
+           woken into full mode first — PiP then floats the real
+           full-length video, with sound. Where PiP is unsupported the
+           tap simply leaves the inline player as it is. */
+        function togglePictureInPicture(button) {
+            const container = button.closest('.video-container-parent');
+            if (!container) return;
+            const video = container.querySelector('video');
+            if (!video) return;
+
+            // Already floating this video: bring it back inline.
+            if (document.pictureInPictureElement === video) {
+                if (document.exitPictureInPicture) document.exitPictureInPicture().catch(() => {});
+                return;
+            }
+            if (video.webkitPresentationMode === 'picture-in-picture' && video.webkitSetPresentationMode) {
+                video.webkitSetPresentationMode('inline');
+                return;
+            }
+
+            // Wake the real video first if this player is still idling.
+            if (video.hasAttribute('data-loop') && !isFullMode(video)) {
+                enterFullMode(video);
+                const playPromise = video.play();
+                if (playPromise !== undefined) playPromise.catch(() => {});
+            } else if (!video.src && VIDEO_FILE_MAP[video.id]) {
+                video.dataset.lazyLoaded = 'true';
+                video.src = getPlayableVideoUrl(VIDEO_FILE_MAP[video.id]);
+                video.load();
+            }
+
+            const requestPip = () => {
+                try {
+                    if (video.requestPictureInPicture) {
+                        const result = video.requestPictureInPicture();
+                        if (result && result.catch) result.catch(() => {});
+                    } else if (video.webkitSetPresentationMode) {
+                        video.webkitSetPresentationMode('picture-in-picture');
+                    }
+                } catch (e) { /* unsupported or not ready: inline player stays as-is */ }
+            };
+
+            if (video.readyState >= 1) {
+                requestPip();
+            } else {
+                video.addEventListener('loadedmetadata', requestPip, { once: true });
+                video.load();
             }
         }
 
@@ -2318,9 +2539,10 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
       <button type="button" class="enquire-copy" id="enquire-copy"><i class="fa-solid fa-copy"></i> Copy</button>
     </div>
     <div class="enquire-actions">
-      <a class="btn btn-gold" id="enquire-mail" href="mailto:kamanibrown@gmail.com"><i class="fa-solid fa-envelope" style="font-size:13px"></i> Open Mail App</a>
+      <a class="btn btn-gold" id="enquire-mail" href="mailto:kamanibrown@gmail.com" target="_top"><i class="fa-solid fa-envelope" style="font-size:13px"></i> Open Mail App</a>
       <a class="btn btn-ghost" id="enquire-gmail" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=kamanibrown@gmail.com" target="_blank" rel="noopener"><i class="fa-brands fa-google" style="color:var(--gold)"></i> Compose in Gmail</a>
     </div>
+    <p class="enquire-hint" id="enquire-hint" hidden>Opening your mail app… If nothing opens, tap <b>Copy</b> above and paste the address into your mail app — or use <b>Compose in Gmail</b>.</p>
   </div>
 </div>
 <script>
@@ -2329,18 +2551,40 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
            silently by embedded app webviews / browsers with no mail
            client, which is exactly how these buttons "did nothing".
            Intercepting the tap and opening this panel guarantees a
-           visible result on every tap, on every device. The panel's
-           own Mail App / Gmail buttons are then tapped directly by
-           the user (a fresh, real gesture), which is the most
-           reliable way to hand off to a mail composer. */
+           visible result on every tap, on every device.
+           Second failure mode, found Nov 10: this page usually runs
+           inside an iframe (the Muse app / Space preview), and iOS
+           ignores mailto: hand-offs that stay inside a frame — the
+           panel's own "Open Mail App" tap did literally nothing,
+           while the https Gmail button worked. Fix: when framed,
+           route the mailto through the TOP-level page inside the
+           same tap gesture (window.top.location), with the anchor's
+           target="_top" saying the same thing declaratively, and
+           show the hint line so a swallowed hand-off can never
+           look like a dead button again. Unframed (the published
+           page in a normal browser), the plain anchor is left
+           completely alone. */
         var dialog = document.getElementById('enquire-dialog');
         if (!dialog) return;
         var kicker = document.getElementById('enquire-kicker');
         var mailBtn = document.getElementById('enquire-mail');
         var gmailBtn = document.getElementById('enquire-gmail');
         var copyBtn = document.getElementById('enquire-copy');
+        var hint = document.getElementById('enquire-hint');
         var EMAIL = 'kamanibrown@gmail.com';
         var lastTrigger = null;
+
+        function inFrame() {
+            try { return window.top !== window.self; } catch (err) { return true; }
+        }
+
+        /* Hand a mailto: URL to the OS from the top-level page.
+           (Location.replace is the cross-origin-legal way to
+           navigate another frame.) Returns true when a hand-off
+           was attempted at the top. */
+        function handoffMailto(url) {
+            try { window.top.location.replace(url); return true; } catch (err) { return false; }
+        }
 
         function openPanel(pkg, trigger) {
             lastTrigger = trigger || null;
@@ -2352,6 +2596,7 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
             if (kicker) kicker.textContent = isScope ? 'Enquire — Custom Scope' : 'Enquire — ' + pkg + ' Package';
             if (mailBtn) mailBtn.href = 'mailto:' + EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(intro);
             if (gmailBtn) gmailBtn.href = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + EMAIL + '&su=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(intro);
+            if (hint) hint.hidden = true;
             dialog.classList.add('open');
             dialog.setAttribute('aria-hidden', 'false');
             document.body.style.overflow = 'hidden';
@@ -2370,6 +2615,51 @@ section[id],footer[id],header[id]{scroll-margin-top:76px}
             btn.addEventListener('click', function (e) {
                 e.preventDefault();
                 openPanel(btn.getAttribute('data-enquire'), btn);
+            });
+        });
+
+        /* "Open Mail App": when the page is framed, iOS drops a
+           mailto: that stays inside the frame, so hand the URL to
+           the top-level page within this same tap. When unframed,
+           do nothing at all — the anchor's own mailto + target="_top"
+           is the most reliable hand-off there is. Either way the
+           hint appears, so the tap always has a visible result. */
+        if (mailBtn) {
+            mailBtn.addEventListener('click', function (e) {
+                var url = mailBtn.getAttribute('href');
+                if (!url) return;
+                if (hint) hint.hidden = false;
+                if (!inFrame()) return;
+                e.preventDefault();
+                if (handoffMailto(url)) return;
+                try {
+                    window.location.assign(url);
+                } catch (err) {
+                    var a = document.createElement('a');
+                    a.href = url;
+                    a.target = '_top';
+                    a.style.display = 'none';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                }
+            });
+        }
+
+        /* The same iframe swallowing hits every other plain mailto:
+           on the page (About email row, footer CTA, footer "Get in
+           Touch") — route those through the top frame too. The
+           [data-enquire] buttons open the panel instead, and the
+           panel's own buttons are handled above / are https. */
+        document.querySelectorAll('a[href^="mailto:"]').forEach(function (a) {
+            if (a === mailBtn || a.hasAttribute('data-enquire')) return;
+            a.addEventListener('click', function (e) {
+                if (!inFrame()) return;
+                e.preventDefault();
+                var url = a.getAttribute('href');
+                if (!handoffMailto(url)) {
+                    try { window.location.assign(url); } catch (err) {}
+                }
             });
         });
 
